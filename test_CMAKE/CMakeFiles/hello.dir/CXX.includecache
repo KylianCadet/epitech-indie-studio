@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/src/chatte.cpp
+iostream
+-
+liba/chatte.hpp
+-
+
+include/liba/chatte.hpp
+

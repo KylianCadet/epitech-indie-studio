@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/olivierbelan/OOP_indie_studio_2018
+CMAKE_SOURCE_DIR = /home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/olivierbelan/OOP_indie_studio_2018
+CMAKE_BINARY_DIR = /home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/olivierbelan/OOP_indie_studio_2018/CMakeFiles /home/olivierbelan/OOP_indie_studio_2018/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles /home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/olivierbelan/OOP_indie_studio_2018/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named bomberman
+# Target rules for targets named penis
 
 # Build rule for target.
-bomberman: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 bomberman
-.PHONY : bomberman
+penis: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 penis
+.PHONY : penis
 
 # fast build rule for target.
-bomberman/fast:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/build
-.PHONY : bomberman/fast
+penis/fast:
+	$(MAKE) -f CMakeFiles/penis.dir/build.make CMakeFiles/penis.dir/build
+.PHONY : penis/fast
 
-src/test.o: src/test.cpp.o
+src/main.o: src/main.cpp.o
 
-.PHONY : src/test.o
+.PHONY : src/main.o
 
 # target to build an object file
-src/test.cpp.o:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/src/test.cpp.o
-.PHONY : src/test.cpp.o
+src/main.cpp.o:
+	$(MAKE) -f CMakeFiles/penis.dir/build.make CMakeFiles/penis.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
 
-src/test.i: src/test.cpp.i
+src/main.i: src/main.cpp.i
 
-.PHONY : src/test.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-src/test.cpp.i:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/src/test.cpp.i
-.PHONY : src/test.cpp.i
+src/main.cpp.i:
+	$(MAKE) -f CMakeFiles/penis.dir/build.make CMakeFiles/penis.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-src/test.s: src/test.cpp.s
+src/main.s: src/main.cpp.s
 
-.PHONY : src/test.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-src/test.cpp.s:
-	$(MAKE) -f CMakeFiles/bomberman.dir/build.make CMakeFiles/bomberman.dir/src/test.cpp.s
-.PHONY : src/test.cpp.s
+src/main.cpp.s:
+	$(MAKE) -f CMakeFiles/penis.dir/build.make CMakeFiles/penis.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -157,11 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... bomberman"
+	@echo "... penis"
 	@echo "... edit_cache"
-	@echo "... src/test.o"
-	@echo "... src/test.i"
-	@echo "... src/test.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 .PHONY : help
 
 

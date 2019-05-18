@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/penis.dir/src/main.cpp.o  -o bin/penis  -L../lib -Wl,-rpath,../lib -lhello 

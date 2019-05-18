@@ -5,7 +5,7 @@
 ** irr
 */
 
-#include <irr/irrlicht.h>
+#include <irrlicht.h>
 
 int main(void) {
 

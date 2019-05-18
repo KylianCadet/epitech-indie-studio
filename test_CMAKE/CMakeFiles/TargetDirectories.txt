@@ -1,3 +1,0 @@
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/CMakeFiles/rebuild_cache.dir
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/CMakeFiles/hello.dir
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/CMakeFiles/edit_cache.dir

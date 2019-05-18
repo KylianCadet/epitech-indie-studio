@@ -1,3 +1,0 @@
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles/rebuild_cache.dir
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles/penis.dir
-/home/olivierbelan/OOP_indie_studio_2018/test_CMAKE/test/CMakeFiles/edit_cache.dir

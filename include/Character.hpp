@@ -34,6 +34,9 @@ namespace IndieStudio {
 			bool getMovingRight() const noexcept;
 			bool getDoingAction() const noexcept;
 
+			bool getIsMoving() const noexcept;
+			void setIsMoving(bool) noexcept;
+
 			irr::scene::IAnimatedMeshSceneNode *getMesh() noexcept;
 
 		private:
@@ -49,6 +52,7 @@ namespace IndieStudio {
 			bool _movingDown = false;
 			bool _movingRight = false;
 			bool _doingAction = false;
+			bool _isMoving = false;
 	};
 };
 

@@ -24,10 +24,19 @@ int main(void)
 
 	device->getCursorControl()->setVisible(false); // curseur invisible
 
-	/* CREATE SYDNEY CHARACTER */
+	/* CREATE CHARACTERS */
 	std::vector<IndieStudio::Character> characterVec;
 	characterVec.push_back(
-		IndieStudio::Character(sceneManager, driver, 'z', 'q', 's', 'd', 'e', "sydney.md2", "sydney.bmp", false)
+		IndieStudio::Character(sceneManager, driver, 'i', 'j', 'k', 'l', 'o', "model/rei/tris.md2", "model/rei/rei.pcx", false)
+	);
+	characterVec.push_back(
+		IndieStudio::Character(sceneManager, driver, 'f', 'c', 'v', 'b', 'g', "model/chun-li/tris.md2", "model/chun-li/original.bmp", false)
+	);
+	characterVec.push_back(
+		IndieStudio::Character(sceneManager, driver, 't', 'f', 'g', 'h', 'y', "model/eric_c/tris.md2", "model/eric_c/eric.pcx", true)
+	);
+	characterVec.push_back(
+		IndieStudio::Character(sceneManager, driver, 'z', 'q', 's', 'd', 'e', "model/starfox/tris.md2", "model/starfox/starfox.pcx", true)
 	);
 
 	/* CREATE EVENT LISTENER */
@@ -79,7 +88,7 @@ int main(void)
 	while (device->run())
 	{										   // la boucle de rendu
 		driver->beginScene(true, true, color); // demarre le rendu
-		EventListener.checkEvent();
+		EventListener.moveCharacter();
 		sceneManager->drawAll();			   // calcule le rendu
 		driver->endScene();					   // affiche le rendu
 	}

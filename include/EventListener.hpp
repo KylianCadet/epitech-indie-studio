@@ -18,7 +18,7 @@ class EventListener : public irr::IEventReceiver {
 			EventListener(std::vector<IndieStudio::Character> &characterVec);
 			~EventListener();
 			virtual bool OnEvent(const irr::SEvent &event);
-			void checkEvent();
+			void moveCharacter() noexcept;
 
 		protected:
 		private:

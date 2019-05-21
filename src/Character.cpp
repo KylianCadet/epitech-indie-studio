@@ -100,3 +100,13 @@ bool IndieStudio::Character::getDoingAction(void) const noexcept
 {
 	return (this->_doingAction);
 }
+
+bool IndieStudio::Character::getIsMoving(void) const noexcept
+{
+	return (this->_isMoving);
+}
+
+void IndieStudio::Character::setIsMoving(bool b) noexcept
+{
+	this->_isMoving = b;
+}

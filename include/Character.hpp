@@ -14,7 +14,7 @@
 namespace IndieStudio {
 	class Character {
 		public:
-			Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, char up, char left, char down, char right, char action, std::string meshPath, std::string texturePath, bool bot);
+			Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
 			~Character();
 			char getUpKey() const noexcept;
 			char getLeftKey() const noexcept;

@@ -25,16 +25,16 @@ int main(void)
 	/* CREATE CHARACTERS */
 	std::vector<IndieStudio::Character> characterVec;
 	characterVec.push_back(
-		IndieStudio::Character(sceneManager, driver, 'i', 'j', 'k', 'l', 'o', "assets/rei/tris.md2", "assets/rei/rei.pcx", false)
+		IndieStudio::Character(sceneManager, driver, "assets/rei/tris.md2", "assets/rei/rei.pcx", false, 'i', 'j', 'k', 'l', 'o')
 	);
 	characterVec.push_back(
-		IndieStudio::Character(sceneManager, driver, 'w', 'x', 'c', 'v', 'b', "assets/chun-li/tris.md2", "assets/chun-li/original.bmp", false)
+		IndieStudio::Character(sceneManager, driver, "assets/chun-li/tris.md2", "assets/chun-li/original.bmp", false, 'w', 'x', 'c', 'v', 'b')
 	);
 	characterVec.push_back(
-		IndieStudio::Character(sceneManager, driver, 't', 'f', 'g', 'h', 'y', "assets/eric_c/tris.md2", "assets/eric_c/eric.pcx", true)
+		IndieStudio::Character(sceneManager, driver, "assets/eric_c/tris.md2", "assets/eric_c/eric.pcx", true)
 	);
 	characterVec.push_back(
-		IndieStudio::Character(other, driver, 'z', 'q', 's', 'd', 'e', "assets/starfox/tris.md2", "assets/starfox/starfox.pcx", true)
+		IndieStudio::Character(other, driver, "assets/starfox/tris.md2", "assets/starfox/starfox.pcx", true)
 	);
 
 	/* CREATE EVENT LISTENER */

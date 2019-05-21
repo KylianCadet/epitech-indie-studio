@@ -7,7 +7,7 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, char up, char left, char down, char right, char action, std::string meshPath, std::string texturePath, bool bot) : _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, bool bot, char up, char left, char down, char right, char action) : _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
 {
 	this->_model = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh(meshPath.c_str()));
 	this->_model->setMaterialFlag(irr::video::EMF_LIGHTING, false);

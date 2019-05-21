@@ -13,10 +13,10 @@
 #include "Character.hpp"
 
 namespace IndieStudio {
-class EventListener : public irr::IEventReceiver {
+class CharacterEventListener : public irr::IEventReceiver {
 		public:
-			EventListener(std::vector<IndieStudio::Character> &characterVec);
-			~EventListener();
+			CharacterEventListener(std::vector<IndieStudio::Character> &characterVec);
+			~CharacterEventListener();
 			virtual bool OnEvent(const irr::SEvent &event);
 			void moveCharacter() noexcept;
 

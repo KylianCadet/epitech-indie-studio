@@ -5,15 +5,14 @@
 ** EventListener
 */
 
-#include "EventListener.hpp"
+#include "CharacterEventListener.hpp"
 #include <iostream>
 
-IndieStudio::EventListener::EventListener(std::vector<IndieStudio::Character> &characterVec) : _characterVec(characterVec)
+IndieStudio::CharacterEventListener::CharacterEventListener(std::vector<IndieStudio::Character> &characterVec) : _characterVec(characterVec)
 {
-	std::cout << "in event listener constructor" << std::endl;
 }
 
-IndieStudio::EventListener::~EventListener()
+IndieStudio::CharacterEventListener::~CharacterEventListener()
 {
 }
 
@@ -23,7 +22,7 @@ IndieStudio::EventListener::~EventListener()
 #define RIGHT_ROT 90
 #define LEFT_ROT 270
 
-void IndieStudio::EventListener::moveCharacter() noexcept
+void IndieStudio::CharacterEventListener::moveCharacter() noexcept
 {
 	bool isMoving = false;
 
@@ -60,7 +59,7 @@ void IndieStudio::EventListener::moveCharacter() noexcept
 	}
 }
 
-bool IndieStudio::EventListener::OnEvent(const irr::SEvent &event)
+bool IndieStudio::CharacterEventListener::OnEvent(const irr::SEvent &event)
 {
 	bool ret = false;
 

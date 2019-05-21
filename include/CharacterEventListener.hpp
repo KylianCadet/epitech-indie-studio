@@ -13,7 +13,7 @@
 #include "Character.hpp"
 
 namespace IndieStudio {
-class CharacterEventListener : public irr::IEventReceiver {
+	class CharacterEventListener : public irr::IEventReceiver {
 		public:
 			CharacterEventListener(std::vector<IndieStudio::Character> &characterVec);
 			~CharacterEventListener();

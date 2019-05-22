@@ -73,10 +73,10 @@ void IndieStudio::Game::createCubes() noexcept
 void IndieStudio::Game::createCharacters() noexcept
 {
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_sceneManager, this->_driver, "assets/characters/rei/tris.md2", "assets/characters/rei/rei.pcx", "assets/characters/rei/death.wav", false, 'i', 'j', 'k', 'l', 'o')
+		IndieStudio::Character(this->_sceneManager, this->_driver, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o')
 	);
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_sceneManager, this->_driver, "assets/characters/chun-li/tris.md2", "assets/characters/chun-li/original.bmp", "assets/characters/chun-li/death.wav", false, 'w', 'x', 'c', 'v', 'b')
+		IndieStudio::Character(this->_sceneManager, this->_driver, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b')
 	);
 	this->_characterVec.push_back(
 		IndieStudio::Character(this->_sceneManager, this->_driver, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y')

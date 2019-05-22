@@ -8,13 +8,14 @@
 #ifndef CHARACTER_HPP_
 #define CHARACTER_HPP_
 
+#include "Audio.hpp"
 #include <irrlicht.h>
 #include <iostream>
 
 namespace IndieStudio {
 	class Character {
 		public:
-			Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
+			Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
 			~Character();
 			char getUpKey() const noexcept;
 			char getLeftKey() const noexcept;
@@ -37,10 +38,15 @@ namespace IndieStudio {
 			bool getIsMoving() const noexcept;
 			void setIsMoving(bool) noexcept;
 
+			float getSpeed() const noexcept;
+			void setSpeed(float) noexcept;
+
 			irr::scene::IAnimatedMeshSceneNode *getMesh() noexcept;
+			IndieStudio::Audio *getDeathSound() noexcept;
 
 		private:
 			irr::scene::IAnimatedMeshSceneNode *_model;
+			IndieStudio::Audio *_deathSound;
 			bool _bot;
 			char _up;
 			char _left;
@@ -53,6 +59,7 @@ namespace IndieStudio {
 			bool _movingRight = false;
 			bool _doingAction = false;
 			bool _isMoving = false;
+			float _speed = 1.0f;
 	};
 };
 

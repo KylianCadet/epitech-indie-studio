@@ -7,16 +7,22 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, bool bot, char up, char left, char down, char right, char action) : _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action) : _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
 {
+	irr::video::ITexture *texture = driver->getTexture(texturePath.c_str());
+
 	this->_model = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh(meshPath.c_str()));
+	if (this->_model == NULL || texture == NULL)
+		exit(84);
 	this->_model->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	this->_model->setMaterialTexture(0, driver->getTexture(texturePath.c_str()));
-	this->_model->setMD2Animation(irr::scene::EMAT_STAND); // joue l'animation STAND en boucle
+	this->_model->setMaterialTexture(0, texture);
+	this->_model->setMD2Animation(irr::scene::EMAT_STAND);
+	this->_deathSound = new IndieStudio::Audio(deathSoundPath);
 }
 
 IndieStudio::Character::~Character()
 {
+	// delete this->_deathSound;
 }
 
 irr::scene::IAnimatedMeshSceneNode *IndieStudio::Character::getMesh() noexcept
@@ -109,4 +115,19 @@ bool IndieStudio::Character::getIsMoving(void) const noexcept
 void IndieStudio::Character::setIsMoving(bool b) noexcept
 {
 	this->_isMoving = b;
+}
+
+float IndieStudio::Character::getSpeed(void) const noexcept
+{
+	return (this->_speed);
+}
+
+void IndieStudio::Character::setSpeed(float speed) noexcept
+{
+	this->_speed = speed;
+}
+
+IndieStudio::Audio *IndieStudio::Character::getDeathSound() noexcept
+{
+	return (this->_deathSound);
 }

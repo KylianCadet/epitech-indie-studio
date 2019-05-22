@@ -34,6 +34,7 @@ elseif(UNIX)
 	set(BINDIR "bin")
 	set(CMAKE_CXX_FLAGS "-W -Wextra -Werror")
 	set(IRRLICHT_DEPENDENCIES Irrlicht X11 Xxf86vm pthread GL)
+	set(SFML_AUDIO_DEPENDENCIES sfml-audio)
 	install(DIRECTORY ${CMAKE_SOURCE_DIR}/cmake/lib/irrlicht-includes 
 		DESTINATION /usr/include
 		FILE_PERMISSIONS WORLD_READ WORLD_WRITE
@@ -68,12 +69,17 @@ if(IRRLICHT_FOUND)
 		target_link_libraries(bomberman
 					${IRRLICHT_DEPENDENCIES}
 					${IRRLICHT_LIBRARY}
+					${SFML_AUDIO_DEPENDENCIES}
 					)
 		file(COPY ${IRRLICHT_DLL} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/build/Debug")
 		file(COPY ${IRRLICHT_LIBRARY} DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/Debug")	
 	else()
 		include_directories(${IRRLICHT_INCLUDE_DIR})
-		target_link_libraries(bomberman ${IRRLICHT_DEPENDENCIES} ${IRRLICHT_LIBRARY})
+		target_link_libraries(bomberman
+					${IRRLICHT_DEPENDENCIES}
+					${IRRLICHT_LIBRARY}
+					${SFML_AUDIO_DEPENDENCIES}
+					)
 	endif()
 
 	set_property		(TARGET bomberman PROPERTY CXX_STANDARD 11)

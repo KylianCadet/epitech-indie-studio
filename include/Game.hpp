@@ -21,6 +21,7 @@ namespace IndieStudio {
 			void createCubes() noexcept;
 			void createCharacters() noexcept;
 			void render() noexcept;
+			void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
 		private:
 			irr::IrrlichtDevice *_device;
 			irr::scene::ISceneManager *_sceneManager;

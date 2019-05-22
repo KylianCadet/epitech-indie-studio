@@ -16,11 +16,22 @@ IndieStudio::CharacterEventListener::~CharacterEventListener()
 {
 }
 
-#define MOV 1.0f
 #define UP_ROT 0
 #define DOWN_ROT 180
 #define RIGHT_ROT 90
 #define LEFT_ROT 270
+
+void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool isMoving,irr::f32 &coordinate, int rotation, bool sign)
+{
+	if (isMoving == true) {
+		if (sign)
+			coordinate += character_it->getSpeed();
+		else
+			coordinate -= character_it->getSpeed();
+		character_it->getMesh()->setRotation(irr::core::vector3df(0, rotation, 0));
+		character_it->setIsMoving(true);
+	}
+}
 
 void IndieStudio::CharacterEventListener::moveCharacter() noexcept
 {
@@ -29,26 +40,10 @@ void IndieStudio::CharacterEventListener::moveCharacter() noexcept
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 		irr::core::vector3df v = character_it->getMesh()->getPosition();
 		isMoving = character_it->getIsMoving();
-		if (character_it->getMovingUp() == true) {
-			v.X += MOV;
-			character_it->getMesh()->setRotation(irr::core::vector3df(0, UP_ROT, 0));
-			character_it->setIsMoving(true);
-		}
-		if (character_it->getMovingDown() == true) {
-			v.X -= MOV;
-			character_it->getMesh()->setRotation(irr::core::vector3df(0, DOWN_ROT, 0));
-			character_it->setIsMoving(true);
-		}
-		if (character_it->getMovingLeft() == true) {
-			v.Z += MOV;
-			character_it->getMesh()->setRotation(irr::core::vector3df(0, LEFT_ROT, 0));
-			character_it->setIsMoving(true);
-		}
-		if (character_it->getMovingRight() == true) {
-			v.Z -= MOV;
-			character_it->getMesh()->setRotation(irr::core::vector3df(0, RIGHT_ROT, 0));
-			character_it->setIsMoving(true);
-		}
+		checkMove(character_it, character_it->getMovingUp(),v.X, UP_ROT, true);
+		checkMove(character_it, character_it->getMovingDown(),v.X, DOWN_ROT, false);
+		checkMove(character_it, character_it->getMovingLeft(),v.Z, LEFT_ROT, true);
+		checkMove(character_it, character_it->getMovingRight(),v.Z, RIGHT_ROT, false);
 		if (character_it->getMesh()->getPosition() != v && isMoving == false)
 			character_it->getMesh()->setMD2Animation(irr::scene::EMAT_RUN);
 		else if (character_it->getMesh()->getPosition() == v && isMoving == true) {
@@ -56,6 +51,9 @@ void IndieStudio::CharacterEventListener::moveCharacter() noexcept
 			character_it->getMesh()->setMD2Animation(irr::scene::EMAT_STAND);
 		}
 		character_it->getMesh()->setPosition(v);
+		if (character_it->getDoingAction() == true) {
+			character_it->getDeathSound()->playSound();
+		}
 	}
 }
 

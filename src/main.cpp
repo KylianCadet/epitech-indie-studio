@@ -8,6 +8,8 @@
 #include <irrlicht.h>
 #include "Game.hpp"
 #include "Menu.hpp"
+#include "Bomb.hpp"
+#include "RenderManager.hpp"
 
 int main()
 {
@@ -19,16 +21,16 @@ int main()
 	irr::scene::ISceneManager *menuSceneManager = gameSceneManager->createNewSceneManager();
 	device->getCursorControl()->setVisible(false);
 
-	IndieStudio::Game game(device, gameSceneManager, driver);
 	IndieStudio::Menu menu(device, menuSceneManager, driver);
-	device->setEventReceiver(&menu);
+	IndieStudio::Game game(device, gameSceneManager, driver);
+	IndieStudio::RenderManager renderManager(menu, game);
 
+	IndieStudio::Bomb bomb(gameSceneManager, driver, irr::core::vector3df(-50, 0, 0));
 	/* RENDU */
 	irr::video::SColor color(100, 0, 0, 0);
 	while (device->run()) {
 		driver->beginScene(true, true, color);
-		//game.render();
-		menu.render();
+		renderManager.render();
 		driver->endScene();
 	}
 	device->drop();

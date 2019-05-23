@@ -19,6 +19,7 @@ IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager 
 	_settings = new IndieStudio::Image2d(driver, "assets/menu/sett1.png", -42, space + 110);
 	_exit = new IndieStudio::Image2d(driver, "assets/menu/exit1.png", -42, space + 220);
 	device->getCursorControl()->setVisible(true);
+	device->setEventReceiver(this);
 }
 
 IndieStudio::Menu::~Menu(){}
@@ -37,18 +38,21 @@ bool IndieStudio::Menu::OnEvent(const irr::SEvent &event)
 	bool ret = false;
 
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
-		if (!this->_keyPressed) {
-			if (event.KeyInput.Key == irr::EKEY_CODE::KEY_UP) {
-				this->_keyPressed = true;
-				this->_keyUp = true;
-				std::cout << "here" << std::endl;
-				ret = true;
-			} else {
-				this->_keyUp = false;
-				this->_keyPressed = false;
-			}
+		if (event.KeyInput.Key == irr::EKEY_CODE::KEY_UP) {
+			this->_render = false;
+			ret = true;
 		}
 		return (ret);
 	}
 	return (false);
+}
+
+bool IndieStudio::Menu::hasRender(void) const noexcept
+{
+	return (this->_render);
+}
+
+void IndieStudio::Menu::setEventReceiver(void) noexcept
+{
+	this->_device->setEventReceiver(this);
 }

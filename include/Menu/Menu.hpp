@@ -11,14 +11,17 @@
 #include <irrlicht.h>
 #include <iostream>
 #include "Image2d.hpp"
+#include "IRender.hpp"
 
 namespace IndieStudio {
-	class Menu : public irr::IEventReceiver {
+	class Menu : public IRender, public irr::IEventReceiver {
 		public:
 			Menu(irr::IrrlichtDevice *, irr::scene::ISceneManager *, irr::video::IVideoDriver *);
 			~Menu();
 			virtual bool OnEvent(const irr::SEvent &event);
 			void render();
+			virtual bool hasRender(void) const noexcept;
+			virtual void setEventReceiver(void) noexcept;
 		private:
 			IndieStudio::Image2d * _bg;
 			IndieStudio::Image2d * _title;
@@ -29,8 +32,7 @@ namespace IndieStudio {
 			irr::scene::ISceneManager * _scene;
 			irr::video::IVideoDriver * _driver;
 			irr::gui::IGUIEnvironment * _gui;
-			bool _keyPressed = false;
-			bool _keyUp = false;
+			bool _render = true;
 	};
 };
 

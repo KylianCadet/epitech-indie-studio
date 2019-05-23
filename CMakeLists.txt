@@ -21,6 +21,7 @@ add_executable(
     ${sources_files} #Variable contenant les Dossiers qui eux contiennes des fichiers
 )
 include_directories	(include)
+include_directories	(include/Menu)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 

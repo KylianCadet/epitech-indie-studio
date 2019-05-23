@@ -13,7 +13,6 @@ IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager 
 	_scene = scene;
 	_driver = driver;
 	int space = 400;
-	_bg = new IndieStudio::Image2d(driver, "assets/menu/moon.png", 500, -250);
 	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", -42, 50);
 	_play = new IndieStudio::Image2d(driver, "assets/menu/play1.png", -42, space);
 	_settings = new IndieStudio::Image2d(driver, "assets/menu/sett1.png", -42, space + 110);
@@ -26,7 +25,6 @@ IndieStudio::Menu::~Menu(){}
 
 void IndieStudio::Menu::render()
 {
-	_bg->draw();
 	_title->draw();
 	_play->draw();
 	_settings->draw();

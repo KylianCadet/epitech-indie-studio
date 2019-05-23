@@ -23,7 +23,6 @@ namespace IndieStudio {
 			virtual bool hasRender(void) const noexcept;
 			virtual void setEventReceiver(void) noexcept;
 		private:
-			IndieStudio::Image2d * _bg;
 			IndieStudio::Image2d * _title;
 			IndieStudio::Image2d * _play;
 			IndieStudio::Image2d * _settings;

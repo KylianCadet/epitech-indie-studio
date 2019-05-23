@@ -25,9 +25,7 @@ int main()
 	IndieStudio::Game game(device, gameSceneManager, driver);
 	IndieStudio::RenderManager renderManager(menu, game);
 
-	IndieStudio::Bomb bomb(gameSceneManager, driver, irr::core::vector3df(-50, 0, 0));
-	/* RENDU */
-	irr::video::SColor color(100, 0, 0, 0);
+	irr::video::SColor color(100, 255, 255, 255);
 	while (device->run()) {
 		driver->beginScene(true, true, color);
 		renderManager.render();

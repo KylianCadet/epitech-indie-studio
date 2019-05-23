@@ -36,6 +36,7 @@ namespace IndieStudio {
 			float _rot_y = 0;
 			float _rot_z = 0;
 			float _counter = 0;
+			bool _keyPressed = false;
 	};
 };
 

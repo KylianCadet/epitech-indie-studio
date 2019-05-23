@@ -8,8 +8,6 @@
 #ifndef IRENDER_HPP_
 #define IRENDER_HPP_
 
-#include <irrlicht.h>
-
 namespace IndieStudio {
 	class IRender {
 		public:

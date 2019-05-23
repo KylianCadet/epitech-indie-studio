@@ -120,6 +120,8 @@ void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool 
 	}
 }
 
+#include "Bomb.hpp"
+
 void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
@@ -141,6 +143,10 @@ void IndieStudio::Game::moveCharacter() noexcept
 		if (character_it->getDoingAction() == true) {
 			character_it->getDeathSound()->playSound();
 		}
+		if (character_it->getDoingAction() == true && this->_keyPressed == false) {
+			IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_sceneManager, this->_driver, character_it->getMesh()->getPosition());
+			this->_keyPressed = true;
+		}
 	}
 }
 
@@ -149,29 +155,31 @@ bool IndieStudio::Game::OnEvent(const irr::SEvent &event)
 	bool ret = false;
 
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
-			for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-				if (event.KeyInput.Key == character_it->getUpKey()) {
-					character_it->setMovingUp(event.KeyInput.PressedDown);
-					ret = true;
-				}
-				if (event.KeyInput.Key == character_it->getLeftKey()) {
-					character_it->setMovingLeft(event.KeyInput.PressedDown);
-					ret = true;
-				}
-				if (event.KeyInput.Key == character_it->getDownKey()) {
-					character_it->setMovingDown(event.KeyInput.PressedDown);
-					ret = true;
-				}
-				if (event.KeyInput.Key == character_it->getRightKey()) {
-					character_it->setMovingRight(event.KeyInput.PressedDown);
-					ret = true;
-				}
-				if (event.KeyInput.Key == character_it->getActionKey()) {
-					character_it->setDoingAction(event.KeyInput.PressedDown);
-					ret = true;
-				}
+		for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+			if (event.KeyInput.Key == character_it->getUpKey()) {
+				character_it->setMovingUp(event.KeyInput.PressedDown);
+				ret = true;
 			}
-			return (ret);
+			if (event.KeyInput.Key == character_it->getLeftKey()) {
+				character_it->setMovingLeft(event.KeyInput.PressedDown);
+				ret = true;
+			}
+			if (event.KeyInput.Key == character_it->getDownKey()) {
+				character_it->setMovingDown(event.KeyInput.PressedDown);
+				ret = true;
+			}
+			if (event.KeyInput.Key == character_it->getRightKey()) {
+				character_it->setMovingRight(event.KeyInput.PressedDown);
+				ret = true;
+			}
+			if (event.KeyInput.Key == character_it->getActionKey()) {
+				if (event.KeyInput.PressedDown == false)
+					this->_keyPressed = false;
+				character_it->setDoingAction(event.KeyInput.PressedDown);
+				ret = true;
+			}
+		}
+		return (ret);
 	}
 	return (false);
 }

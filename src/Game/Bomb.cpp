@@ -41,7 +41,7 @@ void IndieStudio::Bomb::createParticule(irr::core::vector3df vector) noexcept
 	emitter->drop();
 
 	this->_particle->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	this->_particle->setMaterialTexture(0, this->_driver->getTexture("assets/bomb/smoke.jeg"));
+	this->_particle->setMaterialTexture(0, this->_driver->getTexture("assets/bomb/smoke.jpg"));
 
 	irr::scene::IParticleAffector* affector =
 		this->_particle->createFadeOutParticleAffector(
@@ -65,6 +65,8 @@ void IndieStudio::Bomb::startCountdown(void)
 	std::cout << "3 seconde elapsed" << std::endl;
 	sleep(1);
 	std::cout << "EXPLOSION" << std::endl;
-	this->_bomb->remove();
-	this->_particle->remove();
+	this->_sceneManager->addToDeletionQueue(this->_bomb);
+	this->_sceneManager->addToDeletionQueue(this->_particle);
+	// this->_bomb->remove();
+	// this->_particle->remove();
 }

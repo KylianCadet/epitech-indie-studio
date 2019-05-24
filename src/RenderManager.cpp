@@ -25,11 +25,11 @@ void IndieStudio::RenderManager::render()
 	} else {
 		if (this->_counter == false) {
 			this->_color = irr::video::SColor(255, 255, 255, 255);
-			// this->_map.setEventReceiver();
-			this->_game.setEventReceiver();
+			this->_map.setEventReceiver();
+		//	this->_game.setEventReceiver();
 			this->_counter = true;
 		}
-		// this->_map.render();
+		//this->_map.render();
 		this->_game.render();
 	}
 }

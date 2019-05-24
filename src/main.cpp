@@ -25,7 +25,7 @@ int main()
 
 	IndieStudio::Menu menu(device, menuSceneManager, driver);
 	IndieStudio::Game game(device, gameSceneManager, driver);
-	IndieStudio::Map map(device, gameSceneManager, driver);
+	IndieStudio::Map map(device, mapSceneManager, driver);
 	IndieStudio::RenderManager renderManager(menu, game, map);
 
 	while (device->run()) {

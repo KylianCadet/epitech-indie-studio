@@ -18,9 +18,10 @@ namespace IndieStudio {
 			~Bomb();
 			void createParticule(irr::core::vector3df vector) noexcept;
 			void startCountdown(void);
+			void explosion(irr::core::vector3df position);
+			std::vector<irr::core::vector3df> explosionDir(std::vector<irr::core::vector3df> vec);
 			void playExplosionSound(void) noexcept;
 			bool getAlive(void) const noexcept;
-			void exploseBomb(void) noexcept;
 
 		private:
 			irr::scene::IAnimatedMeshSceneNode *_bomb;
@@ -30,7 +31,6 @@ namespace IndieStudio {
 			IndieStudio::Audio _sound;
 			bool _alive = true;
 			int _bombSize;
-
 	};
 };
 

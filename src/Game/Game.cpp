@@ -32,8 +32,8 @@ void IndieStudio::Game::createCubeColision(irr::scene::IMeshSceneNode *cube) noe
 	metaSelector->addTriangleSelector(selector);
 
 	/* CREATE ANIMATOR RESPONSE FOR EACH OF THE CHARACTERS */
-	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-		irr::scene::ISceneNode *node = character_it->getMesh();
+	for (auto & character_it : this->_characterVec) {
+		irr::scene::ISceneNode *node = character_it.getMesh();
 		irr::scene::ISceneNodeAnimatorCollisionResponse* anim = this->_sceneManager->createCollisionResponseAnimator(
 			metaSelector,
 			node,

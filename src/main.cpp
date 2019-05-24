@@ -13,6 +13,7 @@
 
 int main()
 {
+	sleep(1);
 	irr::IrrlichtDevice *device = irr::createDevice(
 		irr::video::EDT_OPENGL,
 		irr::core::dimension2d<irr::u32>(2000, 2000), 32);
@@ -25,7 +26,6 @@ int main()
 	IndieStudio::Game game(device, gameSceneManager, driver);
 	IndieStudio::RenderManager renderManager(menu, game, driver);
 
-	
 	while (device->run()) {
 		renderManager.render();
 		driver->endScene();

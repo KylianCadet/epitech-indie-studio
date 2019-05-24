@@ -11,13 +11,7 @@ IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager 
 : _device(device), _scene(scene), _driver(driver)
 {
 	_menuMain = new IndieStudio::MenuMain(driver);
-	int space = 400;
-	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", -42, 100);
-	_bomberman = new IndieStudio::Image2d(driver, "assets/menu/bomberman.png", 350, 0);
-	_newgame = new IndieStudio::Image2d(driver, "assets/menu/buttons/newgame.png", -42, space);
-	_loadgame = new IndieStudio::Image2d(driver, "assets/menu/buttons/loadgame.png", -42, space + 110);
-	_options = new IndieStudio::Image2d(driver, "assets/menu/buttons/options.png", -42, space + 220);
-	_exit = new IndieStudio::Image2d(driver, "assets/menu/buttons/exit.png", -42, space + 330);
+	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", std::pair<int, int> (-1, 100));
 	_device->setEventReceiver(this);
 }
 
@@ -26,11 +20,7 @@ IndieStudio::Menu::~Menu(){}
 void IndieStudio::Menu::render()
 {
 	_title->draw();
-	//_bomberman->draw();
-	_newgame->draw();
-	_loadgame->draw();
-	_options->draw();
-	_exit->draw();
+	_menuMain->drawAll();
 }
 
 bool isKeyPress(const irr::SEvent & event, irr::EKEY_CODE key)
@@ -45,7 +35,11 @@ bool IndieStudio::Menu::OnEvent(const irr::SEvent & event)
 {
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT && !event.KeyInput.PressedDown) {
 		if (isKeyPress(event, irr::EKEY_CODE::KEY_RETURN))
-			this->_render = false;
+			returnMainMenu();
+		if (isKeyPress(event, irr::EKEY_CODE::KEY_UP))
+			_menuMain->setIncA(-1);
+		if (isKeyPress(event, irr::EKEY_CODE::KEY_DOWN))
+			_menuMain->setIncA(1);
 		return true;
 	}
 	return false;
@@ -59,4 +53,21 @@ bool IndieStudio::Menu::hasRender(void) const noexcept
 void IndieStudio::Menu::setEventReceiver(void) noexcept
 {
 	this->_device->setEventReceiver(this);
+}
+
+void IndieStudio::Menu::setRender(bool s)
+{
+	this->_render = s;
+}
+
+void IndieStudio::Menu::returnMainMenu()
+{
+	if (_menuMain->getBtnA() == 0)
+		_render = false;
+	else if (_menuMain->getBtnA() == 1)
+		printf("Menu load game pas fini, ta qua le faire si t pas content lol\n");
+	else if (_menuMain->getBtnA() == 2)
+		printf("Menu options game pas fini, ta qua le faire si t pas content lol\n");
+	else if (_menuMain->getBtnA() == 3)
+		_device->drop();
 }

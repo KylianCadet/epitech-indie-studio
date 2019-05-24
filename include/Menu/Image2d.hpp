@@ -14,10 +14,11 @@
 namespace IndieStudio {
 	class Image2d {
 		public:
-			Image2d(irr::video::IVideoDriver *, std::string, int, int);
+			Image2d(irr::video::IVideoDriver *, std::string, std::pair<int, int>);
 			~Image2d();
 			void setRectangle(void);
 			void setPositionToMid(void);
+			void setTexture(std::string);
 			void draw(void);
 		public:
 			irr::video::ITexture * _image;

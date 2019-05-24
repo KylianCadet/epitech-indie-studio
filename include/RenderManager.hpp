@@ -14,13 +14,14 @@
 namespace IndieStudio {
 	class RenderManager {
 		public:
-			RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game, irr::video::IVideoDriver *driver);
+			RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game);
 			~RenderManager();
 			void render();
+			irr::video::SColor getColor() const noexcept;
 		private:
 			IndieStudio::IRender &_menu;
 			IndieStudio::IRender &_game;
-			irr::video::IVideoDriver *_driver;
+			irr::video::SColor _color;
 			bool _counter = false;
 	};
 };

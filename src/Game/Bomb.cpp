@@ -8,10 +8,28 @@
 #include "Bomb.hpp"
 #include <chrono>
 #include <thread>
+#include <iostream>
 
-IndieStudio::Bomb::Bomb(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, irr::core::vector3df vector) : _sceneManager(sceneManager), _driver(driver)
+#define WALL_SIZE 20.0f
+
+void setMiddle(float &vec)
 {
-	this->_bomb = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("assets/bomb/dinamite.obj"), 0, -1, vector);
+	if ((int)vec % 30 != 0) {
+		float f = (int)vec % 30;
+		if (f >= 15)
+			vec += (30 - f);
+		else
+			vec -= f;
+	}
+}
+
+IndieStudio::Bomb::Bomb(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, irr::core::vector3df vector, int bombSize) : _sceneManager(sceneManager), _driver(driver), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
+{
+	this->_bomb = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("assets/bomb/dinamite.obj"));
+	setMiddle(vector.X);
+	setMiddle(vector.Y);
+	setMiddle(vector.Z);
+	this->_bomb->setPosition(vector);
 	this->_bomb->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	this->_bomb->setScale(irr::core::vector3df(20, 20, 20));
 	this->createParticule(vector);
@@ -52,21 +70,46 @@ void IndieStudio::Bomb::createParticule(irr::core::vector3df vector) noexcept
 	affector->drop();
 }
 
-#include <iostream>
 #include <unistd.h>
+#include "Audio.hpp"
+
+void IndieStudio::Bomb::playExplosionSound(void) noexcept
+{
+	this->_sound.playSound(true);
+}
+
+void IndieStudio::Bomb::exploseBomb(void) noexcept
+{
+	irr::core::vector3df pos = this->_bomb->getPosition();
+	// int x = pos.X;
+	// int z = pos.Z;
+
+	// for (int i = 0; i != this->_bombSize; i++) {
+	// 	this->createParticule(irr::core::vector3df(pos.X + (i * 30), pos.Y, pos.Z));
+	// 	this->createParticule(irr::core::vector3df(pos.X, pos.Y, pos.Z + (i * 30)));
+	// }
+	sleep(1);
+	
+}
 
 void IndieStudio::Bomb::startCountdown(void)
 {
 	sleep(1);
-	std::cout << "1 seconde elapsed" << std::endl;
+	this->_bomb->setScale(irr::core::vector3df(22, 22, 22));
 	sleep(1);
-	std::cout << "2 seconde elapsed" << std::endl;
+	this->_bomb->setScale(irr::core::vector3df(24, 24, 24));
 	sleep(1);
-	std::cout << "3 seconde elapsed" << std::endl;
-	sleep(1);
-	std::cout << "EXPLOSION" << std::endl;
+	this->_bomb->setScale(irr::core::vector3df(26, 26, 26));
+	// std::thread t1(&IndieStudio::Bomb::playExplosionSound, this);
+	// t1.detach();
+	this->exploseBomb();
 	this->_sceneManager->addToDeletionQueue(this->_bomb);
 	this->_sceneManager->addToDeletionQueue(this->_particle);
-	// this->_bomb->remove();
-	// this->_particle->remove();
+	this->_sound.playSound(true);
+	this->_alive = false;
+}
+
+bool IndieStudio::Bomb::getAlive() const noexcept
+{
+	return (this->_alive);
 }

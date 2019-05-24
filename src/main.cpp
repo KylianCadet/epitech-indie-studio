@@ -24,9 +24,10 @@ int main()
 
 	IndieStudio::Menu menu(device, menuSceneManager, driver);
 	IndieStudio::Game game(device, gameSceneManager, driver);
-	IndieStudio::RenderManager renderManager(menu, game, driver);
+	IndieStudio::RenderManager renderManager(menu, game);
 
 	while (device->run()) {
+		driver->beginScene(true, true, renderManager.getColor());
 		renderManager.render();
 		driver->endScene();
 	}

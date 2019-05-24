@@ -144,8 +144,12 @@ void IndieStudio::Game::moveCharacter() noexcept
 			character_it->getDeathSound()->playSound();
 		}
 		if (character_it->getDoingAction() == true && this->_keyPressed == false) {
-			IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_sceneManager, this->_driver, character_it->getMesh()->getPosition());
-			this->_keyPressed = true;
+			character_it->checkDeleteBomb();
+			if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
+				IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_sceneManager, this->_driver, character_it->getMesh()->getPosition(), character_it->getBombSize());
+				character_it->addBomb(bomb);
+				this->_keyPressed = true;
+			}
 		}
 	}
 }

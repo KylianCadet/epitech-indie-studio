@@ -18,9 +18,9 @@ IndieStudio::Audio::~Audio()
 {
 }
 
-void IndieStudio::Audio::playSound() noexcept
+void IndieStudio::Audio::playSound(bool forced) noexcept
 {
-	if (this->_sound.getStatus() == sf::SoundSource::Status::Stopped)
+	if (this->_sound.getStatus() == sf::SoundSource::Status::Stopped || forced == true)
 		this->_sound.play();
 }
 

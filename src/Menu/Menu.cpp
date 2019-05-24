@@ -8,43 +8,41 @@
 #include "Menu.hpp"
 
 IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager * scene, irr::video::IVideoDriver * driver)
+: _device(device), _scene(scene), _driver(driver)
 {
-	_device = device;
-	_scene = scene;
-	_driver = driver;
-	int space = 400;
-	_bg = new IndieStudio::Image2d(driver, "assets/menu/moon.png", 500, -250);
-	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", -42, 50);
-	_play = new IndieStudio::Image2d(driver, "assets/menu/play1.png", -42, space);
-	_settings = new IndieStudio::Image2d(driver, "assets/menu/sett1.png", -42, space + 110);
-	_exit = new IndieStudio::Image2d(driver, "assets/menu/exit1.png", -42, space + 220);
-	device->getCursorControl()->setVisible(true);
-	device->setEventReceiver(this);
+	_menuMain = new IndieStudio::MenuMain(driver);
+	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", std::pair<int, int> (-1, 100));
+	_device->setEventReceiver(this);
 }
 
 IndieStudio::Menu::~Menu(){}
 
 void IndieStudio::Menu::render()
 {
-	_bg->draw();
 	_title->draw();
-	_play->draw();
-	_settings->draw();
-	_exit->draw();
+	_menuMain->drawAll();
 }
 
-bool IndieStudio::Menu::OnEvent(const irr::SEvent &event)
+bool isKeyPress(const irr::SEvent & event, irr::EKEY_CODE key)
 {
-	bool ret = false;
+	if (event.KeyInput.Key == key)
+		return true;
+	else
+		return false;
+}
 
-	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
-		if (event.KeyInput.Key == irr::EKEY_CODE::KEY_UP) {
-			this->_render = false;
-			ret = true;
-		}
-		return (ret);
+bool IndieStudio::Menu::OnEvent(const irr::SEvent & event)
+{
+	if (event.EventType == irr::EET_KEY_INPUT_EVENT && !event.KeyInput.PressedDown) {
+		if (isKeyPress(event, irr::EKEY_CODE::KEY_RETURN))
+			returnMainMenu();
+		if (isKeyPress(event, irr::EKEY_CODE::KEY_UP))
+			_menuMain->setIncA(-1);
+		if (isKeyPress(event, irr::EKEY_CODE::KEY_DOWN))
+			_menuMain->setIncA(1);
+		return true;
 	}
-	return (false);
+	return false;
 }
 
 bool IndieStudio::Menu::hasRender(void) const noexcept
@@ -55,4 +53,21 @@ bool IndieStudio::Menu::hasRender(void) const noexcept
 void IndieStudio::Menu::setEventReceiver(void) noexcept
 {
 	this->_device->setEventReceiver(this);
+}
+
+void IndieStudio::Menu::setRender(bool s)
+{
+	this->_render = s;
+}
+
+void IndieStudio::Menu::returnMainMenu()
+{
+	if (_menuMain->getBtnA() == 0)
+		_render = false;
+	else if (_menuMain->getBtnA() == 1)
+		printf("Menu load game pas fini, ta qua le faire si t pas content lol\n");
+	else if (_menuMain->getBtnA() == 2)
+		printf("Menu options game pas fini, ta qua le faire si t pas content lol\n");
+	else if (_menuMain->getBtnA() == 3)
+		_device->drop();
 }

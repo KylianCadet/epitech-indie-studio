@@ -23,6 +23,7 @@ add_executable(
 include_directories	(include)
 include_directories	(include/Menu)
 include_directories	(include/Game)
+include_directories	(include/Map)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 

@@ -9,6 +9,8 @@
 #define CHARACTER_HPP_
 
 #include "Audio.hpp"
+#include "Bomb.hpp"
+#include <vector>
 #include <irrlicht.h>
 #include <iostream>
 
@@ -41,12 +43,26 @@ namespace IndieStudio {
 			float getSpeed() const noexcept;
 			void setSpeed(float) noexcept;
 
+			int getBombNb() const noexcept;
+			void setBombNb(int) noexcept;
+
+			int getBombSize() const noexcept;
+			void setBombSize(int) noexcept;
+
+			std::size_t getLaidBomb(void) const noexcept;
+
+			void addBomb(IndieStudio::Bomb *) noexcept;
+
+			void checkDeleteBomb() noexcept;
+
 			irr::scene::IAnimatedMeshSceneNode *getMesh() noexcept;
 			IndieStudio::Audio *getDeathSound() noexcept;
 
 		private:
 			irr::scene::IAnimatedMeshSceneNode *_model;
 			IndieStudio::Audio *_deathSound;
+			std::vector<IndieStudio::Bomb *> _bombArr;
+
 			bool _bot;
 			char _up;
 			char _left;
@@ -60,6 +76,8 @@ namespace IndieStudio {
 			bool _doingAction = false;
 			bool _isMoving = false;
 			float _speed = 1.0f;
+			int _bombNb = 1;
+			int _bombSize = 1;
 	};
 };
 

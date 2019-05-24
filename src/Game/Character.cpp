@@ -131,3 +131,34 @@ IndieStudio::Audio *IndieStudio::Character::getDeathSound() noexcept
 {
 	return (this->_deathSound);
 }
+
+int IndieStudio::Character::getBombNb() const noexcept
+{
+	return (this->_bombNb);
+}
+
+void IndieStudio::Character::checkDeleteBomb() noexcept
+{
+	for (auto bomb_it = this->_bombArr.begin(); bomb_it != this->_bombArr.end(); bomb_it++)
+		if (bomb_it[0]->getAlive() == false) {
+			this->_bombArr.erase(bomb_it);
+			delete bomb_it[0];
+			this->checkDeleteBomb();
+			return;
+		}
+}
+
+std::size_t IndieStudio::Character::getLaidBomb() const noexcept
+{
+	return (this->_bombArr.size());
+}
+
+int IndieStudio::Character::getBombSize() const noexcept
+{
+	return (this->_bombSize);
+}
+
+void IndieStudio::Character::addBomb(IndieStudio::Bomb* bomb) noexcept
+{
+	this->_bombArr.push_back(bomb);
+}

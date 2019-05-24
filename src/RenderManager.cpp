@@ -7,9 +7,10 @@
 
 #include "RenderManager.hpp"
 
-IndieStudio::RenderManager::RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game) : _menu(menu), _game(game)
+IndieStudio::RenderManager::RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game, IndieStudio::IRender &map) : _menu(menu), _game(game), _map(map)
 {
 	menu.setEventReceiver();
+	this->_color = irr::video::SColor(255, 0, 0, 0);
 }
 
 IndieStudio::RenderManager::~RenderManager()
@@ -18,13 +19,22 @@ IndieStudio::RenderManager::~RenderManager()
 
 void IndieStudio::RenderManager::render()
 {
-	if (this->_menu.hasRender())
+	if (this->_menu.hasRender()) {
+		
 		this->_menu.render();
-	else {
+	} else {
 		if (this->_counter == false) {
-			this->_game.setEventReceiver();
+			this->_color = irr::video::SColor(255, 255, 255, 255);
+			this->_map.setEventReceiver();
+			//this->_game.setEventReceiver();
 			this->_counter = true;
 		}
-		this->_game.render();
+		this->_map.render();
+		//this->_game.render();
 	}
+}
+
+irr::video::SColor IndieStudio::RenderManager::getColor() const noexcept
+{
+	return (this->_color);
 }

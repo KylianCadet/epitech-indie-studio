@@ -3,3 +3,5 @@ CMakeFiles
 CMakeCache.txt
 Makefile
 .vscode
+assets/menu/trash/*
+build/*

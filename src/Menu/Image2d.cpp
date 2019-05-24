@@ -7,13 +7,13 @@
 
 #include "Image2d.hpp"
 
-IndieStudio::Image2d::Image2d(irr::video::IVideoDriver * driver, std::string str, int x, int y)
+IndieStudio::Image2d::Image2d(irr::video::IVideoDriver * driver, std::string str, std::pair<int, int> position)
+: _driver(driver)
 {
-	_driver = driver;
-	_image = _driver->getTexture(str.c_str());
-	_position = irr::core::position2d<irr::s32>(x, y);
+	setTexture(str);
+	_position = irr::core::position2d<irr::s32>(position.first, position.second);
 	setRectangle();
-	if (x == -42)
+	if (position.first == -1)
 		setPositionToMid();
 }
 
@@ -40,7 +40,12 @@ void IndieStudio::Image2d::setPositionToMid(void)
 	_position.X = screen.Width / 2 - _rectangle.LowerRightCorner.X / 2;;
 }
 
-void IndieStudio::Image2d::draw(void)
+void IndieStudio::Image2d::draw()
 {
 	_driver->draw2DImage(_image, _position, _rectangle, 0, irr::video::SColor (255, 255, 255, 255), true);
+}
+
+void IndieStudio::Image2d::setTexture(std::string skin)
+{
+	_image = _driver->getTexture(skin.c_str());
 }

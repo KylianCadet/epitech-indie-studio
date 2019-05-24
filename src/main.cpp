@@ -10,24 +10,26 @@
 #include "Menu.hpp"
 #include "Bomb.hpp"
 #include "RenderManager.hpp"
-
+#include "Map.hpp"
 int main()
 {
+	sleep(1);
 	irr::IrrlichtDevice *device = irr::createDevice(
 		irr::video::EDT_OPENGL,
 		irr::core::dimension2d<irr::u32>(2000, 2000), 32);
 	irr::video::IVideoDriver *driver = device->getVideoDriver();
 	irr::scene::ISceneManager *gameSceneManager = device->getSceneManager();
 	irr::scene::ISceneManager *menuSceneManager = gameSceneManager->createNewSceneManager();
+	irr::scene::ISceneManager *mapSceneManager = gameSceneManager->createNewSceneManager();
 	device->getCursorControl()->setVisible(false);
 
 	IndieStudio::Menu menu(device, menuSceneManager, driver);
 	IndieStudio::Game game(device, gameSceneManager, driver);
-	IndieStudio::RenderManager renderManager(menu, game);
+	IndieStudio::Map map(device, gameSceneManager, driver);
+	IndieStudio::RenderManager renderManager(menu, game, map);
 
-	irr::video::SColor color(100, 255, 255, 255);
 	while (device->run()) {
-		driver->beginScene(true, true, color);
+		driver->beginScene(true, true, renderManager.getColor());
 		renderManager.render();
 		driver->endScene();
 	}

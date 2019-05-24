@@ -13,7 +13,7 @@
 namespace IndieStudio {
 	class Audio {
 		public:
-			Audio(std::string audioPath);
+			Audio(std::string audioPath, bool loop = false);
 			~Audio();
 			void playSound(bool forced = false) noexcept;
 			void stopSound() noexcept;

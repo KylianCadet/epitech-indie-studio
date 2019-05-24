@@ -7,11 +7,13 @@
 
 #include "Audio.hpp"
 
-IndieStudio::Audio::Audio(std::string audioPath)
+IndieStudio::Audio::Audio(std::string audioPath, bool loop)
 {
 	if (!this->_soundBuffer.loadFromFile(audioPath))
 		exit(84);
 	this->_sound.setBuffer(this->_soundBuffer);
+	if (loop)
+		this->_sound.setLoop(true);
 }
 
 IndieStudio::Audio::~Audio()

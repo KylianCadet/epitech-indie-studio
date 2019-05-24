@@ -19,6 +19,7 @@
 #include "LoadGame.hpp"
 #include "Options.hpp"
 #include "Exit.hpp"
+#include "Audio.hpp"
 
 namespace IndieStudio {
 	class MenuMain {
@@ -31,6 +32,8 @@ namespace IndieStudio {
 			int getBtnA() const noexcept;
 			void drawAll();
 		private:
+			IndieStudio::Audio *_tick;
+			IndieStudio::Audio *_music;
 			NewGame * _newGame;
 			LoadGame * _loadGame;
 			Options * _options;

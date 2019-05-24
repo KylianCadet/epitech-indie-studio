@@ -69,5 +69,5 @@ void IndieStudio::Menu::returnMainMenu()
 	else if (_menuMain->getBtnA() == 2)
 		printf("Menu options game pas fini, ta qua le faire si t pas content lol\n");
 	else if (_menuMain->getBtnA() == 3)
-		_device->drop();
+		_device->closeDevice();
 }

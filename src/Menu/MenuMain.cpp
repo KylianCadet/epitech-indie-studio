@@ -16,6 +16,9 @@ IndieStudio::MenuMain::MenuMain(irr::video::IVideoDriver * driver)
 	_loadGame = new LoadGame(_driver, "assets/menu/buttons/loadgame.png", "assets/menu/buttons/loadgameA.png", std::pair<int, int> (-1, pos + 110));
 	_options = new Options(_driver, "assets/menu/buttons/options.png", "assets/menu/buttons/optionsA.png", std::pair<int, int> (-1, pos + 220));
 	_exit = new Exit(_driver, "assets/menu/buttons/exit.png", "assets/menu/buttons/exitA.png", std::pair<int, int> (-1, pos + 330));
+	_tick = new IndieStudio::Audio("sounds/menu/tick.ogg");
+	_music = new IndieStudio::Audio("sounds/menu/Stillness2.ogg", true);
+	_music->playSound();
 }
 
 IndieStudio::MenuMain::~MenuMain()
@@ -59,6 +62,7 @@ void IndieStudio::MenuMain::setSkin()
 
 void IndieStudio::MenuMain::setIncA(int i)
 {
+	_tick->playSound();
 	_btnA += i;
 	if (_btnA > 3)
 		_btnA = 0;

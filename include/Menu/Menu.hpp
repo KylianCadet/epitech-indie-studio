@@ -10,8 +10,10 @@
 
 #include <irrlicht.h>
 #include <iostream>
+#include <unistd.h>
 #include "Image2d.hpp"
 #include "IRender.hpp"
+#include "MenuMain.hpp"
 
 namespace IndieStudio {
 	class Menu : public IRender, public irr::IEventReceiver {
@@ -23,9 +25,12 @@ namespace IndieStudio {
 			virtual bool hasRender(void) const noexcept;
 			virtual void setEventReceiver(void) noexcept;
 		private:
+			MenuMain * _menuMain;
 			IndieStudio::Image2d * _title;
-			IndieStudio::Image2d * _play;
-			IndieStudio::Image2d * _settings;
+			IndieStudio::Image2d * _bomberman;
+			IndieStudio::Image2d * _newgame;
+			IndieStudio::Image2d * _loadgame;
+			IndieStudio::Image2d * _options;
 			IndieStudio::Image2d * _exit;
 			irr::IrrlichtDevice * _device;
 			irr::scene::ISceneManager * _scene;

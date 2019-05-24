@@ -13,6 +13,7 @@ IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager 
 	_menuMain = new IndieStudio::MenuMain(driver);
 	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", std::pair<int, int> (-1, 100));
 	_device->setEventReceiver(this);
+	_enter = new IndieStudio::Audio("sounds/menu/turnoff.ogg");
 }
 
 IndieStudio::Menu::~Menu(){}
@@ -62,6 +63,7 @@ void IndieStudio::Menu::setRender(bool s)
 
 void IndieStudio::Menu::returnMainMenu()
 {
+	_enter->playSound();
 	if (_menuMain->getBtnA() == 0)
 		_render = false;
 	else if (_menuMain->getBtnA() == 1)

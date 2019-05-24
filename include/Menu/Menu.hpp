@@ -14,6 +14,7 @@
 #include "Image2d.hpp"
 #include "IRender.hpp"
 #include "MenuMain.hpp"
+#include "Audio.hpp"
 
 namespace IndieStudio {
 	class Menu : public IRender, public irr::IEventReceiver {
@@ -28,6 +29,7 @@ namespace IndieStudio {
 			virtual void setEventReceiver(void) noexcept;
 		private:
 			MenuMain * _menuMain;
+			IndieStudio::Audio *_enter;
 			IndieStudio::Image2d * _title;
 			irr::IrrlichtDevice * _device;
 			irr::scene::ISceneManager * _scene;

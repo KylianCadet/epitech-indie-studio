@@ -19,6 +19,7 @@
 #include "Image2d.hpp"
 #include "IRender.hpp"
 #include "MenuMain.hpp"
+#include "MenuOptions.hpp"
 #include "Audio.hpp"
 
 namespace IndieStudio
@@ -30,7 +31,9 @@ namespace IndieStudio
 		~MenuManager();
 
 		void render(void) noexcept;
+		void refreshAudio(void) noexcept;
 		void returnAction(void) noexcept;
+		void escapeAction(void) noexcept;
 		void setRenderStatus(bool) noexcept;
 
 		virtual bool OnEvent(const irr::SEvent &event);
@@ -38,18 +41,22 @@ namespace IndieStudio
 		virtual void setEventReceiver(void) noexcept;
 
 	private:
+		int _volume = 5;
 		bool _render = true;
 		int _menuRender = MAIN_MENU;
 
-		MenuMain *_menuMain;
+		IndieStudio::MenuMain *_menuMain;
+		IndieStudio::MenuOptions *_menuOptions;
 
 		irr::IrrlichtDevice *_device;
 		irr::scene::ISceneManager *_scene;
 		irr::video::IVideoDriver *_driver;
 
+		IndieStudio::Audio *_mainMusic;
+		IndieStudio::Audio *_volumeSwitchSound;
 		IndieStudio::Audio *_buttonSwitchSound;
 		IndieStudio::Audio *_buttonReturnSound;
-		IndieStudio::Audio *_mainMusic;
+
 		IndieStudio::Image2d *_frameMenu;
 		IndieStudio::Image2d *_titleMenu;
 

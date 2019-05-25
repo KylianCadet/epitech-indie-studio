@@ -19,7 +19,8 @@ namespace IndieStudio
 		Image2d(irr::video::IVideoDriver *, std::string, std::pair<int, int>);
 		~Image2d();
 
-		void setRectangle(void) noexcept;
+		void setFullRectangle(void) noexcept;
+		void setCustomRectangle(int, int, int, int) noexcept;
 		void setPositionToMid(void) noexcept;
 		void setTexture(std::string) noexcept;
 		void drawImage(void) noexcept;

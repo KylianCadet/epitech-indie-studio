@@ -16,7 +16,9 @@ namespace IndieStudio {
 			Audio(std::string audioPath, bool loop = false);
 			~Audio();
 			void playSound(bool forced = false) noexcept;
-			void stopSound() noexcept;
+			void stopSound(void) noexcept;
+			float getVolume(void) const noexcept;
+			void setVolume(int) noexcept;
 		private:
 			sf::SoundBuffer _soundBuffer;
 			sf::Sound _sound;

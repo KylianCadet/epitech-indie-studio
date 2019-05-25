@@ -30,3 +30,13 @@ void IndieStudio::Audio::stopSound() noexcept
 {
 	this->_sound.stop();
 }
+
+void IndieStudio::Audio::setVolume(int newVolume) noexcept
+{
+	this->_sound.setVolume(newVolume);
+}
+
+float IndieStudio::Audio::getVolume(void) const noexcept
+{
+	return this->_sound.getVolume();
+}

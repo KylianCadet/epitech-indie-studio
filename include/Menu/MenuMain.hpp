@@ -17,28 +17,30 @@
 #include <iostream>
 #include "Audio.hpp"
 #include "Button.hpp"
+#include "IMenu.hpp"
 
 namespace IndieStudio
 {
-	class MenuMain
+	class MenuMain : public IMenu
 	{
 	public:
 		MenuMain(irr::video::IVideoDriver *);
 		~MenuMain();
 
-		void drawMenu(void) noexcept;
-		void refreshSkin(void) noexcept;
-		void setButtonSwitch(int) noexcept;
-		void setButtonActive(int) noexcept;
-		int getButtonStatus(void) const noexcept;
+		virtual void drawMenu(void) noexcept;
+		virtual void drawButtons(void) noexcept;
+		virtual void refreshSkin(void) noexcept;
+		virtual void setButtonSwitch(int) noexcept;
+		virtual void setButtonActive(int) noexcept;
+		virtual int getCurrentButtonActive(void) const noexcept;
 
 	private:
 		int _buttonStatus = NEWGAME;
 
-		Button *_newGame;
-		Button *_loadGame;
-		Button *_options;
-		Button *_exit;
+		IndieStudio::Button *_newGame;
+		IndieStudio::Button *_loadGame;
+		IndieStudio::Button *_options;
+		IndieStudio::Button *_exit;
 
 		irr::video::IVideoDriver *_driver;
 	};

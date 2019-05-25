@@ -21,16 +21,21 @@ IndieStudio::MenuMain::~MenuMain()
 {
 }
 
-void IndieStudio::MenuMain::drawMenu() noexcept
+void IndieStudio::MenuMain::drawButtons(void) noexcept
 {
-	refreshSkin();
 	_newGame->drawButton();
 	_loadGame->drawButton();
 	_options->drawButton();
 	_exit->drawButton();
 }
 
-void IndieStudio::MenuMain::refreshSkin() noexcept
+void IndieStudio::MenuMain::drawMenu(void) noexcept
+{
+	refreshSkin();
+	drawButtons();
+}
+
+void IndieStudio::MenuMain::refreshSkin(void) noexcept
 {
 	if (_buttonStatus == NEWGAME)
 	{
@@ -76,7 +81,7 @@ void IndieStudio::MenuMain::setButtonActive(int newButtonStatus) noexcept
 	_buttonStatus = newButtonStatus;
 }
 
-int IndieStudio::MenuMain::getButtonStatus() const noexcept
+int IndieStudio::MenuMain::getCurrentButtonActive(void) const noexcept
 {
 	return _buttonStatus;
 }

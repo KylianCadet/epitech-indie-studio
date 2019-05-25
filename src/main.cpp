@@ -13,7 +13,7 @@
 #include "Map.hpp"
 int main()
 {
-	sleep(1);
+	usleep(100000);
 	irr::IrrlichtDevice *device = irr::createDevice(
 		irr::video::EDT_OPENGL,
 		irr::core::dimension2d<irr::u32>(2000, 2000), 32);

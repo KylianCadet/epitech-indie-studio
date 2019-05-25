@@ -7,77 +7,76 @@
 
 #include "MenuMain.hpp"
 
-IndieStudio::MenuMain::MenuMain(irr::video::IVideoDriver * driver)
-: _driver(driver)
+IndieStudio::MenuMain::MenuMain(irr::video::IVideoDriver *driver)
+	: _driver(driver)
 {
-	_btnA = NEWGAME;
 	int pos = 400;
-	_newGame = new NewGame(_driver, "assets/menu/buttons/newgame.png", "assets/menu/buttons/newgameA.png", std::pair<int, int> (-1, pos));
-	_loadGame = new LoadGame(_driver, "assets/menu/buttons/loadgame.png", "assets/menu/buttons/loadgameA.png", std::pair<int, int> (-1, pos + 110));
-	_options = new Options(_driver, "assets/menu/buttons/options.png", "assets/menu/buttons/optionsA.png", std::pair<int, int> (-1, pos + 220));
-	_exit = new Exit(_driver, "assets/menu/buttons/exit.png", "assets/menu/buttons/exitA.png", std::pair<int, int> (-1, pos + 330));
-	_frame = new IndieStudio::Image2d(driver, "assets/menu/frame.png", std::pair<int, int> (-1, 320));
-	_tick = new IndieStudio::Audio("sounds/menu/tick.ogg");
-	_music = new IndieStudio::Audio("sounds/menu/Stillness2.ogg", true);
-	_music->playSound();
+	_newGame = new Button(_driver, "assets/menu/buttons/newgame.png", "assets/menu/buttons/newgameA.png", std::pair<int, int>(-1, pos));
+	_loadGame = new Button(_driver, "assets/menu/buttons/loadgame.png", "assets/menu/buttons/loadgameA.png", std::pair<int, int>(-1, pos + 110));
+	_options = new Button(_driver, "assets/menu/buttons/options.png", "assets/menu/buttons/optionsA.png", std::pair<int, int>(-1, pos + 220));
+	_exit = new Button(_driver, "assets/menu/buttons/exit.png", "assets/menu/buttons/exitA.png", std::pair<int, int>(-1, pos + 330));
 }
 
 IndieStudio::MenuMain::~MenuMain()
 {
-
 }
 
-void IndieStudio::MenuMain::drawAll()
+void IndieStudio::MenuMain::drawMenu() noexcept
 {
-	setSkin();
-	_newGame->draw();
-	_loadGame->draw();
-	_options->draw();
-	_exit->draw();
-	_frame->draw();
+	refreshSkin();
+	_newGame->drawButton();
+	_loadGame->drawButton();
+	_options->drawButton();
+	_exit->drawButton();
 }
 
-void IndieStudio::MenuMain::setSkin()
+void IndieStudio::MenuMain::refreshSkin() noexcept
 {
-	if (_btnA == NEWGAME) {
-		_newGame->setActive();
-		_loadGame->setDefault();
-		_options->setDefault();
-		_exit->setDefault();
-	} else if (_btnA == LOADGAME) {
-		_newGame->setDefault();
-		_loadGame->setActive();
-		_options->setDefault();
-		_exit->setDefault();
-	} else if (_btnA == OPTIONS) {
-		_newGame->setDefault();
-		_loadGame->setDefault();
-		_options->setActive();
-		_exit->setDefault();
-	} else if (_btnA == EXIT) {
-		_newGame->setDefault();
-		_loadGame->setDefault();
-		_options->setDefault();
-		_exit->setActive();
+	if (_buttonStatus == NEWGAME)
+	{
+		_newGame->setActiveSkin();
+		_loadGame->setDefaultSkin();
+		_options->setDefaultSkin();
+		_exit->setDefaultSkin();
+	}
+	else if (_buttonStatus == LOADGAME)
+	{
+		_newGame->setDefaultSkin();
+		_loadGame->setActiveSkin();
+		_options->setDefaultSkin();
+		_exit->setDefaultSkin();
+	}
+	else if (_buttonStatus == OPTIONS)
+	{
+		_newGame->setDefaultSkin();
+		_loadGame->setDefaultSkin();
+		_options->setActiveSkin();
+		_exit->setDefaultSkin();
+	}
+	else if (_buttonStatus == EXIT)
+	{
+		_newGame->setDefaultSkin();
+		_loadGame->setDefaultSkin();
+		_options->setDefaultSkin();
+		_exit->setActiveSkin();
 	}
 }
 
-void IndieStudio::MenuMain::setIncA(int i)
+void IndieStudio::MenuMain::setButtonSwitch(int incrementation) noexcept
 {
-	_tick->playSound();
-	_btnA += i;
-	if (_btnA > 3)
-		_btnA = 0;
-	else if (_btnA < 0)
-		_btnA = 3;
+	_buttonStatus += incrementation;
+	if (_buttonStatus > 3)
+		_buttonStatus = 0;
+	else if (_buttonStatus < 0)
+		_buttonStatus = 3;
 }
 
-void IndieStudio::MenuMain::setBtnA(int btn)
+void IndieStudio::MenuMain::setButtonActive(int newButtonStatus) noexcept
 {
-	_btnA = btn;
+	_buttonStatus = newButtonStatus;
 }
 
-int IndieStudio::MenuMain::getBtnA() const noexcept
+int IndieStudio::MenuMain::getButtonStatus() const noexcept
 {
-	return _btnA;
+	return _buttonStatus;
 }

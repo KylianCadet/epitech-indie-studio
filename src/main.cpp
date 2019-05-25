@@ -7,7 +7,7 @@
 
 #include <irrlicht.h>
 #include "Game.hpp"
-#include "Menu.hpp"
+#include "MenuManager.hpp"
 #include "Bomb.hpp"
 #include "RenderManager.hpp"
 #include "Map.hpp"
@@ -23,7 +23,7 @@ int main()
 	irr::scene::ISceneManager *mapSceneManager = gameSceneManager->createNewSceneManager();
 	device->getCursorControl()->setVisible(false);
 
-	IndieStudio::Menu menu(device, menuSceneManager, driver);
+	IndieStudio::MenuManager menu(device, menuSceneManager, driver);
 	IndieStudio::Game game(device, gameSceneManager, driver);
 	IndieStudio::Map map(device, mapSceneManager, driver);
 	IndieStudio::RenderManager renderManager(menu, game, map);

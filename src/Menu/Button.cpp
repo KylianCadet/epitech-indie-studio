@@ -7,10 +7,10 @@
 
 #include "Button.hpp"
 
-IndieStudio::Button::Button(irr::video::IVideoDriver * driver, std::string skin, std::string skinA, std::pair<int, int> position)
-: _image2d(driver, skin, position), _active(false), _skin(skin), _skinA(skinA)
+IndieStudio::Button::Button(irr::video::IVideoDriver * driver, std::string skinDefault, std::string skinActive, std::pair<int, int> position)
+: _image2d(driver, skinDefault, position), _active(false), _skinDefault(skinDefault), _skinActive(skinActive)
 {
-
+	
 }
 
 IndieStudio::Button::~Button()
@@ -18,17 +18,17 @@ IndieStudio::Button::~Button()
 
 }
 
-void IndieStudio::Button::draw()
+void IndieStudio::Button::drawButton(void) noexcept
 {
-	_image2d.draw();
+	_image2d.drawImage();
 }
 
-void IndieStudio::Button::setActive()
+void IndieStudio::Button::setActiveSkin(void) noexcept
 {
-	_image2d.setTexture(_skinA);
+	_image2d.setTexture(_skinActive);
 }
 
-void IndieStudio::Button::setDefault()
+void IndieStudio::Button::setDefaultSkin(void) noexcept
 {
-	_image2d.setTexture(_skin);
+	_image2d.setTexture(_skinDefault);
 }

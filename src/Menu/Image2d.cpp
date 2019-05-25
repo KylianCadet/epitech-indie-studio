@@ -7,8 +7,8 @@
 
 #include "Image2d.hpp"
 
-IndieStudio::Image2d::Image2d(irr::video::IVideoDriver * driver, std::string str, std::pair<int, int> position)
-: _driver(driver)
+IndieStudio::Image2d::Image2d(irr::video::IVideoDriver *driver, std::string str, std::pair<int, int> position)
+	: _driver(driver)
 {
 	setTexture(str);
 	_position = irr::core::position2d<irr::s32>(position.first, position.second);
@@ -17,9 +17,11 @@ IndieStudio::Image2d::Image2d(irr::video::IVideoDriver * driver, std::string str
 		setPositionToMid();
 }
 
-IndieStudio::Image2d::~Image2d(){}
+IndieStudio::Image2d::~Image2d()
+{
+}
 
-void IndieStudio::Image2d::setRectangle(void)
+void IndieStudio::Image2d::setRectangle(void) noexcept
 {
 	irr::core::dimension2d<irr::u32> taille = _image->getSize();
 	irr::core::position2d<irr::s32> position0;
@@ -34,18 +36,18 @@ void IndieStudio::Image2d::setRectangle(void)
 	_rectangle = rectangle;
 }
 
-void IndieStudio::Image2d::setPositionToMid(void)
+void IndieStudio::Image2d::setPositionToMid(void) noexcept
 {
 	irr::core::dimension2d<irr::u32> screen = _driver->getScreenSize();
-	_position.X = screen.Width / 2 - _rectangle.LowerRightCorner.X / 2;;
+	_position.X = screen.Width / 2 - _rectangle.LowerRightCorner.X / 2;
 }
 
-void IndieStudio::Image2d::draw()
+void IndieStudio::Image2d::drawImage() noexcept
 {
-	_driver->draw2DImage(_image, _position, _rectangle, 0, irr::video::SColor (255, 255, 255, 255), true);
+	_driver->draw2DImage(_image, _position, _rectangle, 0, irr::video::SColor(255, 255, 255, 255), true);
 }
 
-void IndieStudio::Image2d::setTexture(std::string skin)
+void IndieStudio::Image2d::setTexture(std::string skin) noexcept
 {
 	_image = _driver->getTexture(skin.c_str());
 }

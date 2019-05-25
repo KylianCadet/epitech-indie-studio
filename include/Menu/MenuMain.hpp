@@ -15,33 +15,33 @@
 
 #include <irrlicht.h>
 #include <iostream>
-#include "NewGame.hpp"
-#include "LoadGame.hpp"
-#include "Options.hpp"
-#include "Exit.hpp"
 #include "Audio.hpp"
+#include "Button.hpp"
 
-namespace IndieStudio {
-	class MenuMain {
-		public:
-			MenuMain(irr::video::IVideoDriver *);
-			~MenuMain();
-			void setSkin();
-			void setIncA(int);
-			void setBtnA(int);
-			int getBtnA() const noexcept;
-			void drawAll();
-		private:
-			IndieStudio::Audio *_tick;
-			IndieStudio::Audio *_music;
-			IndieStudio::Image2d * _frame;
-			NewGame * _newGame;
-			LoadGame * _loadGame;
-			Options * _options;
-			Exit * _exit;
-			int _btnA;
-			irr::video::IVideoDriver * _driver;
+namespace IndieStudio
+{
+	class MenuMain
+	{
+	public:
+		MenuMain(irr::video::IVideoDriver *);
+		~MenuMain();
+
+		void drawMenu(void) noexcept;
+		void refreshSkin(void) noexcept;
+		void setButtonSwitch(int) noexcept;
+		void setButtonActive(int) noexcept;
+		int getButtonStatus(void) const noexcept;
+
+	private:
+		int _buttonStatus = NEWGAME;
+
+		Button *_newGame;
+		Button *_loadGame;
+		Button *_options;
+		Button *_exit;
+
+		irr::video::IVideoDriver *_driver;
 	};
-};
+}; // namespace IndieStudio
 
 #endif /* !MENUMAIN_HPP_ */

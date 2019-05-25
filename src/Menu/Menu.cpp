@@ -11,7 +11,7 @@ IndieStudio::Menu::Menu(irr::IrrlichtDevice * device, irr::scene::ISceneManager 
 : _device(device), _scene(scene), _driver(driver)
 {
 	_menuMain = new IndieStudio::MenuMain(driver);
-	_title = new IndieStudio::Image2d(driver, "assets/menu/title.png", std::pair<int, int> (-1, 100));
+	_title = new IndieStudio::Image2d(driver, "assets/menu/title2.png", std::pair<int, int> (-1, 100));
 	_device->setEventReceiver(this);
 	_enter = new IndieStudio::Audio("sounds/menu/turnoff.ogg");
 }

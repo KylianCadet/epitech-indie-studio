@@ -34,6 +34,7 @@ namespace IndieStudio {
 		private:
 			IndieStudio::Audio *_tick;
 			IndieStudio::Audio *_music;
+			IndieStudio::Image2d * _frame;
 			NewGame * _newGame;
 			LoadGame * _loadGame;
 			Options * _options;

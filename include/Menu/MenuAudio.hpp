@@ -28,7 +28,8 @@ public:
 	MenuAudio(irr::video::IVideoDriver *, Volume *, MenuSounds *);
 	~MenuAudio();
 
-	void setVolumeBar(void) noexcept;
+	void setVolumeMusicBar(void) noexcept;
+	void setVolumeEffectBar(void) noexcept;
 
 	virtual void drawMenu(void) noexcept {};
 	virtual void drawMenuManager(void) noexcept;
@@ -57,11 +58,17 @@ private:
 	int _leftTime = 0;
 	int _rightTime = 0;
 
-	Button *_leftArrow;
-	Button *_rightArrow;
+	Button *_music;
+	Button *_effects;
+	Button *_leftMusicArrow;
+	Button *_rightMusicArrow;
+	Button *_leftEffectArrow;
+	Button *_rightEffectArrow;
 
-	Image2d *_volumeBarEmpty;
-	Image2d *_volumeBarFilled;
+	Image2d *_volumeBarMusicEmpty;
+	Image2d *_volumeBarEffectEmpty;
+	Image2d *_volumeBarMusicFilled;
+	Image2d *_volumeBarEffectFilled;
 	Image2d *_escapeInfo;
 };
 }; // namespace IndieStudio

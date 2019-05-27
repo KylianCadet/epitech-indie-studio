@@ -11,6 +11,9 @@
 #define MENU_AUDIO_MAIN 0
 #define MENU_AUDIO_BACK 1
 
+#define BTN_AUDIO_MUSIC 0
+#define BTN_AUDIO_EFFECT 1
+
 #include <irrlicht.h>
 #include <iostream>
 
@@ -55,8 +58,10 @@ public:
 	virtual void refreshSkin(void) noexcept;
 
 private:
-	int _leftTime = 0;
-	int _rightTime = 0;
+	int _leftMusicTime = 0;
+	int _leftEffectTime = 0;
+	int _rightMusicTime = 0;
+	int _rightEffectTime = 0;
 
 	Button *_music;
 	Button *_effects;

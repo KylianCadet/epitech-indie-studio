@@ -10,6 +10,8 @@
 IndieStudio::MenuAudio::MenuAudio(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
 	: Menu(driver, volume, sounds)
 {
+	this->_renderStatus = MENU_AUDIO_MAIN;
+	this->_buttonStatus = BTN_AUDIO_MUSIC;
 	this->createButtons();
 	this->createImages();
 	this->setVolumeMusicBar();
@@ -67,14 +69,32 @@ void IndieStudio::MenuAudio::drawMenuManager(void) noexcept
 
 void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 {
-	if (this->_leftTime <= 0)
-		this->_leftMusicArrow->setDefaultSkin();
-	else
-		this->_leftTime--;
-	if (this->_rightTime <= 0)
-		this->_rightMusicArrow->setDefaultSkin();
-	else
-		this->_rightTime--;
+	if (this->_buttonStatus == BTN_AUDIO_MUSIC)
+	{
+		this->_music->setActiveSkin();
+		this->_effects->setDefaultSkin();
+		if (this->_leftMusicTime <= 0)
+			this->_leftMusicArrow->setDefaultSkin();
+		else
+			this->_leftMusicTime--;
+		if (this->_rightMusicTime <= 0)
+			this->_rightMusicArrow->setDefaultSkin();
+		else
+			this->_rightMusicTime--;
+	}
+	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
+	{
+		this->_music->setDefaultSkin();
+		this->_effects->setActiveSkin();
+		if (this->_leftEffectTime <= 0)
+			this->_leftEffectArrow->setDefaultSkin();
+		else
+			this->_leftEffectTime--;
+		if (this->_rightEffectTime <= 0)
+			this->_rightEffectArrow->setDefaultSkin();
+		else
+			this->_rightEffectTime--;
+	}
 }
 
 void IndieStudio::MenuAudio::setVolumeMusicBar(void) noexcept
@@ -137,7 +157,6 @@ void IndieStudio::MenuAudio::setVolumeEffectBar(void) noexcept
 
 void IndieStudio::MenuAudio::returnActionManager(void) noexcept
 {
-
 }
 
 void IndieStudio::MenuAudio::escapeActionManager(void) noexcept
@@ -147,34 +166,50 @@ void IndieStudio::MenuAudio::escapeActionManager(void) noexcept
 
 void IndieStudio::MenuAudio::leftActionManager(void) noexcept
 {
-	this->_leftTime = 50;
-	this->_leftMusicArrow->setActiveSkin();
-	this->_leftEffectArrow->setActiveSkin();
 	this->_sounds->_volumeSwitchSound->playSound();
-	this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() - 10);
-	this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() - 10);
-	this->setVolumeMusicBar();
-	this->setVolumeEffectBar();
+	if (this->_buttonStatus == BTN_AUDIO_MUSIC)
+	{
+		this->_leftMusicTime = 50;
+		this->_leftMusicArrow->setActiveSkin();
+		this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() - 10);
+		this->setVolumeMusicBar();
+	}
+	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
+	{
+		this->_leftEffectTime = 50;
+		this->_leftEffectArrow->setActiveSkin();
+		this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() - 10);
+		this->setVolumeEffectBar();
+	}
 }
 
 void IndieStudio::MenuAudio::rightActionManager(void) noexcept
 {
-	this->_rightTime = 50;
-	this->_rightMusicArrow->setActiveSkin();
-	this->_rightEffectArrow->setActiveSkin();
 	this->_sounds->_volumeSwitchSound->playSound();
-	this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() + 10);
-	this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() + 10);
-	this->setVolumeMusicBar();
-	this->setVolumeEffectBar();
+	if (this->_buttonStatus == BTN_AUDIO_MUSIC)
+	{
+		this->_rightMusicTime = 50;
+		this->_rightMusicArrow->setActiveSkin();
+		this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() + 10);
+		this->setVolumeMusicBar();
+	}
+	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
+	{
+		this->_rightEffectTime = 50;
+		this->_rightEffectArrow->setActiveSkin();
+		this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() + 10);
+		this->setVolumeEffectBar();
+	}
 }
 
 void IndieStudio::MenuAudio::upActionManager(void) noexcept
 {
-
+	this->_sounds->_buttonSwitchSound->playSound();
+	this->setButtonSwitch(-1, 1);
 }
 
 void IndieStudio::MenuAudio::downActionManager(void) noexcept
 {
-
+	this->_sounds->_buttonSwitchSound->playSound();
+	this->setButtonSwitch(1, 1);
 }

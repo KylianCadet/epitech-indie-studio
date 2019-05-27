@@ -11,6 +11,8 @@
 #include "Bomb.hpp"
 #include "RenderManager.hpp"
 #include "Map.hpp"
+#include "Volume.hpp"
+
 int main()
 {
 	usleep(100000);
@@ -23,7 +25,8 @@ int main()
 	irr::scene::ISceneManager *mapSceneManager = gameSceneManager->createNewSceneManager();
 	device->getCursorControl()->setVisible(false);
 
-	IndieStudio::MenuManager menu(device, menuSceneManager, driver);
+	IndieStudio::Volume *volume = new IndieStudio::Volume();
+	IndieStudio::MenuManager menu(device, menuSceneManager, driver, volume);
 	IndieStudio::Game game(device, gameSceneManager, driver);
 	IndieStudio::Map map(device, mapSceneManager, driver);
 	IndieStudio::RenderManager renderManager(menu, game, map);

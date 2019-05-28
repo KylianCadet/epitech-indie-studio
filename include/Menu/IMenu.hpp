@@ -13,6 +13,7 @@ class IMenu
 public:
 	virtual ~IMenu() = default;
 
+private:
 	virtual void drawMenu(void) noexcept = 0;
 	virtual void drawMenuManager(void) noexcept = 0;
 	virtual void createButtons(void) noexcept = 0;
@@ -40,7 +41,6 @@ public:
 	virtual int getCurrentMenuActive(void) const noexcept = 0;
 	virtual void setButtonActive(int) noexcept = 0;
 	virtual int getCurrentButtonActive(void) const noexcept = 0;
-
 };
 
 #endif /* !IMENU_HPP_ */

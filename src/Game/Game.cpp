@@ -117,9 +117,14 @@ void IndieStudio::Game::render() noexcept
 	this->_counter += 0.05;
 }
 
-bool IndieStudio::Game::hasRender(void) const noexcept
+int IndieStudio::Game::getRenderStatus(void) const noexcept
 {
-	return (true);
+	return this->_renderStatus;
+}
+
+void IndieStudio::Game::setRenderStatus(int status) noexcept
+{
+	this->_renderStatus = status;
 }
 
 void IndieStudio::Game::setEventReceiver(void) noexcept
@@ -178,11 +183,24 @@ void IndieStudio::Game::moveCharacter() noexcept
 	}
 }
 
+bool isKeyPress2(const irr::SEvent &event, irr::EKEY_CODE key) noexcept
+{
+	if (event.KeyInput.Key == key)
+		return true;
+	else
+		return false;
+}
+
 bool IndieStudio::Game::OnEvent(const irr::SEvent &event)
 {
 	bool ret = false;
 
 	if (event.EventType == irr::EET_KEY_INPUT_EVENT) {
+		if (isKeyPress2(event, irr::EKEY_CODE::KEY_ESCAPE) && !event.KeyInput.PressedDown) 
+		{
+			this->_renderStatus = PAUSE_MENU;
+			return true;
+		}
 		for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 			if (event.KeyInput.Key == character_it->getUpKey()) {
 				character_it->setMovingUp(event.KeyInput.PressedDown);

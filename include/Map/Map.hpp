@@ -36,7 +36,8 @@ namespace IndieStudio {
             void render() noexcept;
             std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> get_All_Cube(void);
             virtual bool OnEvent(const irr::SEvent &event);
-            virtual bool hasRender(void) const noexcept;
+            virtual int getRenderStatus(void) const noexcept {};
+			virtual void setRenderStatus(int) noexcept {};
             virtual void setEventReceiver(void) noexcept;
         protected:
         private:

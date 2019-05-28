@@ -10,7 +10,7 @@
 IndieStudio::MenuManager::MenuManager(irr::IrrlichtDevice *device, irr::scene::ISceneManager *scene, irr::video::IVideoDriver *driver, IndieStudio::Volume *volume)
 	: _device(device), _scene(scene), _driver(driver), _volume(volume)
 {
-	this->_menuRender = MENU_MAIN;
+	this->_renderStatus = MAIN_MENU;
 	this->_device->setEventReceiver(this);
 	this->_sounds = new IndieStudio::MenuSounds(this->_volume);
 	this->_menuMain = new IndieStudio::MenuMain(this->_driver, this->_volume, this->_sounds);
@@ -24,11 +24,11 @@ IndieStudio::MenuManager::~MenuManager()
 
 void IndieStudio::MenuManager::checkActions(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 	{
 		if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME)
 		{
-			this->_render = false;
+			this->_renderStatus = false;
 		}
 		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_EXIT)
 		{
@@ -41,9 +41,9 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 void IndieStudio::MenuManager::render(void) noexcept
 {
 	this->checkActions();
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->drawMenuManager();
-	else if (this->_menuRender == MENU_PAUSE)
+	else if (this->_renderStatus == PAUSE_MENU)
 		this->_menuMain->drawMenuManager();
 }
 
@@ -57,37 +57,37 @@ bool isKeyPress(const irr::SEvent &event, irr::EKEY_CODE key) noexcept
 
 void IndieStudio::MenuManager::returnActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->returnActionManager();
 }
 
 void IndieStudio::MenuManager::escapeActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->escapeActionManager();
 }
 
 void IndieStudio::MenuManager::leftActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->leftActionManager();
 }
 
 void IndieStudio::MenuManager::rightActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->rightActionManager();
 }
 
 void IndieStudio::MenuManager::upActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->upActionManager();
 }
 
 void IndieStudio::MenuManager::downActionManager(void) noexcept
 {
-	if (this->_menuRender == MENU_MAIN)
+	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->downActionManager();
 }
 
@@ -112,17 +112,17 @@ bool IndieStudio::MenuManager::OnEvent(const irr::SEvent &event)
 	return false;
 }
 
-bool IndieStudio::MenuManager::hasRender(void) const noexcept
+int IndieStudio::MenuManager::getRenderStatus(void) const noexcept
 {
-	return (this->_render);
+	return this->_renderStatus;
+}
+
+void IndieStudio::MenuManager::setRenderStatus(int status) noexcept
+{
+	this->_renderStatus = status;
 }
 
 void IndieStudio::MenuManager::setEventReceiver(void) noexcept
 {
 	this->_device->setEventReceiver(this);
-}
-
-void IndieStudio::MenuManager::setRenderStatus(bool newRenderStatus) noexcept
-{
-	this->_render = newRenderStatus;
 }

@@ -9,8 +9,9 @@
 
 IndieStudio::RenderManager::RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game) : _menu(menu), _game(game)
 {
-	menu.setEventReceiver();
 	this->_color = irr::video::SColor(255, 0, 0, 0);
+	this->_menu.setRenderStatus(MAIN_MENU);
+	this->_game.setRenderStatus(MAIN_MENU);
 }
 
 IndieStudio::RenderManager::~RenderManager()
@@ -19,17 +20,23 @@ IndieStudio::RenderManager::~RenderManager()
 
 void IndieStudio::RenderManager::render()
 {
-	if (this->_menu.hasRender()) {
-		
+	if (this->_menu.getRenderStatus() == MAIN_MENU)
+	{
+		this->_game.setRenderStatus(MAIN_MENU);
+		this->_menu.setEventReceiver();
 		this->_menu.render();
-	} else {
-		if (this->_counter == false) {
-			this->_color = irr::video::SColor(255, 255, 255, 255);
-			//this->_map.setEventReceiver();
-			this->_game.setEventReceiver();
-			this->_counter = true;
-		}
-//		this->_map.render();
+	}
+	else if (this->_game.getRenderStatus() == PAUSE_MENU)
+	{
+		this->_menu.setRenderStatus(PAUSE_MENU);
+		this->_menu.setEventReceiver();
+		this->_game.render();
+		this->_menu.render();
+	}
+	else if (this->_menu.getRenderStatus() == GAME)
+	{
+		this->_game.setRenderStatus(GAME);
+		this->_game.setEventReceiver();
 		this->_game.render();
 	}
 }

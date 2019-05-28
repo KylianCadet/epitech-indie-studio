@@ -22,7 +22,6 @@ namespace IndieStudio {
 			IndieStudio::IRender &_menu;
 			IndieStudio::IRender &_game;
 			irr::video::SColor _color;
-			bool _counter = false;
 	};
 };
 

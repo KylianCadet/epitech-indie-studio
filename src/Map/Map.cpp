@@ -19,11 +19,6 @@ IndieStudio::Map::Map(irr::IrrlichtDevice *device, irr::scene::ISceneManager *sc
     // );
 }
 
-bool IndieStudio::Map::hasRender(void) const noexcept
-{
-	return (true);
-}
-
 void IndieStudio::Map::setEventReceiver(void) noexcept
 {
 	this->_device->setEventReceiver(this);

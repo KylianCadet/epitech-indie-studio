@@ -22,13 +22,15 @@ namespace IndieStudio {
 			void createCharacters() noexcept;
 			void render() noexcept;
 			void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
-			virtual bool hasRender(void) const noexcept;
+			virtual int getRenderStatus(void) const noexcept;
+			virtual void setRenderStatus(int) noexcept;
 			virtual void setEventReceiver(void) noexcept;
 			virtual bool OnEvent(const irr::SEvent &event);
 			void moveCharacter() noexcept;
 			void set_Map_Collision();
 			IndieStudio::Map *_map;
 		private:
+			int _renderStatus = MAIN_MENU;
 			irr::IrrlichtDevice *_device;
 			irr::scene::ISceneManager *_sceneManager;
 			irr::video::IVideoDriver *_driver;

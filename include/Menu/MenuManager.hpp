@@ -8,9 +8,6 @@
 #ifndef MENUMANAGER_HPP_
 #define MENUMANAGER_HPP_
 
-#define MENU_MAIN 0
-#define MENU_PAUSE 1
-
 #include <irrlicht.h>
 #include <iostream>
 #include <unistd.h>
@@ -29,6 +26,14 @@ public:
 	MenuManager(irr::IrrlichtDevice *, irr::scene::ISceneManager *, irr::video::IVideoDriver *, Volume *);
 	~MenuManager();
 
+	void render(void) noexcept;
+
+	virtual bool OnEvent(const irr::SEvent &event);
+	virtual int getRenderStatus(void) const noexcept;
+	virtual void setRenderStatus(int) noexcept;
+	virtual void setEventReceiver(void) noexcept;
+
+private:
 	void checkActions(void) noexcept;
 	void returnActionManager(void) noexcept;
 	void escapeActionManager(void) noexcept;
@@ -37,16 +42,9 @@ public:
 	void upActionManager(void) noexcept;
 	void downActionManager(void) noexcept;
 
-	void render(void) noexcept;
-	void setRenderStatus(bool) noexcept;
-
-	virtual bool OnEvent(const irr::SEvent &event);
-	virtual bool hasRender(void) const noexcept;
-	virtual void setEventReceiver(void) noexcept;
 
 private:
-	bool _render = true;
-	int _menuRender = MENU_MAIN;
+	int _renderStatus = MAIN_MENU;
 
 	MenuMain *_menuMain;
 

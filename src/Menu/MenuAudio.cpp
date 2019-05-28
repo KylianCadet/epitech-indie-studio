@@ -48,7 +48,7 @@ void IndieStudio::MenuAudio::createImages(void) noexcept
 	this->_volumeBarEffectEmpty = new IndieStudio::Image2d(this->_driver, "assets/menu/options/empty2.png", std::pair<int, int>(-1, 580));
 	this->_volumeBarMusicFilled = new IndieStudio::Image2d(this->_driver, "assets/menu/options/filled.png", std::pair<int, int>(-1, 380));
 	this->_volumeBarEffectFilled = new IndieStudio::Image2d(this->_driver, "assets/menu/options/filled.png", std::pair<int, int>(-1, 580));
-	this->_escapeInfo = new IndieStudio::Image2d(this->_driver, "assets/menu/options/esc.png", std::pair<int, int>(-1, 800));
+	this->_escapeInfo = new IndieStudio::Image2d(this->_driver, "assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
 }
 
 void IndieStudio::MenuAudio::drawImages(void) noexcept
@@ -73,6 +73,12 @@ void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 	{
 		this->_music->setActiveSkin();
 		this->_effects->setDefaultSkin();
+	}
+	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
+	{
+		this->_music->setDefaultSkin();
+		this->_effects->setActiveSkin();
+	}
 		if (this->_leftMusicTime <= 0)
 			this->_leftMusicArrow->setDefaultSkin();
 		else
@@ -81,11 +87,6 @@ void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 			this->_rightMusicArrow->setDefaultSkin();
 		else
 			this->_rightMusicTime--;
-	}
-	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
-	{
-		this->_music->setDefaultSkin();
-		this->_effects->setActiveSkin();
 		if (this->_leftEffectTime <= 0)
 			this->_leftEffectArrow->setDefaultSkin();
 		else
@@ -94,7 +95,6 @@ void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 			this->_rightEffectArrow->setDefaultSkin();
 		else
 			this->_rightEffectTime--;
-	}
 }
 
 void IndieStudio::MenuAudio::setVolumeMusicBar(void) noexcept
@@ -103,26 +103,8 @@ void IndieStudio::MenuAudio::setVolumeMusicBar(void) noexcept
 	int volume = this->_volume->getVolumeMusics() / 10;
 	if (volume == 0)
 		vol = 0;
-	else if (volume == 1)
-		vol = 50;
-	else if (volume == 2)
-		vol = 90;
-	else if (volume == 3)
-		vol = 130;
-	else if (volume == 4)
-		vol = 170;
-	else if (volume == 5)
-		vol = 200;
-	else if (volume == 6)
-		vol = 230;
-	else if (volume == 7)
-		vol = 270;
-	else if (volume == 8)
-		vol = 300;
-	else if (volume == 9)
-		vol = 330;
-	else if (volume == 10)
-		vol = 395;
+	else
+		vol = 35 * volume + 20;
 	this->_volumeBarMusicFilled->setCustomRectangle(0, 0, vol, 208);
 }
 
@@ -132,26 +114,8 @@ void IndieStudio::MenuAudio::setVolumeEffectBar(void) noexcept
 	int volume = this->_volume->getVolumeEffects() / 10;
 	if (volume == 0)
 		vol = 0;
-	else if (volume == 1)
-		vol = 50;
-	else if (volume == 2)
-		vol = 90;
-	else if (volume == 3)
-		vol = 130;
-	else if (volume == 4)
-		vol = 170;
-	else if (volume == 5)
-		vol = 200;
-	else if (volume == 6)
-		vol = 230;
-	else if (volume == 7)
-		vol = 270;
-	else if (volume == 8)
-		vol = 300;
-	else if (volume == 9)
-		vol = 330;
-	else if (volume == 10)
-		vol = 395;
+	else
+		vol = 35 * volume + 20;
 	this->_volumeBarEffectFilled->setCustomRectangle(0, 0, vol, 208);
 }
 

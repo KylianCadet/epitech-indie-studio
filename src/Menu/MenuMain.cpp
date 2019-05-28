@@ -14,6 +14,8 @@ IndieStudio::MenuMain::MenuMain(irr::video::IVideoDriver *driver, IndieStudio::V
 	this->_buttonStatus = BTN_MAIN_NEWGAME;
 	this->createButtons();
 	this->createImages();
+	this->_menuNew = new IndieStudio::MenuNew(this->_driver, this->_volume, this->_sounds);
+	this->_menuLoad = new IndieStudio::MenuLoad(this->_driver, this->_volume, this->_sounds);
 	this->_menuOptions = new IndieStudio::MenuOptions(this->_driver, this->_volume, this->_sounds);
 }
 
@@ -46,16 +48,32 @@ void IndieStudio::MenuMain::createImages(void) noexcept
 void IndieStudio::MenuMain::drawImages(void) noexcept
 {
 	this->_titleMenu->drawImage();
+	this->_titleMenu->drawImage();
 	this->_frameMenu->drawImage();
 }
 
 void IndieStudio::MenuMain::checkActions(void) noexcept
 {
+
 	if (this->_menuOptions->getCurrentMenuActive() == MENU_OPTIONS_BACK)
 	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuOptions->setMenuActive(MENU_OPTIONS_MAIN);
-		// this->_menuOptions->setButtonActive(BTN_OPTIONS_AUDIO);
+	}
+	else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK)
+	{
+		this->_renderStatus = MENU_MAIN_MAIN;
+		this->_menuLoad->setMenuActive(MENU_LOAD_MAIN);
+	}
+	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK)
+	{
+		this->_renderStatus = MENU_MAIN_MAIN;
+		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
+	}
+	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME)
+	{
+		this->_renderStatus = MENU_MAIN_GAME;
+		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 	}
 }
 
@@ -69,17 +87,16 @@ void IndieStudio::MenuMain::drawMenu(void) noexcept
 void IndieStudio::MenuMain::drawMenuManager(void) noexcept
 {
 	this->checkActions();
+	if (this->_renderStatus != MENU_MAIN_MAIN)
+		this->drawImages();
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->drawMenu();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->drawMenu();
+		this->_menuNew->drawMenuManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
-		this->drawMenu();
+		this->_menuLoad->drawMenuManager();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)
-	{
-		this->drawImages();
 		this->_menuOptions->drawMenuManager();
-	}
 	else if (this->_renderStatus == MENU_MAIN_EXIT)
 		this->drawMenu();
 }
@@ -159,7 +176,7 @@ void IndieStudio::MenuMain::returnActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->returnAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->returnAction();
+		this->_menuNew->returnActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
 		this->returnAction();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)
@@ -173,9 +190,9 @@ void IndieStudio::MenuMain::escapeActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->escapeAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->escapeAction();
+		this->_menuNew->escapeActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
-		this->escapeAction();
+		this->_menuLoad->escapeActionManager();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)
 		this->_menuOptions->escapeActionManager();
 	else if (this->_renderStatus == MENU_MAIN_EXIT)
@@ -215,7 +232,7 @@ void IndieStudio::MenuMain::upActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->upAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->upAction();
+		this->_menuNew->upActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
 		this->upAction();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)
@@ -229,7 +246,7 @@ void IndieStudio::MenuMain::downActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->downAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->downAction();
+		this->_menuNew->downActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
 		this->downAction();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)

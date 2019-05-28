@@ -26,7 +26,7 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 {
 	if (this->_menuRender == MENU_MAIN)
 	{
-		if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_NEWGAME)
+		if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME)
 		{
 			this->_render = false;
 		}

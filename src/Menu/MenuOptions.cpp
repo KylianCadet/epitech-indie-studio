@@ -14,6 +14,8 @@ IndieStudio::MenuOptions::MenuOptions(irr::video::IVideoDriver *driver, IndieStu
 	this->_buttonStatus = BTN_OPTIONS_AUDIO;
 	this->createButtons();
 	this->_menuAudio = new IndieStudio::MenuAudio(this->_driver, this->_volume, this->_sounds);
+	this->_menuVideo = new IndieStudio::MenuVideo(this->_driver, this->_volume, this->_sounds);
+	this->_menuControls = new IndieStudio::MenuVideo(this->_driver, this->_volume, this->_sounds);
 }
 
 IndieStudio::MenuOptions::~MenuOptions()
@@ -41,8 +43,17 @@ void IndieStudio::MenuOptions::checkActions(void) noexcept
 	if (this->_menuAudio->getCurrentMenuActive() == MENU_AUDIO_BACK)
 	{
 		this->_renderStatus = MENU_OPTIONS_MAIN;
-		this->_menuAudio->setMenuActive(MENU_OPTIONS_MAIN);
-		// this->_menuOptions->setButtonActive(BTN_OPTIONS_AUDIO);
+		this->_menuAudio->setMenuActive(MENU_AUDIO_MAIN);
+	}
+	else if (this->_menuVideo->getCurrentMenuActive() == MENU_VIDEO_BACK)
+	{
+		this->_renderStatus = MENU_OPTIONS_MAIN;
+		this->_menuVideo->setMenuActive(MENU_VIDEO_MAIN);
+	}
+	else if (this->_menuControls->getCurrentMenuActive() == MENU_CONTROLS_BACK)
+	{
+		this->_renderStatus = MENU_OPTIONS_MAIN;
+		this->_menuControls->setMenuActive(MENU_CONTROLS_MAIN);
 	}
 }
 
@@ -60,9 +71,9 @@ void IndieStudio::MenuOptions::drawMenuManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->drawMenuManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->drawMenu();
+		this->_menuVideo->drawMenuManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->drawMenu();
+		this->_menuControls->drawMenuManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->drawMenu();
 }
@@ -161,9 +172,9 @@ void IndieStudio::MenuOptions::escapeActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->escapeActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->escapeAction();
+		this->_menuVideo->escapeActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->escapeAction();
+		this->_menuControls->escapeActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->escapeAction();
 }

@@ -24,6 +24,8 @@
 
 #include "Menu.hpp"
 #include "MenuAudio.hpp"
+#include "MenuVideo.hpp"
+#include "MenuControls.hpp"
 #include "MenuSounds.hpp"
 #include "Audio.hpp"
 #include "Button.hpp"
@@ -62,6 +64,8 @@ public:
 
 private:
 	MenuAudio *_menuAudio;
+	MenuVideo *_menuVideo;
+	MenuVideo *_menuControls;
 
 	Button *_audio;
 	Button *_video;

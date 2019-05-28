@@ -8,6 +8,7 @@
 #ifndef MENUMAIN_HPP_
 #define MENUMAIN_HPP_
 
+#define MENU_MAIN_GAME -1
 #define MENU_MAIN_MAIN 0
 #define MENU_MAIN_NEWGAME 1
 #define MENU_MAIN_LOADGAME 2
@@ -23,7 +24,9 @@
 #include <iostream>
 
 #include "Menu.hpp"
+#include "MenuNew.hpp"
 #include "MenuOptions.hpp"
+#include "MenuLoad.hpp"
 #include "MenuSounds.hpp"
 #include "Audio.hpp"
 #include "Button.hpp"
@@ -61,6 +64,8 @@ public:
 	virtual void refreshSkin(void) noexcept;
 
 private:
+	MenuNew *_menuNew;
+	MenuLoad *_menuLoad;
 	MenuOptions *_menuOptions;
 
 	Button *_newGame;

@@ -10,17 +10,41 @@
 IndieStudio::Game::Game(irr::IrrlichtDevice *device, irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver) : _device(device), _sceneManager(sceneManager), _driver(driver)
 {
 	this->createCharacters();
-	this->createCubes();
+//	this->createCubes();
 	this->_sceneManager->addCameraSceneNode(
 		0,
 		irr::core::vector3df(-100, 300, 0),
 		irr::core::vector3df(100, 0, 0)
 	);
+	//     this->_sceneManager->addCameraSceneNode(
+    //     0,
+    //     irr::core::vector3df(0, 0, 1250),
+    //     irr::core::vector3df(0, 0, 0)
+    // );
+	this->_map = new Map(_device, _sceneManager, _driver);
+	// std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> cube;
+	// cube = _map->get_All_Cube();
+	// for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++) {
+	// 	createCubeColision(*i);
+	// }
+	set_Map_Collision();
 }
 
 IndieStudio::Game::~Game()
 {
 }
+
+void IndieStudio::Game::set_Map_Collision()
+{
+	std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> cube;
+	cube = _map->get_All_Cube();
+	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
+		createCubeColision(*i);
+	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
+		createCubeColision(*i);
+
+}
+
 
 void IndieStudio::Game::createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept
 {
@@ -45,27 +69,27 @@ void IndieStudio::Game::createCubeColision(irr::scene::IMeshSceneNode *cube) noe
 	}
 }
 
-#define CUBE_SIDE 30.f
-void IndieStudio::Game::createCubes() noexcept
-{
-	for (int i = 0; i != 10; i++) {
-		irr::scene::IMeshSceneNode *cube =
-			this->_sceneManager->addCubeSceneNode(
-				CUBE_SIDE,
-				0,
-				-1,
-				irr::core::vector3df(
-					0.0f,
-					0.0f,
-					(i * CUBE_SIDE) + 100.0f
-				)
-			);
-		cube->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
-		cube->setMaterialFlag(irr::video::EMF_WIREFRAME, true);
-		this->createCubeColision(cube);
-		this->_cubeVec.push_back(cube);
-	}
-}
+//#define CUBE_SIDE 30.f
+// void IndieStudio::Game::createCubes() noexcept
+// {
+// 	for (int i = 0; i != 10; i++) {
+// 		irr::scene::IMeshSceneNode *cube =
+// 			this->_sceneManager->addCubeSceneNode(
+// 				CUBE_SIDE,
+// 				0,
+// 				-1,
+// 				irr::core::vector3df(
+// 					0.0f,
+// 					0.0f,
+// 					(i * CUBE_SIDE) + 100.0f
+// 				)
+// 			);
+// 		cube->setMaterialType(irr::video::E_MATERIAL_TYPE::EMT_SOLID);
+// 		cube->setMaterialFlag(irr::video::EMF_WIREFRAME, true);
+// 		this->createCubeColision(cube);
+// 		this->_cubeVec.push_back(cube);
+// 	}
+// }
 
 void IndieStudio::Game::createCharacters() noexcept
 {

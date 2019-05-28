@@ -12,13 +12,13 @@
 #include "IRender.hpp"
 #include <irrlicht.h>
 #include <vector>
-
+#include "Map.hpp"
 namespace IndieStudio {
 	class Game : public IRender, public irr::IEventReceiver {
 		public:
 			Game(irr::IrrlichtDevice *device, irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver);
 			~Game();
-			void createCubes() noexcept;
+			//void createCubes() noexcept;
 			void createCharacters() noexcept;
 			void render() noexcept;
 			void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
@@ -26,6 +26,8 @@ namespace IndieStudio {
 			virtual void setEventReceiver(void) noexcept;
 			virtual bool OnEvent(const irr::SEvent &event);
 			void moveCharacter() noexcept;
+			void set_Map_Collision();
+			IndieStudio::Map *_map;
 		private:
 			irr::IrrlichtDevice *_device;
 			irr::scene::ISceneManager *_sceneManager;

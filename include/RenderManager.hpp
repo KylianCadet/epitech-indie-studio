@@ -14,14 +14,13 @@
 namespace IndieStudio {
 	class RenderManager {
 		public:
-			RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game, IndieStudio::IRender &map);
+			RenderManager(IndieStudio::IRender &menu, IndieStudio::IRender &game);
 			~RenderManager();
 			void render();
 			irr::video::SColor getColor() const noexcept;
 		private:
 			IndieStudio::IRender &_menu;
 			IndieStudio::IRender &_game;
-			IndieStudio::IRender &_map;
 			irr::video::SColor _color;
 			bool _counter = false;
 	};

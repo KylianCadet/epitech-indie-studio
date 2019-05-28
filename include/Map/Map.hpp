@@ -8,10 +8,10 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
-#define CUBE_SIDE 20.f
-#define CUBE_Y -140
-#define CUBE_Z 990
-#define CUBE_X -310
+#define CUBE_SIDE 30.f
+#define CUBE_Y -400
+#define CUBE_Z 0
+#define CUBE_X -200
 #define SIZE_MAP 15
 #define FLOOR_TEXTURE "assets/map/bedrock.png"
 #define WALL_TEXTURE "assets/map/black_concrete.png"
@@ -23,7 +23,8 @@
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
-#include "Game.hpp"
+//#include "Game.hpp"
+#include <map>
 namespace IndieStudio {
     class Map : public IRender, public irr::IEventReceiver{
         public:
@@ -31,13 +32,15 @@ namespace IndieStudio {
             ~Map();
             irr::scene::IMeshSceneNode *createCubes(irr::f32, irr::f32, irr::f32) noexcept;
             void generate_map(int) noexcept;
-            void generate_texture() noexcept;
-            virtual bool OnEvent(const irr::SEvent &event);
+            void generate_texture(void) noexcept;
             void render() noexcept;
+            std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> get_All_Cube(void);
+            virtual bool OnEvent(const irr::SEvent &event);
             virtual bool hasRender(void) const noexcept;
             virtual void setEventReceiver(void) noexcept;
         protected:
         private:
+        std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> _cube;
             irr::IrrlichtDevice *_device;
             irr::scene::ISceneManager *_sceneManager;
             irr::video::IVideoDriver *_driver;
@@ -50,6 +53,5 @@ namespace IndieStudio {
             float _counter = 0;
     };
 };
-void create_Map_Collision(IndieStudio::Map &, IndieStudio::Game &);
 
 #endif /* !MAP_HPP_ */

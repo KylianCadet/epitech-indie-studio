@@ -10,7 +10,7 @@
 #include "MenuManager.hpp"
 #include "Bomb.hpp"
 #include "RenderManager.hpp"
-#include "Map.hpp"
+//#include "Map.hpp"
 #include "Volume.hpp"
 
 int main()
@@ -22,14 +22,14 @@ int main()
 	irr::video::IVideoDriver *driver = device->getVideoDriver();
 	irr::scene::ISceneManager *gameSceneManager = device->getSceneManager();
 	irr::scene::ISceneManager *menuSceneManager = gameSceneManager->createNewSceneManager();
-	irr::scene::ISceneManager *mapSceneManager = gameSceneManager->createNewSceneManager();
+	//irr::scene::ISceneManager *mapSceneManager = gameSceneManager->createNewSceneManager();
 	device->getCursorControl()->setVisible(false);
 
 	IndieStudio::Volume *volume = new IndieStudio::Volume();
 	IndieStudio::MenuManager menu(device, menuSceneManager, driver, volume);
 	IndieStudio::Game game(device, gameSceneManager, driver);
-	IndieStudio::Map map(device, mapSceneManager, driver);
-	IndieStudio::RenderManager renderManager(menu, game, map);
+	//IndieStudio::Map map(device, mapSceneManager, driver);
+	IndieStudio::RenderManager renderManager(menu, game);
 
 	while (device->run()) {
 		driver->beginScene(true, true, renderManager.getColor());

@@ -24,6 +24,9 @@ include_directories	(include)
 include_directories	(include/Menu)
 include_directories	(include/Game)
 include_directories	(include/Map)
+include_directories	(include/Interfaces)
+include_directories	(include/Interfaces/Irrlicht)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 

@@ -8,6 +8,10 @@
 #ifndef IGRAPHICAL_HPP_
 #define IGRAPHICAL_HPP_
 
+static const int GAME = 0;
+static const int MAIN_MENU = 1;
+static const int PAUSE_MENU = 2;
+
 #include <iostream>
 #include <memory>
 #include "IEntity.hpp"
@@ -28,6 +32,7 @@ namespace IndieStudio {
 			virtual void drop(void) const noexcept = 0;
 			virtual IndieStudio::IEvent getEvent(void) const noexcept = 0;
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept = 0;
+			int _renderStatus = MAIN_MENU;
 	};
 };
 

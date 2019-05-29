@@ -15,6 +15,7 @@
 #include "Audio.hpp"
 #include "IRender.hpp"
 #include "MenuMain.hpp"
+#include "IGraphical.hpp"
 
 namespace IndieStudio
 {

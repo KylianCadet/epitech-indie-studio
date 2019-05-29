@@ -8,10 +8,6 @@
 #ifndef IRENDER_HPP_
 #define IRENDER_HPP_
 
-static const int GAME = 0;
-static const int MAIN_MENU = 1;
-static const int PAUSE_MENU = 2;
-
 namespace IndieStudio {
 	class IRender {
 		public:

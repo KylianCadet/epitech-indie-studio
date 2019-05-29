@@ -10,8 +10,8 @@
 
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical) : _graphical(graphical)
 {
-    srand(time(NULL));
-    this->generate_map(SIZE_MAP);
+	srand(time(NULL));
+	this->generate_map(SIZE_MAP);
 }
 
 void IndieStudio::Map::generate_map(int size) noexcept

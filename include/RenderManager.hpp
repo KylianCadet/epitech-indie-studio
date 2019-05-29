@@ -10,6 +10,7 @@
 
 #include "IRender.hpp"
 #include <irrlicht.h>
+#include "IGraphical.hpp"
 
 namespace IndieStudio {
 	class RenderManager {

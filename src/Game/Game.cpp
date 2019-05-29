@@ -7,10 +7,9 @@
 
 #include "Game.hpp"
 
-IndieStudio::Game::Game(IndieStudio::IGraphical &graphical) : _graphical(graphical)
+IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) : _graphical(graphical), _render(render)
 {
 	this->createCharacters();
-	this->createCubes();
 	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical));
 	this->set_Map_Collision();
 }
@@ -38,22 +37,6 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 	}
 }
 
-#define CUBE_SIDE 30.f
-void IndieStudio::Game::createCubes() noexcept
-{
-	for (int i = 0; i != 10; i++) {
-		IndieStudio::IEntity *cube = this->_graphical.createCube(
-			CUBE_SIDE,
-			"./assets/map/bricks.png",
-			IndieStudio::Pos(
-				0, 0, (i * CUBE_SIDE) + 100
-			)
-		);
-		this->createCubeColision(cube);
-		this->_cubeVec.push_back(cube);
-	}
-}
-
 void IndieStudio::Game::createCharacters() noexcept
 {
 	this->_characterVec.push_back(
@@ -72,12 +55,9 @@ void IndieStudio::Game::createCharacters() noexcept
 
 void IndieStudio::Game::render() noexcept
 {
-	// this->_sceneManager->getActiveCamera()->setTarget(irr::core::vector3df(this->_rot_x, this->_rot_y, this->_rot_z));
-	this->_rot_x = cos(this->_counter) * 3;
-	this->_rot_z = sin(this->_counter) * 3;
-	// this->moveCharacter();
-	// this->_sceneManager->drawAll();
-	this->_counter += 0.05;
+	this->moveCharacter();
+	this->checkEvent();
+	this->_graphical.drawScene();
 }
 
 int IndieStudio::Game::getRenderStatus(void) const noexcept
@@ -146,7 +126,7 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	IndieStudio::IEvent event = this->_graphical.getEvent();
 
 	if (event._key[IndieStudio::Key::ESC] == true)
-		this->_renderStatus = PAUSE_MENU;
+		this->_render = PAUSE_MENU;
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 		character_it->setMovingUp(event._key[static_cast<IndieStudio::Key>(character_it->getUpKey())]);
 		character_it->setMovingLeft(event._key[static_cast<IndieStudio::Key>(character_it->getLeftKey())]);

@@ -25,8 +25,11 @@ namespace IndieStudio {
 			virtual void createColision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept;
 			virtual void setCursorVisible(bool b) noexcept;
 			virtual bool run(void) const noexcept;
-			virtual void render(void) const noexcept;
+			virtual void startRender(void) const noexcept;
+			virtual void endRender(void) const noexcept;
+			virtual void drawScene(void) const noexcept;
 			virtual void drop(void) const noexcept;
+			virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept;
 			virtual bool OnEvent(const irr::SEvent &event);
 			virtual IndieStudio::IEvent getEvent(void) const noexcept;
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept;

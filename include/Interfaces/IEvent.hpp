@@ -39,7 +39,11 @@ namespace IndieStudio {
 		Y = 'Y',
 		Z = 'Z',
 		ENTER,
-		ESC
+		ESC,
+		KEY_UP,
+		KEY_DOWN,
+		KEY_LEFT,
+		KEY_RIGHT
 	};
 	class IEvent {
 		public:

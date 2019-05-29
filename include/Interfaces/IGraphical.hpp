@@ -8,9 +8,11 @@
 #ifndef IGRAPHICAL_HPP_
 #define IGRAPHICAL_HPP_
 
-static const int GAME = 0;
-static const int MAIN_MENU = 1;
-static const int PAUSE_MENU = 2;
+enum Render {
+	GAME,
+	MAIN_MENU,
+	PAUSE_MENU
+};
 
 #include <iostream>
 #include <memory>
@@ -28,13 +30,15 @@ namespace IndieStudio {
 			virtual void createColision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept = 0;
 			virtual void setCursorVisible(bool b) noexcept = 0;
 			virtual bool run(void) const noexcept = 0;
-			virtual void render(void) const noexcept = 0;
+			virtual void startRender(void) const noexcept = 0;
+			virtual void endRender(void) const noexcept = 0;
+			virtual void drawScene(void) const noexcept = 0;
 			virtual void drop(void) const noexcept = 0;
+			virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept = 0;
 			virtual IndieStudio::IEvent getEvent(void) const noexcept = 0;
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept = 0;
 			virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept = 0;
 			virtual void drawImage(IndieStudio::IEntity *) const noexcept = 0;
-			int _renderStatus = MAIN_MENU;
 	};
 };
 

@@ -18,7 +18,7 @@
 namespace IndieStudio {
 	class Game : public IRender {
 		public:
-			Game(IndieStudio::IGraphical &graphical);
+			Game(IndieStudio::IGraphical &graphical, Render &render);
 			~Game();
 			void createCubes() noexcept;
 			void createCharacters() noexcept;
@@ -40,6 +40,7 @@ namespace IndieStudio {
 			float _rot_z = 0;
 			float _counter = 0;
 			bool _keyPressed = false;
+			Render &_render;
 	};
 };
 

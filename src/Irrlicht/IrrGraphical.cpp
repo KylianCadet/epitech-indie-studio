@@ -11,13 +11,18 @@ IndieStudio::IrrGraphical::IrrGraphical()
 {
 	this->_device = irr::createDevice(
 		irr::video::EDT_OPENGL,
-		irr::core::dimension2d<irr::u32>(2000, 2000), 32);
+		irr::core::dimension2d<irr::u32>(2000, 2000),
+		32,
+		false,
+		false,
+		true
+		);
 	this->_sceneManager = this->_device->getSceneManager();
 	this->_driver = this->_device->getVideoDriver();
 	this->_sceneManager->addCameraSceneNode(
 		0,
-		irr::core::vector3df(-100, 300, 0),
-		irr::core::vector3df(100, 0, 0)
+		irr::core::vector3df(0, 300, 0),
+		irr::core::vector3df(0, 0, 0)
 	);
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
@@ -103,16 +108,29 @@ bool IndieStudio::IrrGraphical::run(void) const noexcept
 	return (this->_device->run());
 }
 
-void IndieStudio::IrrGraphical::render(void) const noexcept
+void IndieStudio::IrrGraphical::startRender(void) const noexcept
 {
 	this->_driver->beginScene(true, true, irr::video::SColor(255, 255, 255, 255));
-	this->_sceneManager->drawAll();
+}
+
+void IndieStudio::IrrGraphical::endRender(void) const noexcept
+{
 	this->_driver->endScene();
+}
+
+void IndieStudio::IrrGraphical::drawScene(void) const noexcept
+{
+	this->_sceneManager->drawAll();
 }
 
 void IndieStudio::IrrGraphical::drop(void) const noexcept
 {
 	this->_device->drop();
+}
+
+void IndieStudio::IrrGraphical::setCameraTarget(IndieStudio::Pos pos) const noexcept
+{
+	this->_sceneManager->getActiveCamera()->setTarget(irr::core::vector3df(pos._x, pos._y, pos._z));
 }
 
 bool IndieStudio::IrrGraphical::OnEvent(const irr::SEvent &event)

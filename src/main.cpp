@@ -19,14 +19,15 @@ int main()
 
 	IndieStudio::Volume *volume = new IndieStudio::Volume();
 	// IndieStudio::MenuManager menu(graphical, volume);
-	IndieStudio::Game game(graphical);
+	// IndieStudio::Game game(graphical);
 	//IndieStudio::Map map(device, mapSceneManager, driver);
 	// IndieStudio::RenderManager renderManager(menu, game);
 
+	IndieStudio::IEntity *image = graphical.createImage("assets/menu/title2.png", std::pair<int, int>(20, 20));
 	while (graphical.run()) {
 		graphical.render();
-		game.moveCharacter();
-		game.checkEvent();
+		// game.moveCharacter();
+		// game.checkEvent();
 	}
 	graphical.drop();
 	return 0;

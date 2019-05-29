@@ -32,6 +32,8 @@ namespace IndieStudio {
 			virtual void drop(void) const noexcept = 0;
 			virtual IndieStudio::IEvent getEvent(void) const noexcept = 0;
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept = 0;
+			virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept = 0;
+			virtual void drawImage(IndieStudio::IEntity *) const noexcept = 0;
 			int _renderStatus = MAIN_MENU;
 	};
 };

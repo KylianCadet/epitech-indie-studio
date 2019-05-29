@@ -164,3 +164,28 @@ void IndieStudio::IrrGraphical::createColision(IndieStudio::IEntity *cube, Indie
 	node->addAnimator(anim);
 	anim->drop();
 }
+
+IndieStudio::IEntity *IndieStudio::IrrGraphical::createImage(std::string texturePath, std::pair<int, int> pos) const noexcept
+{
+	irr::video::ITexture *image;
+	image = this->_driver->getTexture(texturePath.c_str());
+	irr::core::dimension2d<irr::u32> taille = image->getSize();
+	irr::core::position2d<irr::s32> position0;
+	position0.X = 0;
+	position0.Y = 0;
+	irr::core::position2d<irr::s32> position1;
+	position1.X = taille.Width;
+	position1.Y = taille.Height;
+	irr::core::rect<irr::s32> rectangle;
+	rectangle.UpperLeftCorner = position0;
+	rectangle.LowerRightCorner = position1;
+
+	IndieStudio::IrrEntity *obj = new IndieStudio::IrrEntity(image, pos, rectangle);
+	return (obj);
+}
+
+void IndieStudio::IrrGraphical::drawImage(IndieStudio::IEntity *image) const noexcept
+{
+	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);
+	this->_driver->draw2DImage(irrImage->getImage(), irrImage->get2DPos(), irrImage->getRectangle(), 0, irr::video::SColor(255, 255, 255, 255), true);
+}

@@ -69,3 +69,19 @@ irr::scene::IParticleSystemSceneNode *IndieStudio::IrrEntity::getParticle() cons
 	return (this->_particle);
 }
 
+irr::video::ITexture *IndieStudio::IrrEntity::getImage() const noexcept
+{
+	return (this->_image);
+}
+
+irr::core::position2d<irr::s32> IndieStudio::IrrEntity::get2DPos() const noexcept
+{
+	return (irr::core::position2d<irr::s32>(this->_pos.first, this->_pos.second));
+}
+
+irr::core::rect<irr::s32> IndieStudio::IrrEntity::getRectangle() const noexcept
+{
+	return (this->_rectangle);
+}
+
+

@@ -30,6 +30,8 @@ namespace IndieStudio {
 			virtual bool OnEvent(const irr::SEvent &event);
 			virtual IndieStudio::IEvent getEvent(void) const noexcept;
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept;
+			virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept;
+			virtual void drawImage(IndieStudio::IEntity *) const noexcept;
 
 		private:
 			IndieStudio::IrrEvent _event;

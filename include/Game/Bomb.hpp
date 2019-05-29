@@ -8,26 +8,26 @@
 #ifndef BOMB_HPP_
 #define BOMB_HPP_
 
-#include <irrlicht.h>
 #include "Audio.hpp"
+#include "IGraphical.hpp"
+#include "IEntity.hpp"
 
 namespace IndieStudio {
 	class Bomb {
 		public:
-			Bomb(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, irr::core::vector3df vector, int bombSize);
+			Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize);
 			~Bomb();
-			void createParticule(irr::core::vector3df vector) noexcept;
+			void createParticule(IndieStudio::Pos vector) noexcept;
 			void startCountdown(void);
-			void explosion(irr::core::vector3df position);
-			std::vector<irr::core::vector3df> explosionDir(std::vector<irr::core::vector3df> vec);
+			void explosion(IndieStudio::Pos position);
+			std::vector<IndieStudio::Pos> explosionDir(std::vector<IndieStudio::Pos> vec);
 			void playExplosionSound(void) noexcept;
 			bool getAlive(void) const noexcept;
 
 		private:
-			irr::scene::IAnimatedMeshSceneNode *_bomb;
-			irr::scene::ISceneManager *_sceneManager;
-			irr::video::IVideoDriver *_driver;
-			irr::scene::IParticleSystemSceneNode *_particle;
+			IndieStudio::IGraphical &_graphical;
+			IndieStudio::IEntity *_bomb;
+			IndieStudio::IEntity *_particle;
 			IndieStudio::Audio _sound;
 			bool _alive = true;
 			int _bombSize;

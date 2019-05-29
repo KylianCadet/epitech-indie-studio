@@ -13,29 +13,29 @@
 #include <irrlicht.h>
 #include <vector>
 #include "Map.hpp"
+#include "IGraphical.hpp"
+#include "IEntity.hpp"
+
 namespace IndieStudio {
-	class Game : public IRender, public irr::IEventReceiver {
+	class Game : public IRender {
 		public:
-			Game(irr::IrrlichtDevice *device, irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver);
+			Game(IndieStudio::IGraphical &graphical);
 			~Game();
-			//void createCubes() noexcept;
+			void createCubes() noexcept;
 			void createCharacters() noexcept;
 			void render() noexcept;
-			void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
+			// void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
 			virtual int getRenderStatus(void) const noexcept;
 			virtual void setRenderStatus(int) noexcept;
-			virtual void setEventReceiver(void) noexcept;
-			virtual bool OnEvent(const irr::SEvent &event);
+			virtual void checkEvent(void) noexcept;
 			void moveCharacter() noexcept;
-			void set_Map_Collision();
+			// void set_Map_Collision();
 			IndieStudio::Map *_map;
 		private:
 			int _renderStatus = MAIN_MENU;
-			irr::IrrlichtDevice *_device;
-			irr::scene::ISceneManager *_sceneManager;
-			irr::video::IVideoDriver *_driver;
+			IndieStudio::IGraphical &_graphical;
 			std::vector<IndieStudio::Character> _characterVec;
-			std::vector<irr::scene::IMeshSceneNode *> _cubeVec;
+			std::vector<IndieStudio::IEntity *> _cubeVec;
 			float _rot_x = 100;
 			float _rot_y = 0;
 			float _rot_z = 0;

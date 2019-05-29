@@ -23,15 +23,14 @@ void setMiddle(float &vec)
 	}
 }
 
-IndieStudio::Bomb::Bomb(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, irr::core::vector3df vector, int bombSize) : _sceneManager(sceneManager), _driver(driver), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize) : _graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
 {
-	this->_bomb = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh("assets/bomb/dinamite.obj"));
-	setMiddle(vector.X);
-	setMiddle(vector.Y);
-	setMiddle(vector.Z);
+	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
+	setMiddle(vector._x);
+	setMiddle(vector._y);
+	setMiddle(vector._z);
 	this->_bomb->setPosition(vector);
-	this->_bomb->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	this->_bomb->setScale(irr::core::vector3df(20, 20, 20));
+	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->createParticule(vector);
 	std::thread t1(&IndieStudio::Bomb::startCountdown, this);
 	t1.detach();
@@ -41,42 +40,24 @@ IndieStudio::Bomb::~Bomb()
 {
 }
 
-void IndieStudio::Bomb::createParticule(irr::core::vector3df vector) noexcept
+void IndieStudio::Bomb::createParticule(IndieStudio::Pos vector) noexcept
 {
-	this->_particle = this->_sceneManager->addParticleSystemSceneNode(false);
-	irr::scene::IParticleEmitter* emitter = this->_particle->createBoxEmitter(
-		irr::core::aabbox3d<irr::f32>(vector.X, vector.Y, vector.Z, vector.X, vector.Y, vector.Z),
-		irr::core::vector3df(0.0f,0.05f,0.0f),
-		3,10,
-		irr::video::SColor(0,255,255,255),
-		irr::video::SColor(0,255,255,255),
-		600, 1200,
-		0,
-		irr::core::dimension2df(8.0f,8.0f),
-		irr::core::dimension2df(14.0f,14.0f)
+	this->_particle = this->_graphical.createParticle(
+		IndieStudio::Pos(vector._x, vector._y, vector._z),
+		IndieStudio::Pos(0.0f, 0.05f, 0.0f),
+		3, 10,
+		IndieStudio::Pos(0, 0, 0),
+		IndieStudio::Pos(30, 30, 30)
 	);
-	this->_particle->setEmitter(emitter);
-	emitter->drop();
-
-	this->_particle->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	this->_particle->setMaterialTexture(0, this->_driver->getTexture("assets/bomb/smoke.jpg"));
-
-	irr::scene::IParticleAffector* affector =
-		this->_particle->createFadeOutParticleAffector(
-		irr::video::SColor(0,0,0,0),
-		1200
-	);
-	this->_particle->addAffector(affector);
-	affector->drop();
 }
 
-std::vector<irr::core::vector3df> IndieStudio::Bomb::explosionDir(std::vector<irr::core::vector3df> vec)
+std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieStudio::Pos> vec)
 {
 	float size = 0.05 * _bombSize;
-	irr::core::vector3df up(size, 0.0f, 0.0f);
-	irr::core::vector3df down(size * -1, 0.0f, 0.0f);
-	irr::core::vector3df right(0.0f, 0.0f, size);
-	irr::core::vector3df left(0.0f, 0.0f, size * -1);
+	IndieStudio::Pos up(size, 0.0f, 0.0f);
+	IndieStudio::Pos down(size * -1, 0.0f, 0.0f);
+	IndieStudio::Pos right(0.0f, 0.0f, size);
+	IndieStudio::Pos left(0.0f, 0.0f, size * -1);
 	vec.push_back(up);
 	vec.push_back(down);
 	vec.push_back(right);
@@ -84,26 +65,34 @@ std::vector<irr::core::vector3df> IndieStudio::Bomb::explosionDir(std::vector<ir
 	return (vec);
 }
 
-void IndieStudio::Bomb::explosion(irr::core::vector3df position)
+void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 {
-	std::vector<irr::core::vector3df> vec;
+	std::vector<IndieStudio::Pos> vec;
 	vec = explosionDir(vec);
-	for(std::vector<irr::core::vector3df>::iterator it = vec.begin(); it != vec.end(); ++it) {
-		irr::scene::IParticleSystemSceneNode *particleSystem = _sceneManager->addParticleSystemSceneNode(false);
-		irr::scene::IParticleEmitter *emitter = particleSystem->createBoxEmitter(
-			irr::core::aabbox3d<irr::f32>(position.X, position.Y, position.Z,position.X, position.Y, position.Z), // coordonnees de la boite
-			irr::core::vector3df(*it),      // direction de diffusion
-			0, 5 * _bombSize,                                      // nb particules emises a la sec min / max
-			irr::video::SColor(1, 205, 205,19),         // couleur la plus sombre
-			irr::video::SColor(1, 192, 31, 31),         // couleur la plus claire
-			1000, 1000,                                  // duree de vie min / max
-			0,                                        // angle max d'ecart / direction prevue
-			irr::core::dimension2df(13.0f, 13.0f),      // taille minimum
-			irr::core::dimension2df(13.0f, 13.0f)       // taille maximum
+	for(std::vector<IndieStudio::Pos>::iterator it = vec.begin(); it != vec.end(); ++it) {
+		IndieStudio::IEntity *particleSystem = this->_graphical.createParticle(
+			IndieStudio::Pos(
+				position._x,
+				position._y,
+				position._z
+			),
+			IndieStudio::Pos(
+				it->_x,
+				it->_y,
+				it->_z
+			),
+			0, 5 * _bombSize,
+			IndieStudio::Pos(
+				255,
+				1,
+				1
+			),
+			IndieStudio::Pos(
+				255,
+				255,
+				255
+			)
 		);
-		particleSystem->setEmitter(emitter);
-		emitter->drop();
-		particleSystem->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 	}
 	this->playExplosionSound();
 }
@@ -120,16 +109,14 @@ void IndieStudio::Bomb::playExplosionSound(void) noexcept
 void IndieStudio::Bomb::startCountdown(void)
 {
 	sleep(1);
-	this->_bomb->setScale(irr::core::vector3df(22, 22, 22));
+	this->_bomb->setScale(IndieStudio::Pos(22, 22, 22));
 	sleep(1);
-	this->_bomb->setScale(irr::core::vector3df(24, 24, 24));
+	this->_bomb->setScale(IndieStudio::Pos(24, 24, 24));
 	sleep(1);
-	this->_bomb->setScale(irr::core::vector3df(26, 26, 26));
-	// std::thread t1(&IndieStudio::Bomb::playExplosionSound, this);
-	// t1.detach();
+	this->_bomb->setScale(IndieStudio::Pos(26, 26, 26));
 	this->explosion(this->_bomb->getPosition());
-	this->_sceneManager->addToDeletionQueue(this->_bomb);
-	this->_sceneManager->addToDeletionQueue(this->_particle);
+	this->_graphical.deleteEntity(this->_bomb);
+	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);
 	this->_alive = false;
 }

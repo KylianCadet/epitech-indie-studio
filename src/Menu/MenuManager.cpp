@@ -121,8 +121,3 @@ void IndieStudio::MenuManager::setRenderStatus(int status) noexcept
 {
 	this->_renderStatus = status;
 }
-
-void IndieStudio::MenuManager::setEventReceiver(void) noexcept
-{
-	this->_device->setEventReceiver(this);
-}

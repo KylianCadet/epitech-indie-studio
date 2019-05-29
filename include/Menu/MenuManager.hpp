@@ -29,7 +29,6 @@ public:
 	bool OnEvent(const irr::SEvent &event) override;
 	int getRenderStatus(void) const noexcept override;
 	void setRenderStatus(int) noexcept override;
-	void setEventReceiver(void) noexcept override;
 
 private:
 	void checkActions(void) noexcept;

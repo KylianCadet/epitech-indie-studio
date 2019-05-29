@@ -23,20 +23,17 @@ void IndieStudio::RenderManager::render()
 	if (this->_menu.getRenderStatus() == MAIN_MENU)
 	{
 		this->_game.setRenderStatus(MAIN_MENU);
-		this->_menu.setEventReceiver();
 		this->_menu.render();
 	}
 	else if (this->_game.getRenderStatus() == PAUSE_MENU)
 	{
 		this->_menu.setRenderStatus(PAUSE_MENU);
-		this->_menu.setEventReceiver();
 		this->_game.render();
 		this->_menu.render();
 	}
 	else if (this->_menu.getRenderStatus() == GAME)
 	{
 		this->_game.setRenderStatus(GAME);
-		this->_game.setEventReceiver();
 		this->_game.render();
 	}
 }

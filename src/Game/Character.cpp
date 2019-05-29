@@ -7,18 +7,9 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action) : _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action) : _graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
 {
-	irr::video::ITexture *texture = driver->getTexture(texturePath.c_str());
-
-	this->_model = sceneManager->addAnimatedMeshSceneNode(sceneManager->getMesh(meshPath.c_str()));
-	if (this->_model == NULL || texture == NULL)
-		exit(84);
-	this->_model->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	this->_model->setMaterialTexture(0, texture);
-	this->_model->setMD2Animation(irr::scene::EMAT_STAND);
-	this->_model->setPosition(irr::core::vector3df(0, 11, 0));
-	//this->_model->setRotation(irr::core::vector3df(100,0,0));
+	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
 	this->_deathSound = new IndieStudio::Audio(deathSoundPath);
 }
 
@@ -27,7 +18,7 @@ IndieStudio::Character::~Character()
 	// delete this->_deathSound;
 }
 
-irr::scene::IAnimatedMeshSceneNode *IndieStudio::Character::getMesh() noexcept
+IndieStudio::IEntity *IndieStudio::Character::getMesh() noexcept
 {
 	return (this->_model);
 }

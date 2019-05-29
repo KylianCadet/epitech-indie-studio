@@ -10,6 +10,7 @@
 
 #include "Audio.hpp"
 #include "Bomb.hpp"
+#include "IGraphical.hpp"
 #include <vector>
 #include <irrlicht.h>
 #include <iostream>
@@ -17,7 +18,7 @@
 namespace IndieStudio {
 	class Character {
 		public:
-			Character(irr::scene::ISceneManager *sceneManager, irr::video::IVideoDriver *driver, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
+			Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
 			~Character();
 			char getUpKey() const noexcept;
 			char getLeftKey() const noexcept;
@@ -55,11 +56,12 @@ namespace IndieStudio {
 
 			void checkDeleteBomb() noexcept;
 
-			irr::scene::IAnimatedMeshSceneNode *getMesh() noexcept;
+			IndieStudio::IEntity *getMesh() noexcept;
 			IndieStudio::Audio *getDeathSound() noexcept;
 
 		private:
-			irr::scene::IAnimatedMeshSceneNode *_model;
+			IndieStudio::IGraphical &_graphical;
+			IndieStudio::IEntity *_model;
 			IndieStudio::Audio *_deathSound;
 			std::vector<IndieStudio::Bomb *> _bombArr;
 

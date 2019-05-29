@@ -19,7 +19,6 @@ namespace IndieStudio {
 			virtual void render(void) = 0;
 			virtual int getRenderStatus(void) const noexcept = 0;
 			virtual void setRenderStatus(int) noexcept = 0;
-			virtual void setEventReceiver(void) noexcept = 0;
 		private:
 	};
 };

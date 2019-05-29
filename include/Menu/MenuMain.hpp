@@ -8,29 +8,22 @@
 #ifndef MENUMAIN_HPP_
 #define MENUMAIN_HPP_
 
-#define MENU_MAIN_GAME -1
-#define MENU_MAIN_MAIN 0
-#define MENU_MAIN_NEWGAME 1
-#define MENU_MAIN_LOADGAME 2
-#define MENU_MAIN_OPTIONS 3
-#define MENU_MAIN_EXIT 4
+static const int MENU_MAIN_GAME = -1;
+static const int MENU_MAIN_MAIN = 0;
+static const int MENU_MAIN_NEWGAME = 1;
+static const int MENU_MAIN_LOADGAME = 2;
+static const int MENU_MAIN_OPTIONS = 3;
+static const int MENU_MAIN_EXIT = 4;
 
-#define BTN_MAIN_NEWGAME 0
-#define BTN_MAIN_LOADGAME 1
-#define BTN_MAIN_OPTIONS 2
-#define BTN_MAIN_EXIT 3
-
-#include <irrlicht.h>
-#include <iostream>
+static const int BTN_MAIN_NEWGAME = 0;
+static const int BTN_MAIN_LOADGAME = 1;
+static const int BTN_MAIN_OPTIONS = 2;
+static const int BTN_MAIN_EXIT = 3;
 
 #include "Menu.hpp"
 #include "MenuNew.hpp"
 #include "MenuOptions.hpp"
 #include "MenuLoad.hpp"
-#include "MenuSounds.hpp"
-#include "Audio.hpp"
-#include "Button.hpp"
-#include "Volume.hpp"
 
 namespace IndieStudio
 {
@@ -40,28 +33,31 @@ public:
 	MenuMain(irr::video::IVideoDriver *, Volume *, MenuSounds *);
 	~MenuMain();
 
-	virtual void drawMenu(void) noexcept;
-	virtual void drawMenuManager(void) noexcept;
-	virtual void createButtons(void) noexcept;
-	virtual void drawButtons(void) noexcept;
-	virtual void createImages(void) noexcept;
-	virtual void drawImages(void) noexcept;
+public:
+	void drawMenuManager(void) noexcept override;
+	void returnActionManager(void) noexcept override;
+	void escapeActionManager(void) noexcept override;
+	void leftActionManager(void) noexcept override;
+	void rightActionManager(void) noexcept override;
+	void upActionManager(void) noexcept override;
+	void downActionManager(void) noexcept override;
 
-	virtual void checkActions(void) noexcept;
-	virtual void returnAction(void) noexcept;
-	virtual void returnActionManager(void) noexcept;
-	virtual void escapeAction(void) noexcept;
-	virtual void escapeActionManager(void) noexcept;
-	virtual void leftAction(void) noexcept;
-	virtual void leftActionManager(void) noexcept;
-	virtual void rightAction(void) noexcept;
-	virtual void rightActionManager(void) noexcept;
-	virtual void upAction(void) noexcept;
-	virtual void upActionManager(void) noexcept;
-	virtual void downAction(void) noexcept;
-	virtual void downActionManager(void) noexcept;
+private:
+	void drawMenu(void) noexcept override;
+	void createButtons(void) noexcept override;
+	void drawButtons(void) noexcept override;
+	void createImages(void) noexcept override;
+	void drawImages(void) noexcept override;
 
-	virtual void refreshSkin(void) noexcept;
+	void checkActions(void) noexcept override;
+	void returnAction(void) noexcept override;
+	void escapeAction(void) noexcept override;
+	void leftAction(void) noexcept override;
+	void rightAction(void) noexcept override;
+	void upAction(void) noexcept override;
+	void downAction(void) noexcept override;
+
+	void refreshSkin(void) noexcept override;
 
 private:
 	MenuNew *_menuNew;
@@ -75,7 +71,6 @@ private:
 
 	Image2d *_frameMenu;
 	Image2d *_titleMenu;
-
 };
 }; // namespace IndieStudio
 

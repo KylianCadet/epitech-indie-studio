@@ -11,12 +11,10 @@
 #include <irrlicht.h>
 #include <iostream>
 #include <unistd.h>
-#include "Image2d.hpp"
+
+#include "Audio.hpp"
 #include "IRender.hpp"
 #include "MenuMain.hpp"
-#include "Audio.hpp"
-#include "Volume.hpp"
-#include "MenuSounds.hpp"
 
 namespace IndieStudio
 {
@@ -28,10 +26,10 @@ public:
 
 	void render(void) noexcept;
 
-	virtual bool OnEvent(const irr::SEvent &event);
-	virtual int getRenderStatus(void) const noexcept;
-	virtual void setRenderStatus(int) noexcept;
-	virtual void setEventReceiver(void) noexcept;
+	bool OnEvent(const irr::SEvent &event) override;
+	int getRenderStatus(void) const noexcept override;
+	void setRenderStatus(int) noexcept override;
+	void setEventReceiver(void) noexcept override;
 
 private:
 	void checkActions(void) noexcept;
@@ -41,7 +39,6 @@ private:
 	void rightActionManager(void) noexcept;
 	void upActionManager(void) noexcept;
 	void downActionManager(void) noexcept;
-
 
 private:
 	int _renderStatus = MAIN_MENU;

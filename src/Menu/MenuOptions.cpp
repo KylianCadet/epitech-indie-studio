@@ -234,3 +234,11 @@ void IndieStudio::MenuOptions::downActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->downAction();
 }
+
+void IndieStudio::MenuOptions::createImages(void) noexcept
+{
+}
+
+void IndieStudio::MenuOptions::drawImages(void) noexcept
+{
+}

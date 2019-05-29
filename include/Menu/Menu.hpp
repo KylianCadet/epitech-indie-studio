@@ -8,12 +8,13 @@
 #ifndef MENU_HPP_
 #define MENU_HPP_
 
-#define NOTHING -1
-
-#include "Volume.hpp"
-#include "IMenu.hpp"
-#include "MenuSounds.hpp"
 #include <irrlicht.h>
+#include <iostream>
+
+#include "IMenu.hpp"
+#include "Button.hpp"
+#include "Volume.hpp"
+#include "MenuSounds.hpp"
 
 class Menu : public IMenu
 {

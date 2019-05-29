@@ -22,10 +22,10 @@ private:
 	Volume *_volume;
 
 public:
-	IndieStudio::Audio *_mainMusic;
-	IndieStudio::Audio *_volumeSwitchSound;
-	IndieStudio::Audio *_buttonSwitchSound;
-	IndieStudio::Audio *_buttonReturnSound;
+	Audio *_mainMusic;
+	Audio *_volumeSwitchSound;
+	Audio *_buttonSwitchSound;
+	Audio *_buttonReturnSound;
 };
 }; // namespace IndieStudio
 

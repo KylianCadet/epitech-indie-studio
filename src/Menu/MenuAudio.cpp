@@ -79,22 +79,22 @@ void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 		this->_music->setDefaultSkin();
 		this->_effects->setActiveSkin();
 	}
-		if (this->_leftMusicTime <= 0)
-			this->_leftMusicArrow->setDefaultSkin();
-		else
-			this->_leftMusicTime--;
-		if (this->_rightMusicTime <= 0)
-			this->_rightMusicArrow->setDefaultSkin();
-		else
-			this->_rightMusicTime--;
-		if (this->_leftEffectTime <= 0)
-			this->_leftEffectArrow->setDefaultSkin();
-		else
-			this->_leftEffectTime--;
-		if (this->_rightEffectTime <= 0)
-			this->_rightEffectArrow->setDefaultSkin();
-		else
-			this->_rightEffectTime--;
+	if (this->_leftMusicTime <= 0)
+		this->_leftMusicArrow->setDefaultSkin();
+	else
+		this->_leftMusicTime--;
+	if (this->_rightMusicTime <= 0)
+		this->_rightMusicArrow->setDefaultSkin();
+	else
+		this->_rightMusicTime--;
+	if (this->_leftEffectTime <= 0)
+		this->_leftEffectArrow->setDefaultSkin();
+	else
+		this->_leftEffectTime--;
+	if (this->_rightEffectTime <= 0)
+		this->_rightEffectArrow->setDefaultSkin();
+	else
+		this->_rightEffectTime--;
 }
 
 void IndieStudio::MenuAudio::setVolumeMusicBar(void) noexcept
@@ -176,4 +176,36 @@ void IndieStudio::MenuAudio::downActionManager(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
 	this->setButtonSwitch(1, 1);
+}
+
+void IndieStudio::MenuAudio::returnAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::escapeAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::leftAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::rightAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::upAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::downAction(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::checkActions(void) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::drawMenu(void) noexcept
+{
 }

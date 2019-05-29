@@ -9,8 +9,6 @@
 
 Menu::Menu(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
 {
-	this->_buttonStatus = NOTHING;
-	this->_renderStatus = NOTHING;
 	this->_volume = volume;
 	this->_sounds = sounds;
 	this->_driver = driver;

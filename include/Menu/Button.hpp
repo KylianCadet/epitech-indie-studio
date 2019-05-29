@@ -14,25 +14,24 @@
 
 namespace IndieStudio
 {
-	class Button
-	{
-	public:
-		Button(irr::video::IVideoDriver *, std::string, std::string, std::pair<int, int>);
-		~Button();
+class Button
+{
+public:
+	Button(irr::video::IVideoDriver *, std::string, std::string, std::pair<int, int>);
+	~Button();
 
-		void drawButton(void) noexcept;
-		void setDefaultSkin(void) noexcept;
-		void setActiveSkin(void) noexcept;
+	void drawButton(void) noexcept;
+	void setDefaultSkin(void) noexcept;
+	void setActiveSkin(void) noexcept;
 
-	protected:
-		bool _active;
+private:
+	bool _active;
 
-		Image2d _image2d;
+	Image2d _image2d;
 
-		std::string _skinDefault;
-		std::string _skinActive;
-
-	};
+	std::string _skinDefault;
+	std::string _skinActive;
+};
 }; // namespace IndieStudio
 
 #endif /* !BUTTON_HPP_ */

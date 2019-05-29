@@ -20,34 +20,28 @@
 #include <irrlicht.h>
 #include <iostream>
 #include "IRender.hpp"
+#include "IGraphical.hpp"
 #include <vector>
 #include <time.h>
 #include <stdlib.h>
 //#include "Game.hpp"
 #include <map>
+
 namespace IndieStudio {
-    class Map : public IRender, public irr::IEventReceiver{
+    class Map {
         public:
-            Map(irr::IrrlichtDevice *, irr::scene::ISceneManager *, irr::video::IVideoDriver *);
+            Map(IndieStudio::IGraphical &graphical);
             ~Map();
-            irr::scene::IMeshSceneNode *createCubes(irr::f32, irr::f32, irr::f32) noexcept;
+            IndieStudio::IEntity *createCubes(float, float, float, std::string) noexcept;
             void generate_map(int) noexcept;
-            void generate_texture(void) noexcept;
-            void render() noexcept;
-            std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> get_All_Cube(void);
-            virtual bool OnEvent(const irr::SEvent &event);
-            virtual int getRenderStatus(void) const noexcept {};
-			virtual void setRenderStatus(int) noexcept {};
-            virtual void setEventReceiver(void) noexcept;
+            std::map<std::string, std::vector<IndieStudio::IEntity *>> get_All_Cube(void);
         protected:
         private:
-        std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> _cube;
-            irr::IrrlichtDevice *_device;
-            irr::scene::ISceneManager *_sceneManager;
-            irr::video::IVideoDriver *_driver;
-            std::vector<irr::scene::IMeshSceneNode *> _cube_Destruc_Vec;
-            std::vector<irr::scene::IMeshSceneNode *> _wall_Vec;
-            std::vector<irr::scene::IMeshSceneNode *> _floor_Vec;
+        	std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;
+            IndieStudio::IGraphical &_graphical;
+            std::vector<IndieStudio::IEntity *> _cube_Destruc_Vec;
+            std::vector<IndieStudio::IEntity *> _wall_Vec;
+            std::vector<IndieStudio::IEntity *> _floor_Vec;
             float _rot_x = 0;
             float _rot_y = 0;
             float _rot_z = 0;

@@ -10,7 +10,6 @@
 
 #include "Character.hpp"
 #include "IRender.hpp"
-#include <irrlicht.h>
 #include <vector>
 #include "Map.hpp"
 #include "IGraphical.hpp"
@@ -24,13 +23,13 @@ namespace IndieStudio {
 			void createCubes() noexcept;
 			void createCharacters() noexcept;
 			void render() noexcept;
-			// void createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept;
+			void createCubeColision(IndieStudio::IEntity *cube) noexcept;
 			virtual int getRenderStatus(void) const noexcept;
 			virtual void setRenderStatus(int) noexcept;
 			virtual void checkEvent(void) noexcept;
 			void moveCharacter() noexcept;
-			// void set_Map_Collision();
-			IndieStudio::Map *_map;
+			void set_Map_Collision() noexcept;
+			std::unique_ptr<IndieStudio::Map> _map;
 		private:
 			int _renderStatus = MAIN_MENU;
 			IndieStudio::IGraphical &_graphical;

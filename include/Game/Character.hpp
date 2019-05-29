@@ -12,7 +12,6 @@
 #include "Bomb.hpp"
 #include "IGraphical.hpp"
 #include <vector>
-#include <irrlicht.h>
 #include <iostream>
 
 namespace IndieStudio {
@@ -56,7 +55,7 @@ namespace IndieStudio {
 
 			void checkDeleteBomb() noexcept;
 
-			IndieStudio::IEntity *getMesh() noexcept;
+			IndieStudio::IEntity *getEntity() noexcept;
 			IndieStudio::Audio *getDeathSound() noexcept;
 
 		private:

@@ -9,7 +9,7 @@
 #define IRREVENT_HPP_
 
 #include "IEvent.hpp"
-#include "irrlicht.h"
+#include <irrlicht.h>
 
 namespace IndieStudio {
 	class IrrEvent : public IEvent {

@@ -10,48 +10,33 @@
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical) : _graphical(graphical)
 {
 	this->createCharacters();
-	// this->set_Map_Collision();
 	this->createCubes();
+	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical));
+	this->set_Map_Collision();
 }
 
 IndieStudio::Game::~Game()
 {
 }
 
-// void IndieStudio::Game::set_Map_Collision()
-// {
-// 	std::map<std::string, std::vector<irr::scene::IMeshSceneNode *>> cube;
-// 	cube = _map->get_All_Cube();
-// 	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
-// 		createCubeColision(*i);
-// 	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
-// 		createCubeColision(*i);
+void IndieStudio::Game::set_Map_Collision() noexcept
+{
+	std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
+	cube = _map->get_All_Cube();
+	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
+		this->createCubeColision(*i);
+	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
+		this->createCubeColision(*i);
+}
 
-// }
 
-
-// void IndieStudio::Game::createCubeColision(irr::scene::IMeshSceneNode *cube) noexcept
-// {
-// 	/* CREATE TRIANGLE SELECTOR FOR THE CREATED CUBE */
-// 	irr::scene::IMetaTriangleSelector* metaSelector = this->_sceneManager->createMetaTriangleSelector();
-// 	irr::scene::ITriangleSelector* selector = 0;
-// 	selector = this->_sceneManager->createTriangleSelectorFromBoundingBox(cube);
-// 	cube->setTriangleSelector(selector);
-// 	metaSelector->addTriangleSelector(selector);
-
-// 	/* CREATE ANIMATOR RESPONSE FOR EACH OF THE CHARACTERS */
-// 	for (auto & character_it : this->_characterVec) {
-// 		irr::scene::ISceneNode *node = character_it.getMesh();
-// 		irr::scene::ISceneNodeAnimatorCollisionResponse* anim = this->_sceneManager->createCollisionResponseAnimator(
-// 			metaSelector,
-// 			node,
-// 			irr::core::vector3df(20, 20, 20),
-// 			irr::core::vector3df(0, 0, 0)
-// 		);
-// 		node->addAnimator(anim);
-// 		anim->drop();
-// 	}
-// }
+void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
+{
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+		IndieStudio::IEntity *entity = character_it->getEntity();
+		this->_graphical.createColision(cube, entity);
+	}
+}
 
 #define CUBE_SIDE 30.f
 void IndieStudio::Game::createCubes() noexcept
@@ -64,7 +49,7 @@ void IndieStudio::Game::createCubes() noexcept
 				0, 0, (i * CUBE_SIDE) + 100
 			)
 		);
-		// this->createCubeColision(cube);
+		this->createCubeColision(cube);
 		this->_cubeVec.push_back(cube);
 	}
 }
@@ -117,7 +102,7 @@ void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool 
 			coordinate += character_it->getSpeed();
 		else
 			coordinate -= character_it->getSpeed();
-		character_it->getMesh()->setRotation(IndieStudio::Pos(0, rotation, 0));
+		character_it->getEntity()->setRotation(IndieStudio::Pos(0, rotation, 0));
 		character_it->setIsMoving(true);
 	}
 }
@@ -129,19 +114,19 @@ void IndieStudio::Game::moveCharacter() noexcept
 	bool isMoving = false;
 
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-		IndieStudio::Pos v = character_it->getMesh()->getPosition();
+		IndieStudio::Pos v = character_it->getEntity()->getPosition();
 		isMoving = character_it->getIsMoving();
 		checkMove(character_it, character_it->getMovingUp(),v._x, UP_ROT, true);
 		checkMove(character_it, character_it->getMovingDown(),v._x, DOWN_ROT, false);
 		checkMove(character_it, character_it->getMovingLeft(),v._z, LEFT_ROT, true);
 		checkMove(character_it, character_it->getMovingRight(),v._z, RIGHT_ROT, false);
-		if (character_it->getMesh()->getPosition() != v && isMoving == false)
-			character_it->getMesh()->setAnimation(irr::scene::EMAT_RUN);
-		else if (character_it->getMesh()->getPosition() == v && isMoving == true) {
+		if (character_it->getEntity()->getPosition() != v && isMoving == false)
+			character_it->getEntity()->setAnimation(irr::scene::EMAT_RUN);
+		else if (character_it->getEntity()->getPosition() == v && isMoving == true) {
 			character_it->setIsMoving(false);
-			character_it->getMesh()->setAnimation(irr::scene::EMAT_STAND);
+			character_it->getEntity()->setAnimation(irr::scene::EMAT_STAND);
 		}
-		character_it->getMesh()->setPosition(v);
+		character_it->getEntity()->setPosition(v);
 		if (character_it->getDoingAction() == true) {
 			character_it->getDeathSound()->playSound();
 		}
@@ -149,19 +134,11 @@ void IndieStudio::Game::moveCharacter() noexcept
 			this->_keyPressed = true;
 			character_it->checkDeleteBomb();
 			if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
-				IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_graphical, character_it->getMesh()->getPosition(), character_it->getBombSize());
+				IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize());
 				character_it->addBomb(bomb);
 			}
 		}
 	}
-}
-
-bool isKeyPress2(const irr::SEvent &event, irr::EKEY_CODE key) noexcept
-{
-	if (event.KeyInput.Key == key)
-		return true;
-	else
-		return false;
 }
 
 void IndieStudio::Game::checkEvent(void) noexcept

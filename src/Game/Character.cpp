@@ -18,7 +18,7 @@ IndieStudio::Character::~Character()
 	// delete this->_deathSound;
 }
 
-IndieStudio::IEntity *IndieStudio::Character::getMesh() noexcept
+IndieStudio::IEntity *IndieStudio::Character::getEntity() noexcept
 {
 	return (this->_model);
 }

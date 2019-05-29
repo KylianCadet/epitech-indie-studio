@@ -21,6 +21,7 @@ namespace IndieStudio {
 			virtual IndieStudio::IEntity *createAnimatedMesh(std::string meshPath, std::string texturePath) const noexcept = 0;
 			virtual IndieStudio::IEntity *createCube(float size, std::string texturePath, IndieStudio::Pos pos = IndieStudio::Pos(0, 0, 0), IndieStudio::Pos scale = IndieStudio::Pos(1, 1, 1)) const noexcept = 0;
 			virtual IndieStudio::IEntity *createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax) const noexcept = 0;
+			virtual void createColision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept = 0;
 			virtual void setCursorVisible(bool b) noexcept = 0;
 			virtual bool run(void) const noexcept = 0;
 			virtual void render(void) const noexcept = 0;

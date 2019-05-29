@@ -130,8 +130,37 @@ void IndieStudio::IrrGraphical::deleteEntity(IndieStudio::IEntity *entity) const
 {
 	IndieStudio::IrrEntity *irrEntity = static_cast<IndieStudio::IrrEntity *>(entity);
 
+	if (irrEntity->getAnimatedMesh() != nullptr)
+		this->_sceneManager->addToDeletionQueue(irrEntity->getAnimatedMesh());
 	if (irrEntity->getMesh() != nullptr)
 		this->_sceneManager->addToDeletionQueue(irrEntity->getMesh());
 	if (irrEntity->getParticle() != nullptr)
 		this->_sceneManager->addToDeletionQueue(irrEntity->getParticle());
+}
+
+void IndieStudio::IrrGraphical::createColision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept
+{
+	IndieStudio::IrrEntity *irrCube = dynamic_cast<IndieStudio::IrrEntity *>(cube);
+	IndieStudio::IrrEntity *irrEntity = dynamic_cast<IndieStudio::IrrEntity *>(entity);
+
+
+	if (irrCube == nullptr)
+		std::cout << "failed to cast cubeNode" << std::endl;
+	if (irrEntity == nullptr)
+		std::cout << "failed to cast entityNode" << std::endl;
+	irr::scene::IMetaTriangleSelector* metaSelector = this->_sceneManager->createMetaTriangleSelector();
+	irr::scene::ITriangleSelector* selector = 0;
+	selector = this->_sceneManager->createTriangleSelectorFromBoundingBox(irrCube->getMesh());
+	irrCube->getMesh()->setTriangleSelector(selector);
+	metaSelector->addTriangleSelector(selector);
+
+	irr::scene::ISceneNode *node = irrEntity->getAnimatedMesh();
+	irr::scene::ISceneNodeAnimatorCollisionResponse* anim = this->_sceneManager->createCollisionResponseAnimator(
+		metaSelector,
+		node,
+		irr::core::vector3df(20, 20, 20),
+		irr::core::vector3df(0, 0, 0)
+	);
+	node->addAnimator(anim);
+	anim->drop();
 }

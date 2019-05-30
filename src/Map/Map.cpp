@@ -80,15 +80,16 @@ IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, s
 
 void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 {
+	this->_graphical.deleteEntity(del);
 	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
+				std::cout << "FIND DELETED\n";
 				this->_cube_Destruc_map[j].erase(i);
 				break;
 			}
 		}
 	}
-	this->_graphical.deleteEntity(del);
 }
 
 //             GET
@@ -102,6 +103,7 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::get_Destruc_Cube(void) noe
 			cube.push_back(*i);
 		}
 	}
+	std::cout << "SIZE CUBE" << cube.size() << "\n";
 	return (cube);
 }
 
@@ -111,13 +113,8 @@ std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get
 
 	cube["Floor"] = this->_floor_Vec;
 	cube["Wall"] = this->_wall_Vec;
-	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
-		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
-			cube["Destruc"].push_back(*i);
-		}
-	}
 	if (cube["Destruc"].size() == 0)
-		cube["Destruc"] = _cube_Destruc_Vec;
+		cube["Destruc"] = get_Destruc_Cube();
 	return (cube);
 }
 

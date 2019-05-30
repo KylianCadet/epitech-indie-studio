@@ -1,0 +1,15 @@
+#############################
+#P                         P#
+#     B          B   B      #
+#    B B          B B       #
+#   B   B          B        #
+#  BBBBBBB        B B       #
+# B       B  #   B   B      #
+#                           #
+#                           #
+#  BBBB  BBB    BBBBB       #
+#  B     B  B   B   B       #
+#  BBBB  B  B   BBBBB       #
+#  B     B  B   B           #
+#P B     BBB    B          P#
+#############################

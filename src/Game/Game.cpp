@@ -9,8 +9,10 @@
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) : _graphical(graphical), _render(render)
 {
-	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical));
+	//this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical));
+	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical, "64", "map/map.txt"));
 	this->createCharacters();
+	std::cout << "CHARACTER CREATED\n";
 	this->set_Map_Collision();
 }
 

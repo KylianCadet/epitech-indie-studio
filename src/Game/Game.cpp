@@ -20,12 +20,22 @@ IndieStudio::Game::~Game()
 
 void IndieStudio::Game::set_Map_Collision() noexcept
 {
-	std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
-	cube = _map->get_All_Cube();
-	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
-		this->createCubeColision(*i);
-	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
-		this->createCubeColision(*i);
+	auto wallMap = this->_map->getWallCube();
+	for (auto wallMap_it = wallMap.begin(); wallMap_it != wallMap.end(); wallMap_it++) {
+		this->createCubeColision(*wallMap_it);
+	}
+	auto brickMap = this->_map->getBrickCube();
+	for (auto brickMap_it = brickMap.begin(); brickMap_it != brickMap.end(); brickMap_it++) {
+		this->createCubeColision(*brickMap_it);
+	}
+	// std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
+	// cube = _map->get_All_Cube();
+	// std::cout << "wall map size : " << cube["Wall"].size() << std::endl;
+	// for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++) {
+	// 	this->createCubeColision(*i);
+	// }
+	// for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
+	// 	this->createCubeColision(*i);
 }
 
 
@@ -55,8 +65,10 @@ void IndieStudio::Game::createCharacters() noexcept
 
 void IndieStudio::Game::render() noexcept
 {
-	this->moveCharacter();
-	this->checkEvent();
+	if (this->_render == GAME) {
+		this->moveCharacter();
+		this->checkEvent();
+	}
 	this->_graphical.drawScene();
 }
 
@@ -75,7 +87,7 @@ void IndieStudio::Game::setRenderStatus(int status) noexcept
 #define RIGHT_ROT 90
 #define LEFT_ROT 270
 
-void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool isMoving,irr::f32 &coordinate, int rotation, bool sign)
+void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool isMoving, float &coordinate, int rotation, bool sign)
 {
 	if (isMoving == true) {
 		if (sign)
@@ -88,6 +100,8 @@ void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool 
 }
 
 #include "Bomb.hpp"
+#define RUN 1
+#define STAND 0
 
 void IndieStudio::Game::moveCharacter() noexcept
 {
@@ -101,10 +115,10 @@ void IndieStudio::Game::moveCharacter() noexcept
 		checkMove(character_it, character_it->getMovingLeft(),v._z, LEFT_ROT, true);
 		checkMove(character_it, character_it->getMovingRight(),v._z, RIGHT_ROT, false);
 		if (character_it->getEntity()->getPosition() != v && isMoving == false)
-			character_it->getEntity()->setAnimation(irr::scene::EMAT_RUN);
+			character_it->getEntity()->setAnimation(RUN);
 		else if (character_it->getEntity()->getPosition() == v && isMoving == true) {
 			character_it->setIsMoving(false);
-			character_it->getEntity()->setAnimation(irr::scene::EMAT_STAND);
+			character_it->getEntity()->setAnimation(STAND);
 		}
 		character_it->getEntity()->setPosition(v);
 		if (character_it->getDoingAction() == true) {

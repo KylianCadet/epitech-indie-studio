@@ -17,36 +17,35 @@
 #define WALL_TEXTURE "assets/map/black_concrete.png"
 #define BRICK_TEXTURE "assets/map/bricks.png"
 
-#include <irrlicht.h>
-#include <iostream>
-#include "IRender.hpp"
 #include "IGraphical.hpp"
 #include <vector>
-#include <time.h>
-#include <stdlib.h>
-//#include "Game.hpp"
 #include <map>
 
 namespace IndieStudio {
-    class Map {
-        public:
-            Map(IndieStudio::IGraphical &graphical);
-            ~Map();
-            IndieStudio::IEntity *createCubes(float, float, float, std::string) noexcept;
-            void generate_map(int) noexcept;
-            std::map<std::string, std::vector<IndieStudio::IEntity *>> get_All_Cube(void);
-        protected:
-        private:
-        	std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;
-            IndieStudio::IGraphical &_graphical;
-            std::vector<IndieStudio::IEntity *> _cube_Destruc_Vec;
-            std::vector<IndieStudio::IEntity *> _wall_Vec;
-            std::vector<IndieStudio::IEntity *> _floor_Vec;
-            float _rot_x = 0;
-            float _rot_y = 0;
-            float _rot_z = 0;
-            float _counter = 0;
-    };
+	class Map {
+		public:
+			Map(IndieStudio::IGraphical &graphical);
+			~Map();
+			IndieStudio::IEntity *createCubes(float, float, float, std::string) noexcept;
+			void generate_map(int) noexcept;
+			std::vector<IndieStudio::IEntity *> &getWallCube(void) noexcept;
+			void setWallCube(std::vector<IndieStudio::IEntity *> wall) noexcept;
+
+			std::vector<IndieStudio::IEntity *> &getFloorCube(void) noexcept;
+			void setFloorCube(std::vector<IndieStudio::IEntity *> wall) noexcept;
+
+			std::vector<IndieStudio::IEntity *> &getBrickCube(void) noexcept;
+			void setBrickCube(std::vector<IndieStudio::IEntity *> wall) noexcept;
+
+
+		protected:
+		private:
+			std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;
+			IndieStudio::IGraphical &_graphical;
+			std::vector<IndieStudio::IEntity *> _cube_Destruc_Vec;
+			std::vector<IndieStudio::IEntity *> _wall_Vec;
+			std::vector<IndieStudio::IEntity *> _floor_Vec;
+	};
 };
 
-#endif /* !MAP_HPP_ */
+#endif

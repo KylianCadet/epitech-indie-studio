@@ -41,18 +41,32 @@ void IndieStudio::Map::generate_map(int x, int y) noexcept
 
 void IndieStudio::Map::create_Start_Positon(void) noexcept
 {
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[1].at(0));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[0].at(1));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[0].at(0));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[1].at(this->_cube_Destruc_map[1].size() - 1));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[0].at(this->_cube_Destruc_map[1].size() - 2));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[0].at(this->_cube_Destruc_map[1].size() - 1));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 2].at(0));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(1));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(0));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 2].at(this->_cube_Destruc_map[1].size() - 1));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(this->_cube_Destruc_map[1].size() - 2));
-	this->_graphical.deleteEntity(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(this->_cube_Destruc_map[1].size() - 1));
+
+	delete_Cube(this->_cube_Destruc_map[1].at(0));
+	delete_Cube(this->_cube_Destruc_map[0].at(1));
+	delete_Cube(this->_cube_Destruc_map[0].at(0));
+	delete_Cube(this->_cube_Destruc_map[1].at(this->_cube_Destruc_map[1].size() - 1));
+	delete_Cube(this->_cube_Destruc_map[0].at(this->_cube_Destruc_map[0].size() - 2));
+	delete_Cube(this->_cube_Destruc_map[0].at(this->_cube_Destruc_map[0].size() - 1));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 2].at(0));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(1));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(0));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 2].at(this->_cube_Destruc_map[1].size()));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(this->_cube_Destruc_map[0].size()));
+	delete_Cube(this->_cube_Destruc_map[_cube_Destruc_map.size() - 1].at(this->_cube_Destruc_map[0].size()));
+}
+
+void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
+{
+	this->_graphical.deleteEntity(del);
+	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
+		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
+			if (*i == del) {
+				this->_cube_Destruc_map[j].erase(i);
+				break;
+			}
+		}
+	}
 }
 
 IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, std::string texturePath) noexcept
@@ -78,6 +92,8 @@ std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get
 	std::cout << "size DESTRUC " << cube["Destruc"].size() << "\n";
 	return (cube);
 }
+
+
 
 IndieStudio::Map::~Map()
 {

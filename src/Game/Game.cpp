@@ -20,22 +20,14 @@ IndieStudio::Game::~Game()
 
 void IndieStudio::Game::set_Map_Collision() noexcept
 {
-	auto wallMap = this->_map->getWallCube();
-	for (auto wallMap_it = wallMap.begin(); wallMap_it != wallMap.end(); wallMap_it++) {
-		this->createCubeColision(*wallMap_it);
-	}
-	auto brickMap = this->_map->getBrickCube();
-	for (auto brickMap_it = brickMap.begin(); brickMap_it != brickMap.end(); brickMap_it++) {
-		this->createCubeColision(*brickMap_it);
-	}
-	// std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
-	// cube = _map->get_All_Cube();
-	// std::cout << "wall map size : " << cube["Wall"].size() << std::endl;
-	// for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++) {
-	// 	this->createCubeColision(*i);
-	// }
-	// for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
-	// 	this->createCubeColision(*i);
+	std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
+	cube = _map->get_All_Cube();
+	for (auto i = cube["Destruc"].begin(); i != cube["Destruc"].end(); i++)
+		this->createCubeColision(*i);
+	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
+		this->createCubeColision(*i);
+	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
+		this->createCubeColision(*i);
 }
 
 

@@ -36,6 +36,7 @@ namespace IndieStudio {
             void generate_map(int, int) noexcept;
             std::map<std::string, std::vector<IndieStudio::IEntity *>> get_All_Cube(void);
             void create_Start_Positon(void) noexcept;
+			void delete_Cube(IndieStudio::IEntity *);
         protected:
         private:
         	std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;

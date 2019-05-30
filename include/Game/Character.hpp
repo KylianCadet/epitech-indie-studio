@@ -17,7 +17,7 @@
 namespace IndieStudio {
 	class Character {
 		public:
-			Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ');
+			Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos postion = {0,0,0});
 			~Character();
 			char getUpKey() const noexcept;
 			char getLeftKey() const noexcept;
@@ -58,6 +58,8 @@ namespace IndieStudio {
 			IndieStudio::IEntity *getEntity() noexcept;
 			IndieStudio::Audio *getDeathSound() noexcept;
 
+			void setPosition(IndieStudio::Pos) noexcept;
+			IndieStudio::Pos getPosition() noexcept;
 		private:
 			IndieStudio::IGraphical &_graphical;
 			IndieStudio::IEntity *_model;

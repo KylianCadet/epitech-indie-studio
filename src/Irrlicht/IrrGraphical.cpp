@@ -20,7 +20,7 @@ IndieStudio::IrrGraphical::IrrGraphical()
 	this->_driver = this->_device->getVideoDriver();
 	this->_sceneManager->addCameraSceneNode(
 		0,
-		irr::core::vector3df(-100, 400, 0),
+		irr::core::vector3df(-200, 500, 0),
 		irr::core::vector3df(0, 0, 0));
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);

@@ -7,15 +7,26 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action) : _graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos postion) : _graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
 {
 	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
+	this->_model->setPosition(postion);
 	this->_deathSound = new IndieStudio::Audio(deathSoundPath);
 }
 
 IndieStudio::Character::~Character()
 {
 	// delete this->_deathSound;
+}
+
+IndieStudio::Pos IndieStudio::Character::getPosition() noexcept
+{
+	return (_model->getPosition());
+}
+
+void IndieStudio::Character::setPosition(IndieStudio::Pos position) noexcept
+{
+	_model->setPosition(position);
 }
 
 IndieStudio::IEntity *IndieStudio::Character::getEntity() noexcept

@@ -9,8 +9,8 @@
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) : _graphical(graphical), _render(render)
 {
-	this->createCharacters();
 	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical));
+	this->createCharacters();
 	this->set_Map_Collision();
 }
 
@@ -41,17 +41,18 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 
 void IndieStudio::Game::createCharacters() noexcept
 {
+	auto Pos_Vec = _map->get_Position_Start();
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o')
+		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0))
 	);
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b')
+		IndieStudio::Character(this->_graphical, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))
 	);
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y')
+		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2))
 	);
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e')
+		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3))
 	);
 }
 

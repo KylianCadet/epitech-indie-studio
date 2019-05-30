@@ -34,7 +34,7 @@ static const char* BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
 namespace IndieStudio {
     class Map {
         public:
-            Map(IndieStudio::IGraphical &graphical, std::string graphisme = "64");
+            Map(IndieStudio::IGraphical &graphical, std::string graphisme = "64", int x = 15, int y = 32);
             ~Map();
             IndieStudio::IEntity *createCubes(float, float, float, const std::string) noexcept;
             void generate_map(int, int, std::vector<std::string> texture_Path) noexcept;

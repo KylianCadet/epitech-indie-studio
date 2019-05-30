@@ -8,10 +8,10 @@
 #include "Map.hpp"
 #include <thread>
 
-IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme) : _graphical(graphical)
+IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y) : _graphical(graphical)
 {
 	srand(time(NULL));
-	this->generate_map(15, 32, set_Graphisme(graphisme));
+	this->generate_map(x, y, set_Graphisme(graphisme));
 }
 
 void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const texture_Path) noexcept

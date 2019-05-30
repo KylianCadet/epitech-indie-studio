@@ -80,11 +80,11 @@ IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, s
 
 void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 {
-	this->_graphical.deleteEntity(del);
 	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
 				std::cout << "FIND DELETED\n";
+				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
 				break;
 			}

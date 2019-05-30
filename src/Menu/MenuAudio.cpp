@@ -7,8 +7,8 @@
 
 #include "MenuAudio.hpp"
 
-IndieStudio::MenuAudio::MenuAudio(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(driver, volume, sounds)
+IndieStudio::MenuAudio::MenuAudio(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
+	: Menu(graphical, volume, sounds)
 {
 	this->_renderStatus = MENU_AUDIO_MAIN;
 	this->_buttonStatus = BTN_AUDIO_MUSIC;
@@ -24,12 +24,12 @@ IndieStudio::MenuAudio::~MenuAudio()
 
 void IndieStudio::MenuAudio::createButtons(void) noexcept
 {
-	this->_music = new Button(this->_driver, "assets/menu/options/music.png", "assets/menu/options/musicA.png", std::pair<int, int>(-1, 550));
-	this->_effects = new Button(this->_driver, "assets/menu/options/effects.png", "assets/menu/options/effectsA.png", std::pair<int, int>(-1, 750));
-	this->_leftMusicArrow = new Button(this->_driver, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 405));
-	this->_leftEffectArrow = new Button(this->_driver, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 605));
-	this->_rightMusicArrow = new Button(this->_driver, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 405));
-	this->_rightEffectArrow = new Button(this->_driver, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 605));
+	this->_music = new Button(this->_graphical, "assets/menu/options/music.png", "assets/menu/options/musicA.png", std::pair<int, int>(-1, 550));
+	this->_effects = new Button(this->_graphical, "assets/menu/options/effects.png", "assets/menu/options/effectsA.png", std::pair<int, int>(-1, 750));
+	this->_leftMusicArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 405));
+	this->_leftEffectArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 605));
+	this->_rightMusicArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 405));
+	this->_rightEffectArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 605));
 }
 
 void IndieStudio::MenuAudio::drawButtons(void) noexcept
@@ -44,20 +44,20 @@ void IndieStudio::MenuAudio::drawButtons(void) noexcept
 
 void IndieStudio::MenuAudio::createImages(void) noexcept
 {
-	this->_volumeBarMusicEmpty = new IndieStudio::Image2d(this->_driver, "assets/menu/options/empty2.png", std::pair<int, int>(-1, 380));
-	this->_volumeBarEffectEmpty = new IndieStudio::Image2d(this->_driver, "assets/menu/options/empty2.png", std::pair<int, int>(-1, 580));
-	this->_volumeBarMusicFilled = new IndieStudio::Image2d(this->_driver, "assets/menu/options/filled.png", std::pair<int, int>(-1, 380));
-	this->_volumeBarEffectFilled = new IndieStudio::Image2d(this->_driver, "assets/menu/options/filled.png", std::pair<int, int>(-1, 580));
-	this->_escapeInfo = new IndieStudio::Image2d(this->_driver, "assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
+	this->_volumeBarMusicEmpty = this->_graphical.createImage("assets/menu/options/empty2.png", std::pair<int, int>(-1, 380));
+	this->_volumeBarEffectEmpty = this->_graphical.createImage("assets/menu/options/empty2.png", std::pair<int, int>(-1, 580));
+	this->_volumeBarMusicFilled = this->_graphical.createImage("assets/menu/options/filled.png", std::pair<int, int>(-1, 380));
+	this->_volumeBarEffectFilled = this->_graphical.createImage("assets/menu/options/filled.png", std::pair<int, int>(-1, 580));
+	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
 }
 
 void IndieStudio::MenuAudio::drawImages(void) noexcept
 {
-	this->_volumeBarMusicEmpty->drawImage();
-	this->_volumeBarEffectEmpty->drawImage();
-	this->_volumeBarMusicFilled->drawImage();
-	this->_volumeBarEffectFilled->drawImage();
-	this->_escapeInfo->drawImage();
+	this->_graphical.drawImage(this->_volumeBarMusicEmpty);
+	this->_graphical.drawImage(this->_volumeBarEffectEmpty);
+	this->_graphical.drawImage(this->_volumeBarMusicFilled);
+	this->_graphical.drawImage(this->_volumeBarEffectFilled);
+	this->_graphical.drawImage(this->_escapeInfo);
 }
 
 void IndieStudio::MenuAudio::drawMenuManager(void) noexcept
@@ -105,7 +105,7 @@ void IndieStudio::MenuAudio::setVolumeMusicBar(void) noexcept
 		vol = 0;
 	else
 		vol = 35 * volume + 20;
-	this->_volumeBarMusicFilled->setCustomRectangle(0, 0, vol, 208);
+	this->_graphical.setCustomRectangle(this->_volumeBarMusicFilled, 0, 0, vol, 208);
 }
 
 void IndieStudio::MenuAudio::setVolumeEffectBar(void) noexcept
@@ -116,7 +116,7 @@ void IndieStudio::MenuAudio::setVolumeEffectBar(void) noexcept
 		vol = 0;
 	else
 		vol = 35 * volume + 20;
-	this->_volumeBarEffectFilled->setCustomRectangle(0, 0, vol, 208);
+	this->_graphical.setCustomRectangle(this->_volumeBarEffectFilled, 0, 0, vol, 208);
 }
 
 void IndieStudio::MenuAudio::returnActionManager(void) noexcept

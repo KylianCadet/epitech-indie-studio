@@ -12,14 +12,17 @@
 #include <iostream>
 
 #include "IMenu.hpp"
+#include "IGraphical.hpp"
 #include "Button.hpp"
 #include "Volume.hpp"
 #include "MenuSounds.hpp"
 
+namespace IndieStudio
+{
 class Menu : public IMenu
 {
 public:
-	Menu(irr::video::IVideoDriver *, IndieStudio::Volume *, IndieStudio::MenuSounds *);
+	Menu(IGraphical &, Volume *, MenuSounds *);
 
 	virtual void setButtonSwitch(int, int) noexcept;
 	virtual void setMenuActive(int) noexcept;
@@ -31,9 +34,9 @@ protected:
 	int _renderStatus;
 	int _buttonStatus;
 
-	IndieStudio::Volume *_volume;
-	IndieStudio::MenuSounds *_sounds;
-	irr::video::IVideoDriver *_driver;
+	Volume *_volume;
+	MenuSounds *_sounds;
+	IGraphical &_graphical;
 };
-
+};	 // namespace IndieStudio
 #endif /* !IMENU_HPP_ */

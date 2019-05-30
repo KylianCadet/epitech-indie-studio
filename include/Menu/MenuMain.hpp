@@ -30,7 +30,7 @@ namespace IndieStudio
 class MenuMain : public Menu
 {
 public:
-	MenuMain(irr::video::IVideoDriver *, Volume *, MenuSounds *);
+	MenuMain(IGraphical &, Volume *, MenuSounds *);
 	~MenuMain();
 
 public:
@@ -69,8 +69,9 @@ private:
 	Button *_options;
 	Button *_exit;
 
-	Image2d *_frameMenu;
-	Image2d *_titleMenu;
+	IEntity *_wall;
+	IEntity *_frameMenu;
+	IEntity *_titleMenu;
 };
 }; // namespace IndieStudio
 

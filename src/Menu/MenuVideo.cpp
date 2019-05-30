@@ -7,8 +7,8 @@
 
 #include "MenuVideo.hpp"
 
-IndieStudio::MenuVideo::MenuVideo(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(driver, volume, sounds)
+IndieStudio::MenuVideo::MenuVideo(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
+	: Menu(graphical, volume, sounds)
 {
 	this->_renderStatus = MENU_VIDEO_MAIN;
 	this->createButtons();
@@ -29,14 +29,14 @@ void IndieStudio::MenuVideo::drawButtons(void) noexcept
 
 void IndieStudio::MenuVideo::createImages(void) noexcept
 {
-	this->_comingsoon = new IndieStudio::Image2d(this->_driver, "assets/menu/comingsoon.png", std::pair<int, int>(-1, 500));
-	this->_escapeInfo = new IndieStudio::Image2d(this->_driver, "assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
+	this->_comingsoon = this->_graphical.createImage("assets/menu/comingsoon.png", std::pair<int, int>(-1, 500));
+	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
 }
 
 void IndieStudio::MenuVideo::drawImages(void) noexcept
 {
-	this->_comingsoon->drawImage();
-	this->_escapeInfo->drawImage();
+	this->_graphical.drawImage(this->_comingsoon);
+	this->_graphical.drawImage(this->_escapeInfo);
 }
 
 void IndieStudio::MenuVideo::checkActions(void) noexcept

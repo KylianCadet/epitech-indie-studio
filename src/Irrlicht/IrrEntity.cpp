@@ -74,6 +74,16 @@ irr::video::ITexture *IndieStudio::IrrEntity::getImage() const noexcept
 	return (this->_image);
 }
 
+void IndieStudio::IrrEntity::setImage(irr::video::ITexture *image) noexcept
+{
+	this->_image = image;
+}
+
+void IndieStudio::IrrEntity::setRectangle(irr::core::rect<irr::s32> rectangle) noexcept
+{
+	this->_rectangle = rectangle;
+}
+
 irr::core::position2d<irr::s32> IndieStudio::IrrEntity::get2DPos() const noexcept
 {
 	return (irr::core::position2d<irr::s32>(this->_pos.first, this->_pos.second));

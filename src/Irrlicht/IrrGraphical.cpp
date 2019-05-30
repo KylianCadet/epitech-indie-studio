@@ -15,15 +15,13 @@ IndieStudio::IrrGraphical::IrrGraphical()
 		32,
 		false,
 		false,
-		true
-		);
+		true);
 	this->_sceneManager = this->_device->getSceneManager();
 	this->_driver = this->_device->getVideoDriver();
 	this->_sceneManager->addCameraSceneNode(
 		0,
 		irr::core::vector3df(0, 300, 0),
-		irr::core::vector3df(0, 0, 0)
-	);
+		irr::core::vector3df(0, 0, 0));
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
 }
@@ -71,8 +69,7 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createCube(float size, std::str
 		-1,
 		irr::core::vector3df(pos._x, pos._y, pos._z),
 		irr::core::vector3df(0, 0, 0),
-		irr::core::vector3df(scale._x, scale._y, scale._z)
-	);
+		irr::core::vector3df(scale._x, scale._y, scale._z));
 
 	if (texture == nullptr || cube == nullptr)
 		exit(84);
@@ -94,8 +91,7 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createParticle(IndieStudio::Pos
 		1000, 1000,
 		0,
 		irr::core::dimension2df(13.0f, 13.0f),
-		irr::core::dimension2df(13.0f, 13.0f)
-	);
+		irr::core::dimension2df(13.0f, 13.0f));
 	particle->setEmitter(emitter);
 	emitter->drop();
 	particle->setMaterialFlag(irr::video::EMF_LIGHTING, false);
@@ -110,7 +106,7 @@ bool IndieStudio::IrrGraphical::run(void) const noexcept
 
 void IndieStudio::IrrGraphical::startRender(void) const noexcept
 {
-	this->_driver->beginScene(true, true, irr::video::SColor(255, 255, 255, 255));
+	this->_driver->beginScene(true, true, irr::video::SColor(255, 0, 0, 0));
 }
 
 void IndieStudio::IrrGraphical::endRender(void) const noexcept
@@ -161,24 +157,22 @@ void IndieStudio::IrrGraphical::createColision(IndieStudio::IEntity *cube, Indie
 	IndieStudio::IrrEntity *irrCube = dynamic_cast<IndieStudio::IrrEntity *>(cube);
 	IndieStudio::IrrEntity *irrEntity = dynamic_cast<IndieStudio::IrrEntity *>(entity);
 
-
 	if (irrCube == nullptr)
 		std::cout << "failed to cast cubeNode" << std::endl;
 	if (irrEntity == nullptr)
 		std::cout << "failed to cast entityNode" << std::endl;
-	irr::scene::IMetaTriangleSelector* metaSelector = this->_sceneManager->createMetaTriangleSelector();
-	irr::scene::ITriangleSelector* selector = 0;
+	irr::scene::IMetaTriangleSelector *metaSelector = this->_sceneManager->createMetaTriangleSelector();
+	irr::scene::ITriangleSelector *selector = 0;
 	selector = this->_sceneManager->createTriangleSelectorFromBoundingBox(irrCube->getMesh());
 	irrCube->getMesh()->setTriangleSelector(selector);
 	metaSelector->addTriangleSelector(selector);
 
 	irr::scene::ISceneNode *node = irrEntity->getAnimatedMesh();
-	irr::scene::ISceneNodeAnimatorCollisionResponse* anim = this->_sceneManager->createCollisionResponseAnimator(
+	irr::scene::ISceneNodeAnimatorCollisionResponse *anim = this->_sceneManager->createCollisionResponseAnimator(
 		metaSelector,
 		node,
 		irr::core::vector3df(20, 20, 20),
-		irr::core::vector3df(0, 0, 0)
-	);
+		irr::core::vector3df(0, 0, 0));
 	node->addAnimator(anim);
 	anim->drop();
 }
@@ -197,7 +191,11 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createImage(std::string texture
 	irr::core::rect<irr::s32> rectangle;
 	rectangle.UpperLeftCorner = position0;
 	rectangle.LowerRightCorner = position1;
-
+	if (pos.first == -1)
+	{
+		irr::core::dimension2d<irr::u32> screen = _driver->getScreenSize();
+		pos.first = screen.Width / 2 - rectangle.LowerRightCorner.X / 2;
+	}
 	IndieStudio::IrrEntity *obj = new IndieStudio::IrrEntity(image, pos, rectangle);
 	return (obj);
 }
@@ -206,4 +204,25 @@ void IndieStudio::IrrGraphical::drawImage(IndieStudio::IEntity *image) const noe
 {
 	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);
 	this->_driver->draw2DImage(irrImage->getImage(), irrImage->get2DPos(), irrImage->getRectangle(), 0, irr::video::SColor(255, 255, 255, 255), true);
+}
+
+void IndieStudio::IrrGraphical::setSkin(IndieStudio::IEntity *image, std::string skin) noexcept
+{
+	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);
+	irrImage->setImage(this->_driver->getTexture(skin.c_str()));
+}
+
+void IndieStudio::IrrGraphical::setCustomRectangle(IndieStudio::IEntity *image, int p0X, int p0Y, int p1X, int p1Y) noexcept
+{
+	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);
+	irr::core::position2d<irr::s32> position0;
+	position0.X = p0X;
+	position0.Y = p0Y;
+	irr::core::position2d<irr::s32> position1;
+	position1.X = p1X;
+	position1.Y = p1Y;
+	irr::core::rect<irr::s32> rectangle;
+	rectangle.UpperLeftCorner = position0;
+	rectangle.LowerRightCorner = position1;
+	irrImage->setRectangle(rectangle);
 }

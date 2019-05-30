@@ -21,7 +21,7 @@ namespace IndieStudio
 class MenuAudio : public Menu
 {
 public:
-	MenuAudio(irr::video::IVideoDriver *, Volume *, MenuSounds *);
+	MenuAudio(IGraphical &, Volume *, MenuSounds *);
 	~MenuAudio();
 
 	void setVolumeMusicBar(void) noexcept;
@@ -66,11 +66,11 @@ private:
 	Button *_leftEffectArrow;
 	Button *_rightEffectArrow;
 
-	Image2d *_volumeBarMusicEmpty;
-	Image2d *_volumeBarEffectEmpty;
-	Image2d *_volumeBarMusicFilled;
-	Image2d *_volumeBarEffectFilled;
-	Image2d *_escapeInfo;
+	IEntity *_volumeBarMusicEmpty;
+	IEntity *_volumeBarEffectEmpty;
+	IEntity *_volumeBarMusicFilled;
+	IEntity *_volumeBarEffectFilled;
+	IEntity *_escapeInfo;
 };
 }; // namespace IndieStudio
 

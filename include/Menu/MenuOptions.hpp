@@ -29,7 +29,7 @@ namespace IndieStudio
 class MenuOptions : public Menu
 {
 public:
-	MenuOptions(irr::video::IVideoDriver *, Volume *, MenuSounds *);
+	MenuOptions(IGraphical &, Volume *, MenuSounds *);
 	~MenuOptions();
 
 public:

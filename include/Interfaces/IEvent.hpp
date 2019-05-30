@@ -38,7 +38,7 @@ namespace IndieStudio {
 		X = 'X',
 		Y = 'Y',
 		Z = 'Z',
-		ENTER,
+		RETURN,
 		ESC,
 		KEY_UP,
 		KEY_DOWN,
@@ -49,6 +49,7 @@ namespace IndieStudio {
 		public:
 			virtual ~IEvent() = default;
 			std::map<IndieStudio::Key, bool> _key;
+			std::map<IndieStudio::Key, bool> _keyRelease;
 	};
 };
 

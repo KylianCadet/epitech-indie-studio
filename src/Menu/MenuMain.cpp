@@ -7,16 +7,16 @@
 
 #include "MenuMain.hpp"
 
-IndieStudio::MenuMain::MenuMain(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(driver, volume, sounds)
+IndieStudio::MenuMain::MenuMain(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
+	: Menu(graphical, volume, sounds)
 {
 	this->_renderStatus = MENU_MAIN_MAIN;
 	this->_buttonStatus = BTN_MAIN_NEWGAME;
 	this->createButtons();
 	this->createImages();
-	this->_menuNew = new IndieStudio::MenuNew(this->_driver, this->_volume, this->_sounds);
-	this->_menuLoad = new IndieStudio::MenuLoad(this->_driver, this->_volume, this->_sounds);
-	this->_menuOptions = new IndieStudio::MenuOptions(this->_driver, this->_volume, this->_sounds);
+	this->_menuNew = new IndieStudio::MenuNew(this->_graphical, this->_volume, this->_sounds);
+	this->_menuLoad = new IndieStudio::MenuLoad(this->_graphical, this->_volume, this->_sounds);
+	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds);
 }
 
 IndieStudio::MenuMain::~MenuMain()
@@ -25,10 +25,10 @@ IndieStudio::MenuMain::~MenuMain()
 
 void IndieStudio::MenuMain::createButtons(void) noexcept
 {
-	this->_newGame = new Button(this->_driver, "assets/menu/buttons/newgame.png", "assets/menu/buttons/newgameA.png", std::pair<int, int>(-1, 400));
-	this->_loadGame = new Button(this->_driver, "assets/menu/buttons/loadgame.png", "assets/menu/buttons/loadgameA.png", std::pair<int, int>(-1, 400 + 110));
-	this->_options = new Button(this->_driver, "assets/menu/buttons/options.png", "assets/menu/buttons/optionsA.png", std::pair<int, int>(-1, 400 + 220));
-	this->_exit = new Button(this->_driver, "assets/menu/buttons/exit.png", "assets/menu/buttons/exitA.png", std::pair<int, int>(-1, 400 + 330));
+	this->_newGame = new Button(this->_graphical, "assets/menu/buttons/newgame.png", "assets/menu/buttons/newgameA.png", std::pair<int, int>(-1, 400));
+	this->_loadGame = new Button(this->_graphical, "assets/menu/buttons/loadgame.png", "assets/menu/buttons/loadgameA.png", std::pair<int, int>(-1, 400 + 110));
+	this->_options = new Button(this->_graphical, "assets/menu/buttons/options.png", "assets/menu/buttons/optionsA.png", std::pair<int, int>(-1, 400 + 220));
+	this->_exit = new Button(this->_graphical, "assets/menu/buttons/exit.png", "assets/menu/buttons/exitA.png", std::pair<int, int>(-1, 400 + 330));
 }
 
 void IndieStudio::MenuMain::drawButtons(void) noexcept
@@ -41,15 +41,17 @@ void IndieStudio::MenuMain::drawButtons(void) noexcept
 
 void IndieStudio::MenuMain::createImages(void) noexcept
 {
-	this->_titleMenu = new IndieStudio::Image2d(this->_driver, "assets/menu/title2.png", std::pair<int, int>(-1, 100));
-	this->_frameMenu = new IndieStudio::Image2d(this->_driver, "assets/menu/frame.png", std::pair<int, int>(-1, 320));
+	this->_wall = this->_graphical.createImage("assets/menu/wall.jpg", std::pair<int, int>(0, 0));
+	this->_titleMenu = this->_graphical.createImage("assets/menu/title2.png", std::pair<int, int>(-1, 100));
+	this->_frameMenu = this->_graphical.createImage("assets/menu/frame.png", std::pair<int, int>(-1, 320));
 }
 
 void IndieStudio::MenuMain::drawImages(void) noexcept
 {
-	this->_titleMenu->drawImage();
-	this->_titleMenu->drawImage();
-	this->_frameMenu->drawImage();
+	this->_graphical.drawImage(this->_wall);
+	this->_graphical.drawImage(this->_titleMenu);
+	this->_graphical.drawImage(this->_titleMenu);
+	this->_graphical.drawImage(this->_frameMenu);
 }
 
 void IndieStudio::MenuMain::checkActions(void) noexcept
@@ -59,6 +61,7 @@ void IndieStudio::MenuMain::checkActions(void) noexcept
 	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuOptions->setMenuActive(MENU_OPTIONS_MAIN);
+		this->_menuOptions->setButtonActive(BTN_OPTIONS_AUDIO);
 	}
 	else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK)
 	{
@@ -69,6 +72,7 @@ void IndieStudio::MenuMain::checkActions(void) noexcept
 	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
+		this->_menuNew->setButtonActive(BTN_NEW_SOLO);
 	}
 	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME)
 	{
@@ -80,8 +84,8 @@ void IndieStudio::MenuMain::checkActions(void) noexcept
 void IndieStudio::MenuMain::drawMenu(void) noexcept
 {
 	this->refreshSkin();
-	this->drawButtons();
 	this->drawImages();
+	this->drawButtons();
 }
 
 void IndieStudio::MenuMain::drawMenuManager(void) noexcept

@@ -15,22 +15,19 @@
 #include "Audio.hpp"
 #include "IRender.hpp"
 #include "MenuMain.hpp"
+#include "MenuPause.hpp"
 #include "IGraphical.hpp"
 
 namespace IndieStudio
 {
-class MenuManager : public IRender, public irr::IEventReceiver
+class MenuManager
 {
 public:
-	MenuManager(irr::IrrlichtDevice *, irr::scene::ISceneManager *, irr::video::IVideoDriver *, Volume *);
+	MenuManager(Render &, IGraphical &, Volume *);
 	~MenuManager();
 
 	void render(void) noexcept;
-
-	bool OnEvent(const irr::SEvent &event) override;
-	int getRenderStatus(void) const noexcept override;
-	void setRenderStatus(int) noexcept override;
-
+	void checkEvent(void) noexcept;
 private:
 	void checkActions(void) noexcept;
 	void returnActionManager(void) noexcept;
@@ -41,15 +38,15 @@ private:
 	void downActionManager(void) noexcept;
 
 private:
-	int _renderStatus = MAIN_MENU;
+	Render &_renderStatus;
 
 	MenuMain *_menuMain;
+	MenuPause *_menuPause;
 
 	Volume *_volume;
 	MenuSounds *_sounds;
-	irr::IrrlichtDevice *_device;
-	irr::scene::ISceneManager *_scene;
-	irr::video::IVideoDriver *_driver;
+	IGraphical &_graphical;
+	IndieStudio::IEvent _event;
 };
 }; // namespace IndieStudio
 

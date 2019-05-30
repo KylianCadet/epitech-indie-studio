@@ -7,8 +7,8 @@
 
 #include "MenuNew.hpp"
 
-IndieStudio::MenuNew::MenuNew(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(driver, volume, sounds)
+IndieStudio::MenuNew::MenuNew(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
+	: Menu(graphical, volume, sounds)
 {
 	this->_renderStatus = MENU_NEW_MAIN;
 	this->_buttonStatus = BTN_NEW_SOLO;
@@ -22,17 +22,17 @@ IndieStudio::MenuNew::~MenuNew()
 
 void IndieStudio::MenuNew::createButtons(void) noexcept
 {
-	this->_solomode = new Button(this->_driver, "assets/menu/buttons/solo.png", "assets/menu/buttons/soloA.png", std::pair<int, int>(-1, 400));
-	this->_1vs1mode = new Button(this->_driver, "assets/menu/buttons/1vs1.png", "assets/menu/buttons/1vs1A.png", std::pair<int, int>(-1, 400 + 110));
-	this->_2vs2mode = new Button(this->_driver, "assets/menu/buttons/2vs2.png", "assets/menu/buttons/2vs2A.png", std::pair<int, int>(-1, 400 + 220));
-	this->_back = new Button(this->_driver, "assets/menu/buttons/back.png", "assets/menu/buttons/backA.png", std::pair<int, int>(-1, 400 + 330));
+	this->_solomode = new Button(this->_graphical, "assets/menu/buttons/solo.png", "assets/menu/buttons/soloA.png", std::pair<int, int>(-1, 400));
+	this->_coopmode = new Button(this->_graphical, "assets/menu/buttons/coop.png", "assets/menu/buttons/coopA.png", std::pair<int, int>(-1, 400 + 110));
+	this->_1vs1mode = new Button(this->_graphical, "assets/menu/buttons/1vs1.png", "assets/menu/buttons/1vs1A.png", std::pair<int, int>(-1, 400 + 220));
+	this->_back = new Button(this->_graphical, "assets/menu/buttons/back.png", "assets/menu/buttons/backA.png", std::pair<int, int>(-1, 400 + 330));
 }
 
 void IndieStudio::MenuNew::drawButtons(void) noexcept
 {
 	this->_solomode->drawButton();
+	this->_coopmode->drawButton();
 	this->_1vs1mode->drawButton();
-	this->_2vs2mode->drawButton();
 	this->_back->drawButton();
 }
 
@@ -69,29 +69,29 @@ void IndieStudio::MenuNew::refreshSkin(void) noexcept
 	if (this->_buttonStatus == BTN_NEW_SOLO)
 	{
 		this->_solomode->setActiveSkin();
+		this->_coopmode->setDefaultSkin();
 		this->_1vs1mode->setDefaultSkin();
-		this->_2vs2mode->setDefaultSkin();
+		this->_back->setDefaultSkin();
+	}
+	else if (this->_buttonStatus == BTN_NEW_COOP)
+	{
+		this->_solomode->setDefaultSkin();
+		this->_coopmode->setActiveSkin();
+		this->_1vs1mode->setDefaultSkin();
 		this->_back->setDefaultSkin();
 	}
 	else if (this->_buttonStatus == BTN_NEW_1VS1)
 	{
 		this->_solomode->setDefaultSkin();
+		this->_coopmode->setDefaultSkin();
 		this->_1vs1mode->setActiveSkin();
-		this->_2vs2mode->setDefaultSkin();
-		this->_back->setDefaultSkin();
-	}
-	else if (this->_buttonStatus == BTN_NEW_2VS2)
-	{
-		this->_solomode->setDefaultSkin();
-		this->_1vs1mode->setDefaultSkin();
-		this->_2vs2mode->setActiveSkin();
 		this->_back->setDefaultSkin();
 	}
 	else if (this->_buttonStatus == BTN_NEW_BACK)
 	{
 		this->_solomode->setDefaultSkin();
+		this->_coopmode->setDefaultSkin();
 		this->_1vs1mode->setDefaultSkin();
-		this->_2vs2mode->setDefaultSkin();
 		this->_back->setActiveSkin();
 	}
 }
@@ -101,9 +101,9 @@ void IndieStudio::MenuNew::returnAction(void) noexcept
 	this->_sounds->_buttonReturnSound->playSound();
 	if (this->_buttonStatus == BTN_NEW_SOLO)
 		this->_renderStatus = MENU_NEW_GAME;
-	else if (this->_buttonStatus == BTN_NEW_1VS1)
+	else if (this->_buttonStatus == BTN_NEW_COOP)
 		this->_renderStatus = MENU_NEW_GAME;
-	else if (this->_buttonStatus == BTN_NEW_2VS2)
+	else if (this->_buttonStatus == BTN_NEW_1VS1)
 		this->_renderStatus = MENU_NEW_GAME;
 	else if (this->_buttonStatus == BTN_NEW_BACK)
 		this->_renderStatus = MENU_NEW_BACK;

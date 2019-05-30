@@ -39,6 +39,8 @@ namespace IndieStudio {
 			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept = 0;
 			virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept = 0;
 			virtual void drawImage(IndieStudio::IEntity *) const noexcept = 0;
+			virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept = 0;
+			virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept = 0;
 	};
 };
 

@@ -7,15 +7,15 @@
 
 #include "MenuOptions.hpp"
 
-IndieStudio::MenuOptions::MenuOptions(irr::video::IVideoDriver *driver, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(driver, volume, sounds)
+IndieStudio::MenuOptions::MenuOptions(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
+	: Menu(graphical, volume, sounds)
 {
 	this->_renderStatus = MENU_OPTIONS_MAIN;
 	this->_buttonStatus = BTN_OPTIONS_AUDIO;
 	this->createButtons();
-	this->_menuAudio = new IndieStudio::MenuAudio(this->_driver, this->_volume, this->_sounds);
-	this->_menuVideo = new IndieStudio::MenuVideo(this->_driver, this->_volume, this->_sounds);
-	this->_menuControls = new IndieStudio::MenuVideo(this->_driver, this->_volume, this->_sounds);
+	this->_menuAudio = new IndieStudio::MenuAudio(this->_graphical, this->_volume, this->_sounds);
+	this->_menuVideo = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
+	this->_menuControls = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
 }
 
 IndieStudio::MenuOptions::~MenuOptions()
@@ -24,10 +24,10 @@ IndieStudio::MenuOptions::~MenuOptions()
 
 void IndieStudio::MenuOptions::createButtons(void) noexcept
 {
-	this->_audio = new Button(this->_driver, "assets/menu/buttons/audio.png", "assets/menu/buttons/audioA.png", std::pair<int, int>(-1, 400));
-	this->_video = new Button(this->_driver, "assets/menu/buttons/video.png", "assets/menu/buttons/videoA.png", std::pair<int, int>(-1, 400 + 110));
-	this->_controls = new Button(this->_driver, "assets/menu/buttons/controls.png", "assets/menu/buttons/controlsA.png", std::pair<int, int>(-1, 400 + 220));
-	this->_back = new Button(this->_driver, "assets/menu/buttons/back.png", "assets/menu/buttons/backA.png", std::pair<int, int>(-1, 400 + 330));
+	this->_audio = new Button(this->_graphical, "assets/menu/buttons/audio.png", "assets/menu/buttons/audioA.png", std::pair<int, int>(-1, 400));
+	this->_video = new Button(this->_graphical, "assets/menu/buttons/video.png", "assets/menu/buttons/videoA.png", std::pair<int, int>(-1, 400 + 110));
+	this->_controls = new Button(this->_graphical, "assets/menu/buttons/controls.png", "assets/menu/buttons/controlsA.png", std::pair<int, int>(-1, 400 + 220));
+	this->_back = new Button(this->_graphical, "assets/menu/buttons/back.png", "assets/menu/buttons/backA.png", std::pair<int, int>(-1, 400 + 330));
 }
 
 void IndieStudio::MenuOptions::drawButtons(void) noexcept

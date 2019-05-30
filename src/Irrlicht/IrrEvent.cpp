@@ -6,6 +6,7 @@
 */
 
 #include "IrrEvent.hpp"
+#include "iostream"
 
 IndieStudio::IrrEvent::IrrEvent()
 {
@@ -22,4 +23,18 @@ void IndieStudio::IrrEvent::update(const irr::SEvent &event) noexcept
 	for (auto dic_it = this->_keyDic.begin(); dic_it != this->_keyDic.end(); dic_it++)
 		if (dic_it->second == event.KeyInput.Key)
 			this->_key[dic_it->first] = event.KeyInput.PressedDown;
+	if (!event.KeyInput.PressedDown)
+	{
+		for (auto dic_it = this->_keyDic.begin(); dic_it != this->_keyDic.end(); dic_it++)
+		{
+			if (dic_it->second == event.KeyInput.Key)
+			{
+				this->_keyRelease[dic_it->first] = true;
+			}
+			else
+			{
+				this->_keyRelease[dic_it->first] = false;
+			}
+		}
+	}
 }

@@ -47,7 +47,7 @@ namespace IndieStudio {
 				{IndieStudio::Key::X, irr::EKEY_CODE::KEY_KEY_X},
 				{IndieStudio::Key::Y, irr::EKEY_CODE::KEY_KEY_Y},
 				{IndieStudio::Key::Z, irr::EKEY_CODE::KEY_KEY_Z},
-				{IndieStudio::Key::ENTER, irr::EKEY_CODE::KEY_RETURN},
+				{IndieStudio::Key::RETURN, irr::EKEY_CODE::KEY_RETURN},
 				{IndieStudio::Key::ESC, irr::EKEY_CODE::KEY_ESCAPE},
 				{IndieStudio::Key::KEY_UP, irr::EKEY_CODE::KEY_UP},
 				{IndieStudio::Key::KEY_DOWN, irr::EKEY_CODE::KEY_DOWN},

@@ -7,13 +7,12 @@
 
 #include "MenuManager.hpp"
 
-IndieStudio::MenuManager::MenuManager(irr::IrrlichtDevice *device, irr::scene::ISceneManager *scene, irr::video::IVideoDriver *driver, IndieStudio::Volume *volume)
-	: _device(device), _scene(scene), _driver(driver), _volume(volume)
+IndieStudio::MenuManager::MenuManager(Render &renderStatus, IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume)
+	: _renderStatus(renderStatus), _graphical(graphical), _volume(volume)
 {
-	this->_renderStatus = MAIN_MENU;
-	this->_device->setEventReceiver(this);
 	this->_sounds = new IndieStudio::MenuSounds(this->_volume);
-	this->_menuMain = new IndieStudio::MenuMain(this->_driver, this->_volume, this->_sounds);
+	this->_menuMain = new IndieStudio::MenuMain(this->_graphical, this->_volume, this->_sounds);
+	this->_menuPause = new IndieStudio::MenuPause(this->_graphical, this->_volume, this->_sounds);
 	this->_sounds->_mainMusic->playSound();
 	this->_volume->refreshVolume();
 }
@@ -28,96 +27,110 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 	{
 		if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME)
 		{
-			this->_renderStatus = false;
+			this->_renderStatus = GAME;
 		}
 		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_EXIT)
 		{
 			usleep(100000);
-			this->_device->closeDevice();
+			this->_graphical.drop();
+			exit(0);
+		}
+	}
+	else if (this->_renderStatus == PAUSE_MENU)
+	{
+		if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_BACK)
+		{
+			this->_renderStatus = GAME;
+			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);
+		}
+		else if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_QUIT)
+		{
+			this->_renderStatus = MAIN_MENU;
+			this->_menuPause->setButtonActive(BTN_PAUSE_BACK);
+			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);
+			this->_menuMain->setMenuActive(MENU_MAIN_MAIN);
 		}
 	}
 }
 
 void IndieStudio::MenuManager::render(void) noexcept
 {
+	this->checkEvent();
 	this->checkActions();
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->drawMenuManager();
 	else if (this->_renderStatus == PAUSE_MENU)
-		this->_menuMain->drawMenuManager();
-}
-
-bool isKeyPress(const irr::SEvent &event, irr::EKEY_CODE key) noexcept
-{
-	if (event.KeyInput.Key == key)
-		return true;
-	else
-		return false;
+		this->_menuPause->drawMenuManager();
 }
 
 void IndieStudio::MenuManager::returnActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->returnActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->returnActionManager();
 }
 
 void IndieStudio::MenuManager::escapeActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->escapeActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->escapeActionManager();
 }
 
 void IndieStudio::MenuManager::leftActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->leftActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->leftActionManager();
 }
 
 void IndieStudio::MenuManager::rightActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->rightActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->rightActionManager();
 }
 
 void IndieStudio::MenuManager::upActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->upActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->upActionManager();
 }
 
 void IndieStudio::MenuManager::downActionManager(void) noexcept
 {
 	if (this->_renderStatus == MAIN_MENU)
 		this->_menuMain->downActionManager();
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->downActionManager();
 }
 
-bool IndieStudio::MenuManager::OnEvent(const irr::SEvent &event)
+void IndieStudio::MenuManager::checkEvent(void) noexcept
 {
-	if (event.EventType == irr::EET_KEY_INPUT_EVENT && !event.KeyInput.PressedDown)
-	{
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_RETURN))
-			this->returnActionManager();
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_ESCAPE))
-			this->escapeActionManager();
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_LEFT))
-			this->leftActionManager();
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_RIGHT))
-			this->rightActionManager();
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_UP))
-			this->upActionManager();
-		if (isKeyPress(event, irr::EKEY_CODE::KEY_DOWN))
-			this->downActionManager();
-		return true;
-	}
-	return false;
-}
+	bool returnKey = this->_event._key[IndieStudio::Key::RETURN];
+	bool escKey = this->_event._key[IndieStudio::Key::ESC];
+	bool leftKey = this->_event._key[IndieStudio::Key::KEY_LEFT];
+	bool rightKey = this->_event._key[IndieStudio::Key::KEY_RIGHT];
+	bool upKey = this->_event._key[IndieStudio::Key::KEY_UP];
+	bool downKey = this->_event._key[IndieStudio::Key::KEY_DOWN];
+	this->_event = this->_graphical.getEvent();
 
-int IndieStudio::MenuManager::getRenderStatus(void) const noexcept
-{
-	return this->_renderStatus;
-}
-
-void IndieStudio::MenuManager::setRenderStatus(int status) noexcept
-{
-	this->_renderStatus = status;
+	if (this->_event._key[IndieStudio::Key::RETURN] != returnKey && returnKey == false)
+		this->returnActionManager();
+	if (this->_event._key[IndieStudio::Key::ESC] != escKey && escKey == false)
+		this->escapeActionManager();
+	if (this->_event._key[IndieStudio::Key::KEY_LEFT] != leftKey && leftKey == false)
+		this->leftActionManager();
+	if (this->_event._key[IndieStudio::Key::KEY_RIGHT] != rightKey && rightKey == false)
+		this->rightActionManager();
+	if (this->_event._key[IndieStudio::Key::KEY_UP] != upKey && upKey == false)
+		this->upActionManager();
+	if (this->_event._key[IndieStudio::Key::KEY_DOWN] != downKey && downKey == false)
+		this->downActionManager();
 }

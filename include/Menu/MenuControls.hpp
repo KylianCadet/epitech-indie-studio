@@ -18,7 +18,7 @@ namespace IndieStudio
 class MenuControls : public Menu
 {
 public:
-	MenuControls(irr::video::IVideoDriver *, Volume *, MenuSounds *);
+	MenuControls(IGraphical &, Volume *, MenuSounds *);
 	~MenuControls();
 
 public:
@@ -48,8 +48,8 @@ private:
 	void refreshSkin(void) noexcept override;
 
 private:
-	Image2d *_comingsoon;
-	Image2d *_escapeInfo;
+	IEntity *_comingsoon;
+	IEntity *_escapeInfo;
 };
 }; // namespace IndieStudio
 

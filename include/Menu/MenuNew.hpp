@@ -13,8 +13,8 @@ static const int MENU_NEW_MAIN = 0;
 static const int MENU_NEW_BACK = 1;
 
 static const int BTN_NEW_SOLO = 0;
-static const int BTN_NEW_1VS1 = 1;
-static const int BTN_NEW_2VS2 = 2;
+static const int BTN_NEW_COOP = 1;
+static const int BTN_NEW_1VS1 = 2;
 static const int BTN_NEW_BACK = 3;
 
 #include "Menu.hpp"
@@ -24,7 +24,7 @@ namespace IndieStudio
 class MenuNew : public Menu
 {
 public:
-	MenuNew(irr::video::IVideoDriver *, Volume *, MenuSounds *);
+	MenuNew(IGraphical &, Volume *, MenuSounds *);
 	~MenuNew();
 
 public:
@@ -55,8 +55,8 @@ private:
 
 private:
 	Button *_solomode;
+	Button *_coopmode;
 	Button *_1vs1mode;
-	Button *_2vs2mode;
 	Button *_back;
 };
 }; // namespace IndieStudio

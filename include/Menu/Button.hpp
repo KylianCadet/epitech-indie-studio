@@ -10,14 +10,16 @@
 
 #include <irrlicht.h>
 #include <iostream>
+
 #include "Image2d.hpp"
+#include "IGraphical.hpp"
 
 namespace IndieStudio
 {
 class Button
 {
 public:
-	Button(irr::video::IVideoDriver *, std::string, std::string, std::pair<int, int>);
+	Button(IGraphical &, std::string, std::string, std::pair<int, int>);
 	~Button();
 
 	void drawButton(void) noexcept;
@@ -27,10 +29,12 @@ public:
 private:
 	bool _active;
 
-	Image2d _image2d;
+	IEntity *_image;
 
 	std::string _skinDefault;
 	std::string _skinActive;
+
+	IGraphical &_graphical;
 };
 }; // namespace IndieStudio
 

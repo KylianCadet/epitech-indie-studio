@@ -17,14 +17,16 @@ int main()
 	Render render = Render::MAIN_MENU;
 
 	IndieStudio::Volume *volume = new IndieStudio::Volume();
-	// IndieStudio::MenuManager menu(graphical, volume);
+	IndieStudio::MenuManager menu(render, graphical, volume);
 	IndieStudio::Game game(graphical, render);
 
-	render = Render::GAME;
-	while (graphical.run()) {
+	while (graphical.run())
+	{
 		graphical.startRender();
 		if (render == Render::GAME)
 			game.render();
+		else if (render == Render::MAIN_MENU || Render::PAUSE_MENU)
+			menu.render();
 		graphical.endRender();
 	}
 	graphical.drop();

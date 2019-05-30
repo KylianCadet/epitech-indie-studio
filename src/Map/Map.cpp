@@ -8,26 +8,26 @@
 #include "Map.hpp"
 #include <thread>
 
-IndieStudio::Map::Map(IndieStudio::IGraphical &graphical) : _graphical(graphical)
+IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme) : _graphical(graphical)
 {
 	srand(time(NULL));
-	this->generate_map(15, 32);
+	this->generate_map(15, 32, set_Graphisme(graphisme));
 }
 
-void IndieStudio::Map::generate_map(int x, int y) noexcept
+void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const texture_Path) noexcept
 {
 	bool check = false;
 	for (int j = 0, k = 0; j < y; j++) {
 		for (int i = 1; i < x; i++) {
-			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z - CUBE_SIDE, FLOOR_TEXTURE));
+			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z - CUBE_SIDE, texture_Path.at(0)));
 			if (i == 1 || i == x - 1 || j == 0 || j == y - 1)
-				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, WALL_TEXTURE));
+				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
 			else {
 				if (rand() % 3 == 0 && j > 3 && j < y - 3)
-					this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, WALL_TEXTURE));
+					this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
 				else {
 					check = true;
-					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, BRICK_TEXTURE));
+					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
 				}
 			}
 		}
@@ -110,7 +110,7 @@ std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get
 	return (cube);
 }
 
-std::vector<IndieStudio::Pos> IndieStudio::Map::get_Position_Start() noexcept
+std::vector<IndieStudio::Pos> IndieStudio::Map::get_Position_Start() const noexcept
 {
 	return (_pos_start);
 }
@@ -121,6 +121,43 @@ void IndieStudio::Map::adjustment_Position_Start() noexcept
 		i->_y += 10;
 		i->_x += 5;
 	}
+}
+
+std::vector<std::string> IndieStudio::Map::get_texture_64() const noexcept
+{
+	std::vector<std::string> texture;
+	texture.push_back(FLOOR_TEXTURE_64);
+	texture.push_back(WALL_TEXTURE_64);
+	texture.push_back(BRICK_TEXTURE_64);
+	return (texture);
+}
+std::vector<std::string> IndieStudio::Map::get_texture_128() const noexcept
+{
+	std::vector<std::string> texture;
+	texture.push_back(FLOOR_TEXTURE_128);
+	texture.push_back(WALL_TEXTURE_128);
+	texture.push_back(BRICK_TEXTURE_128);
+	return (texture);
+}
+std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
+{
+	std::vector<std::string> texture;
+	texture.push_back(FLOOR_TEXTURE_256);
+	texture.push_back(WALL_TEXTURE_256);
+	texture.push_back(BRICK_TEXTURE_256);
+	return (texture);
+}
+
+std::vector<std::string> IndieStudio::Map::set_Graphisme(std::string path) const noexcept
+{
+	if ("256" == path)
+		return (get_texture_256());
+	else if ("128" == path)
+		return (get_texture_128());
+	else if ("64" == path)
+		return(get_texture_64());
+	std::cout << "Graphism " << path << " doesnt exist, only 64, 128 and 256 exist. It set to 64 by default\n";
+	return(get_texture_64());
 }
 
 IndieStudio::Map::~Map()

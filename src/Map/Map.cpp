@@ -200,7 +200,7 @@ int IndieStudio::Map::check_format_map() noexcept
 			if (_map_txt_vec[j][i] == ' ' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' || _map_txt_vec[j][i] == 'P')
 				;
 			else {
-				std::cout << "Bad Format, Format : Wall = '#', Brick = 'B', Other = ' ', Positon Player = 'A/Z/E/R'. Random generation Used\n";
+				std::cout << "Bad Format, Format : Wall = '#', Brick = 'B', Other = ' ', Positon Player = 'P'. Random generation Used\n";
 				return (-1);
 			}
 		}

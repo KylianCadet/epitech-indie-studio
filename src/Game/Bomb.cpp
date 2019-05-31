@@ -5,10 +5,13 @@
 ** Bomb
 */
 
-#include "Bomb.hpp"
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <iostream>
+#include <unistd.h>
+#include "Audio.hpp"
+#include "Bomb.hpp"
 
 #define WALL_SIZE 40.0f
 
@@ -88,13 +91,17 @@ void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 				255,
 				255,
 				255));
+		this->_explosionParticule.push_back(particleSystem);
 	}
 	this->playExplosionSound();
 }
 
-#include "Audio.hpp"
-#include <iostream>
-#include <unistd.h>
+void IndieStudio::Bomb::destroyExplosionParticle() {
+	for (std::vector<IndieStudio::IEntity *>::iterator it = this->_explosionParticule.begin();
+	it != this->_explosionParticule.end(); ++it) {
+		this->_graphical.deleteEntity(*it);
+	}
+}
 
 void IndieStudio::Bomb::playExplosionSound(void) noexcept
 {
@@ -109,10 +116,12 @@ void IndieStudio::Bomb::startCountdown(void)
 	this->_bomb->setScale(IndieStudio::Pos(24, 24, 24));
 	sleep(1);
 	this->_bomb->setScale(IndieStudio::Pos(26, 26, 26));
-	// this->explosion(this->_bomb->getPosition());
+	this->explosion(this->_bomb->getPosition());
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);
+	sleep(2);
+	this->destroyExplosionParticle();
 	this->_alive = false;
 }
 

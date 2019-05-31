@@ -23,12 +23,14 @@ namespace IndieStudio {
 			std::vector<IndieStudio::Pos> explosionDir(std::vector<IndieStudio::Pos> vec);
 			void playExplosionSound(void) noexcept;
 			bool getAlive(void) const noexcept;
+			void destroyExplosionParticle(void);
 
 		private:
 			IndieStudio::IGraphical &_graphical;
 			IndieStudio::IEntity *_bomb;
 			IndieStudio::IEntity *_particle;
 			IndieStudio::Audio _sound;
+			std::vector<IndieStudio::IEntity*> _explosionParticule;
 			bool _alive = true;
 			int _bombSize;
 	};

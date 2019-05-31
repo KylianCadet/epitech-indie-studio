@@ -16,10 +16,9 @@ void setMiddle(float &vec)
 {
 	if ((int)vec % 40 != 0) {
 		float f = (int)vec % 40;
-		std::cout << "f : " << f << std::endl;
-		if (f > 0) {
+		if (f > 0)
 			vec += (20 - f);
-		} else
+		else
 			vec -= (20 + f);
 	}
 	vec = static_cast<int>(vec);
@@ -29,11 +28,8 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 	_graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
 {
 	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
-	std::cout << "before : " << vector._z << std::endl;
 	setMiddle(vector._x);
 	setMiddle(vector._z);
-	std::cout << "after : " << vector._z << std::endl
-			  << std::endl;
 	this->_bomb->setPosition(vector);
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->createParticule(vector);

@@ -17,6 +17,8 @@ namespace IndieStudio {
 			~Audio();
 			void playSound(bool forced = false) noexcept;
 			void stopSound(void) noexcept;
+			void pauseSound(void) noexcept;
+			int getSoundStatus(void) const noexcept;
 			float getVolume(void) const noexcept;
 			void setVolume(int) noexcept;
 		private:

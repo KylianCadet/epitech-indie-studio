@@ -13,7 +13,6 @@ IndieStudio::MenuManager::MenuManager(Render &renderStatus, IndieStudio::IGraphi
 	this->_sounds = new IndieStudio::MenuSounds(this->_volume);
 	this->_menuMain = new IndieStudio::MenuMain(this->_graphical, this->_volume, this->_sounds);
 	this->_menuPause = new IndieStudio::MenuPause(this->_graphical, this->_volume, this->_sounds);
-	this->_sounds->_mainMusic->playSound();
 	this->_volume->refreshVolume();
 }
 

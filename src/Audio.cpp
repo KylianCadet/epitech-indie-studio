@@ -22,13 +22,22 @@ IndieStudio::Audio::~Audio()
 
 void IndieStudio::Audio::playSound(bool forced) noexcept
 {
-	if (this->_sound.getStatus() == sf::SoundSource::Status::Stopped || forced == true)
-		this->_sound.play();
+	this->_sound.play();
 }
 
 void IndieStudio::Audio::stopSound() noexcept
 {
 	this->_sound.stop();
+}
+
+void IndieStudio::Audio::pauseSound() noexcept
+{
+	this->_sound.pause();
+}
+
+int IndieStudio::Audio::getSoundStatus(void) const noexcept
+{
+	return this->_sound.getStatus();
 }
 
 void IndieStudio::Audio::setVolume(int newVolume) noexcept

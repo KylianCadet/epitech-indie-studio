@@ -22,7 +22,6 @@ private:
 	Volume *_volume;
 
 public:
-	Audio *_mainMusic;
 	Audio *_volumeSwitchSound;
 	Audio *_buttonSwitchSound;
 	Audio *_buttonReturnSound;

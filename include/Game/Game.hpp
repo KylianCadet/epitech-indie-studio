@@ -36,11 +36,11 @@ namespace IndieStudio {
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
 		std::vector<IndieStudio::IEntity *> _cubeVec;
+		IndieStudio::IEvent _event;
 		float _rot_x = 100;
 		float _rot_y = 0;
 		float _rot_z = 0;
 		float _counter = 0;
-		bool _keyPressed = false;
 		Render &_render;
 	};
 }; // namespace IndieStudio

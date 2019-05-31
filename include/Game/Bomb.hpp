@@ -9,8 +9,8 @@
 #define BOMB_HPP_
 
 #include "Audio.hpp"
-#include "IGraphical.hpp"
 #include "IEntity.hpp"
+#include "IGraphical.hpp"
 
 namespace IndieStudio {
 	class Bomb {
@@ -34,6 +34,6 @@ namespace IndieStudio {
 			bool _alive = true;
 			int _bombSize;
 	};
-};
+}; // namespace IndieStudio
 
 #endif

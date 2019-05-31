@@ -68,25 +68,20 @@ std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieS
 	return (vec);
 }
 
-#include <unistd.h>
-
 void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 {
-	std::vector<IndieStudio::IEntity *> particleVec;
-	float posX = position._x;
-	float posY = position._y;
-	float posZ = position._z;
-
-	for (int i = 0; i != 5; i++) {
-		particleVec.push_back(this->_graphical.createParticle(
+	std::vector<IndieStudio::Pos> vec;
+	vec = explosionDir(vec);
+	for (std::vector<IndieStudio::Pos>::iterator it = vec.begin(); it != vec.end(); ++it) {
+		IndieStudio::IEntity *particleSystem = this->_graphical.createParticle(
 			IndieStudio::Pos(
-				posX + (i * WALL_SIZE),
-				posY,
-				posZ + (i * WALL_SIZE)),
+				position._x,
+				position._y,
+				position._z),
 			IndieStudio::Pos(
-				0,
-				0.01,
-				0),
+				it->_x,
+				it->_y,
+				it->_z),
 			0, 5 * _bombSize,
 			IndieStudio::Pos(
 				255,
@@ -98,9 +93,7 @@ void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 				255));
 		this->_explosionParticule.push_back(particleSystem);
 	}
-	sleep(1);
-	for (auto particle_it = particleVec.begin(); particle_it != particleVec.end(); particle_it++)
-		this->_graphical.deleteEntity(*particle_it);
+	this->playExplosionSound();
 }
 
 void IndieStudio::Bomb::destroyExplosionParticle() {

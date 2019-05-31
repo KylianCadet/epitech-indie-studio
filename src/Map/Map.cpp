@@ -51,17 +51,23 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 
 void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path) noexcept
 {
-	for (unsigned int j = 0; j != _map_txt_vec.size(); j++) {
+	bool check = false;
+	for (unsigned int j = 0, k = 0; j != _map_txt_vec.size(); j++) {
 		for (unsigned int i = 0; i < _map_txt_vec[j].size(); i++) {
 			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z - CUBE_SIDE, texture_Path.at(0)));
 			if (_map_txt_vec[j][i] == '#')
 				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
 			if (_map_txt_vec[j][i] == 'B') {
-				this->_cube_Destruc_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
+				check = true;
+				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
 			}
 			if (_map_txt_vec[j][i] == 'P') {
 				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE) - 10, CUBE_Z, CUBE_Y + (j * CUBE_SIDE)-215}); // A refaire.
 			}
+		}
+		if (check == true) {
+			k++;
+			check = false;
 		}
 	}
 	adjustment_Position_Start();
@@ -83,10 +89,9 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
-				std::cout << "FIND DELETED\n";
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
-				break;
+				return ;
 			}
 		}
 	}

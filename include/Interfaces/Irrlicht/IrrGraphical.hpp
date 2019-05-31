@@ -15,35 +15,35 @@
 
 namespace IndieStudio {
 	class IrrGraphical : public IGraphical, public irr::IEventReceiver {
-		public:
-			IrrGraphical();
-			~IrrGraphical();
-			virtual IndieStudio::IEntity *createMesh(std::string meshPath) const noexcept;
-			virtual IndieStudio::IEntity *createAnimatedMesh(std::string meshPath, std::string texturePath) const noexcept;
-			virtual IndieStudio::IEntity *createCube(float size, std::string texturePath, IndieStudio::Pos pos, IndieStudio::Pos scale) const noexcept;
-			virtual IndieStudio::IEntity *createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax) const noexcept;
-			virtual void createCollision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept;
-			virtual void setCursorVisible(bool b) noexcept;
-			virtual bool run(void) const noexcept;
-			virtual void startRender(void) const noexcept;
-			virtual void endRender(void) const noexcept;
-			virtual void drawScene(void) const noexcept;
-			virtual void drop(void) const noexcept;
-			virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept;
-			virtual bool OnEvent(const irr::SEvent &event);
-			virtual IndieStudio::IEvent getEvent(void) const noexcept;
-			virtual void deleteEntity(IndieStudio::IEntity *) const noexcept;
-			virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept;
-			virtual void drawImage(IndieStudio::IEntity *) const noexcept;
-			virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept;
-			virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept;
+	public:
+		IrrGraphical();
+		~IrrGraphical();
+		virtual IndieStudio::IEntity *createMesh(std::string meshPath) const noexcept;
+		virtual IndieStudio::IEntity *createAnimatedMesh(std::string meshPath, std::string texturePath) const noexcept;
+		virtual IndieStudio::IEntity *createCube(float size, std::string texturePath, IndieStudio::Pos pos, IndieStudio::Pos scale) const noexcept;
+		virtual IndieStudio::IEntity *createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax) const noexcept;
+		virtual void createCollision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept;
+		virtual void setCursorVisible(bool b) noexcept;
+		virtual bool run(void) const noexcept;
+		virtual void startRender(void) const noexcept;
+		virtual void endRender(void) const noexcept;
+		virtual void drawScene(void) const noexcept;
+		virtual void drop(void) const noexcept;
+		virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept;
+		virtual bool OnEvent(const irr::SEvent &event);
+		virtual IndieStudio::IEvent getEvent(void) const noexcept;
+		virtual void deleteEntity(IndieStudio::IEntity *) const noexcept;
+		virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept;
+		virtual void drawImage(IndieStudio::IEntity *) const noexcept;
+		virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept;
+		virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept;
 
-		private:
-			IndieStudio::IrrEvent _event;
-			irr::IrrlichtDevice *_device;
-			irr::scene::ISceneManager *_sceneManager;
-			irr::video::IVideoDriver *_driver;
+	private:
+		IndieStudio::IrrEvent _event;
+		irr::IrrlichtDevice *_device;
+		irr::scene::ISceneManager *_sceneManager;
+		irr::video::IVideoDriver *_driver;
 	};
-};
+}; // namespace IndieStudio
 
 #endif

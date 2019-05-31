@@ -10,8 +10,8 @@
 
 static const float CUBE_SIDE = 40.f;
 static const int CUBE_Y = -400;
-static const int CUBE_Z = 0;
-static const int CUBE_X = -200;
+static const int CUBE_Z = 15;
+static const int CUBE_X = -220;
 static const int SIZE_MAP = 15;
 static const char *FLOOR_TEXTURE_256 = "assets/map/256/bedrock.png";
 static const char *WALL_TEXTURE_256 = "assets/map/256/black_concrete.png";

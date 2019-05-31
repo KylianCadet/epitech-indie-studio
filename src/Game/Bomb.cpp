@@ -7,35 +7,33 @@
 
 #include "Bomb.hpp"
 #include <chrono>
-#include <thread>
 #include <iostream>
+#include <thread>
 
-#define WALL_SIZE 30.0f
+#define WALL_SIZE 40.0f
 
 void setMiddle(float &vec)
 {
-	if ((int)vec % 30 != 0) {
-		float f = (int)vec % 30;
-		if (f > 15)
-			vec += (30 - f);
-		else
-			vec -= f;
+	if ((int)vec % 40 != 0) {
+		float f = (int)vec % 40;
+		std::cout << "f : " << f << std::endl;
+		if (f > 0) {
+			vec += (20 - f);
+		} else
+			vec -= (20 + f);
 	}
 	vec = static_cast<int>(vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize) : _graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize) :
+	_graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
 {
 	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
-	std::cout << "vector._x : " << vector._x << std::endl;
-	std::cout << "vector._y : " << vector._y << std::endl;
-	std::cout << "vector._z : " << vector._z << std::endl;
+	std::cout << "before : " << vector._z << std::endl;
 	setMiddle(vector._x);
-	setMiddle(vector._y);
 	setMiddle(vector._z);
-	std::cout << "vector._x : " << vector._x << std::endl;
-	std::cout << "vector._y : " << vector._y << std::endl;
-	std::cout << "vector._z : " << vector._z << std::endl << std::endl;
+	std::cout << "after : " << vector._z << std::endl
+			  << std::endl;
 	this->_bomb->setPosition(vector);
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->createParticule(vector);
@@ -54,8 +52,7 @@ void IndieStudio::Bomb::createParticule(IndieStudio::Pos vector) noexcept
 		IndieStudio::Pos(0.0f, 0.05f, 0.0f),
 		3, 10,
 		IndieStudio::Pos(0, 0, 0),
-		IndieStudio::Pos(30, 30, 30)
-	);
+		IndieStudio::Pos(30, 30, 30));
 }
 
 std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieStudio::Pos> vec)
@@ -76,37 +73,32 @@ void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 {
 	std::vector<IndieStudio::Pos> vec;
 	vec = explosionDir(vec);
-	for(std::vector<IndieStudio::Pos>::iterator it = vec.begin(); it != vec.end(); ++it) {
+	for (std::vector<IndieStudio::Pos>::iterator it = vec.begin(); it != vec.end(); ++it) {
 		IndieStudio::IEntity *particleSystem = this->_graphical.createParticle(
 			IndieStudio::Pos(
 				position._x,
 				position._y,
-				position._z
-			),
+				position._z),
 			IndieStudio::Pos(
 				it->_x,
 				it->_y,
-				it->_z
-			),
+				it->_z),
 			0, 5 * _bombSize,
 			IndieStudio::Pos(
 				255,
 				1,
-				1
-			),
+				1),
 			IndieStudio::Pos(
 				255,
 				255,
-				255
-			)
-		);
+				255));
 	}
 	this->playExplosionSound();
 }
 
+#include "Audio.hpp"
 #include <iostream>
 #include <unistd.h>
-#include "Audio.hpp"
 
 void IndieStudio::Bomb::playExplosionSound(void) noexcept
 {
@@ -121,7 +113,7 @@ void IndieStudio::Bomb::startCountdown(void)
 	this->_bomb->setScale(IndieStudio::Pos(24, 24, 24));
 	sleep(1);
 	this->_bomb->setScale(IndieStudio::Pos(26, 26, 26));
-	this->explosion(this->_bomb->getPosition());
+	// this->explosion(this->_bomb->getPosition());
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);

@@ -21,11 +21,11 @@ IndieStudio::Game::~Game()
 
 void IndieStudio::Game::setMapCollision() noexcept
 {
-	auto brick_vec = this->_map->getBrickCube();
+	// auto brick_vec = this->_map->getBrickCube();
 	auto wall_vec = this->_map->getWallCube();
 
-	for (auto brick_it = brick_vec.begin(); brick_it != brick_vec.end(); brick_it++)
-		this->createCubeColision(*brick_it);
+	// for (auto brick_it = brick_vec.begin(); brick_it != brick_vec.end(); brick_it++)
+	// 	this->createCubeColision(*brick_it);
 	for (auto wall_it = wall_vec.begin(); wall_it != wall_vec.end(); wall_it++)
 		this->createCubeColision(*wall_it);
 }
@@ -58,7 +58,6 @@ void IndieStudio::Game::render() noexcept
 		this->checkEvent();
 	}
 	this->_graphical.drawScene();
-	this->_map->delete_Cube(this->_map->getBrickCube().at(0));
 }
 
 int IndieStudio::Game::getRenderStatus(void) const noexcept

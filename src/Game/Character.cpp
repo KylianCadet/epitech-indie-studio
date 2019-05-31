@@ -7,7 +7,8 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos postion) : _graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos postion) :
+	_graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
 {
 	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
 	this->_model->setPosition(postion);
@@ -74,12 +75,10 @@ void IndieStudio::Character::setMovingDown(bool b) noexcept
 	this->_movingDown = b;
 }
 
-
 void IndieStudio::Character::setMovingRight(bool b) noexcept
 {
 	this->_movingRight = b;
 }
-
 
 void IndieStudio::Character::setDoingAction(bool b) noexcept
 {
@@ -162,7 +161,7 @@ int IndieStudio::Character::getBombSize() const noexcept
 	return (this->_bombSize);
 }
 
-void IndieStudio::Character::addBomb(IndieStudio::Bomb* bomb) noexcept
+void IndieStudio::Character::addBomb(IndieStudio::Bomb *bomb) noexcept
 {
 	this->_bombArr.push_back(bomb);
 }

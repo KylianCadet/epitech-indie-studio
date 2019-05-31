@@ -10,31 +10,29 @@
 
 #include "Audio.hpp"
 
-namespace IndieStudio
-{
-class Volume
-{
-public:
-	Volume();
-	~Volume();
+namespace IndieStudio {
+	class Volume {
+	public:
+		Volume();
+		~Volume();
 
-	int getVolumeMusics(void) const noexcept;
-	int getVolumeEffects(void) const noexcept;
-	void setVolumeMusics(int) noexcept;
-	void setVolumeEffects(int) noexcept;
-	void refreshVolumeMusics(void) noexcept;
-	void refreshVolumeEffects(void) noexcept;
-	void refreshVolume(void) noexcept;
-	Audio *createSoundMusic(std::string, bool loop = false) noexcept;
-	Audio *createSoundEffect(std::string, bool loop = false) noexcept;
+		int getVolumeMusics(void) const noexcept;
+		int getVolumeEffects(void) const noexcept;
+		void setVolumeMusics(int) noexcept;
+		void setVolumeEffects(int) noexcept;
+		void refreshVolumeMusics(void) noexcept;
+		void refreshVolumeEffects(void) noexcept;
+		void refreshVolume(void) noexcept;
+		Audio *createSoundMusic(std::string, bool loop = false) noexcept;
+		Audio *createSoundEffect(std::string, bool loop = false) noexcept;
 
-private:
-	int _volumeMusics = 50;
-	int _volumeEffects = 50;
+	private:
+		int _volumeMusics = 50;
+		int _volumeEffects = 50;
 
-	std::vector<IndieStudio::Audio *> _soundsMusics;
-	std::vector<IndieStudio::Audio *> _soundsEffects;
-};
+		std::vector<IndieStudio::Audio *> _soundsMusics;
+		std::vector<IndieStudio::Audio *> _soundsEffects;
+	};
 }; // namespace IndieStudio
 
-#endif /* !VOLUME_HPP_ */
+#endif

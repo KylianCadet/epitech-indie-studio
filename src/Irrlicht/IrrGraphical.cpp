@@ -154,7 +154,7 @@ void IndieStudio::IrrGraphical::deleteEntity(IndieStudio::IEntity *entity) const
 		this->_sceneManager->addToDeletionQueue(irrEntity->getParticle());
 }
 
-void IndieStudio::IrrGraphical::createColision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept
+void IndieStudio::IrrGraphical::createCollision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept
 {
 	IndieStudio::IrrEntity *irrCube = dynamic_cast<IndieStudio::IrrEntity *>(cube);
 	IndieStudio::IrrEntity *irrEntity = dynamic_cast<IndieStudio::IrrEntity *>(entity);
@@ -176,6 +176,7 @@ void IndieStudio::IrrGraphical::createColision(IndieStudio::IEntity *cube, Indie
 		irr::core::vector3df(20, 20, 20),
 		irr::core::vector3df(0, 0, 0));
 	node->addAnimator(anim);
+	node->removeAnimator(anim);
 	anim->drop();
 }
 
@@ -193,8 +194,7 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createImage(std::string texture
 	irr::core::rect<irr::s32> rectangle;
 	rectangle.UpperLeftCorner = position0;
 	rectangle.LowerRightCorner = position1;
-	if (pos.first == -1)
-	{
+	if (pos.first == -1) {
 		irr::core::dimension2d<irr::u32> screen = _driver->getScreenSize();
 		pos.first = screen.Width / 2 - rectangle.LowerRightCorner.X / 2;
 	}

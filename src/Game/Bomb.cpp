@@ -10,25 +10,32 @@
 #include <thread>
 #include <iostream>
 
-#define WALL_SIZE 20.0f
+#define WALL_SIZE 30.0f
 
 void setMiddle(float &vec)
 {
 	if ((int)vec % 30 != 0) {
 		float f = (int)vec % 30;
-		if (f >= 15)
+		if (f > 15)
 			vec += (30 - f);
 		else
 			vec -= f;
 	}
+	vec = static_cast<int>(vec);
 }
 
 IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize) : _graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
 {
 	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
+	std::cout << "vector._x : " << vector._x << std::endl;
+	std::cout << "vector._y : " << vector._y << std::endl;
+	std::cout << "vector._z : " << vector._z << std::endl;
 	setMiddle(vector._x);
 	setMiddle(vector._y);
 	setMiddle(vector._z);
+	std::cout << "vector._x : " << vector._x << std::endl;
+	std::cout << "vector._y : " << vector._y << std::endl;
+	std::cout << "vector._z : " << vector._z << std::endl << std::endl;
 	this->_bomb->setPosition(vector);
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->createParticule(vector);

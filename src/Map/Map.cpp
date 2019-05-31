@@ -8,12 +8,14 @@
 #include "Map.hpp"
 #include <thread>
 
-IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y) : _graphical(graphical)
+IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y) :
+	_graphical(graphical)
 {
 	this->generate_map(x, y, set_Graphisme(graphisme));
 }
 
-IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :_graphical(graphical)
+IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :
+	_graphical(graphical)
 {
 	if (set_Txt_Map(map) == 0)
 		generate_map_by_txt(set_Graphisme(graphisme));
@@ -62,7 +64,7 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
 			}
 			if (_map_txt_vec[j][i] == 'P') {
-				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE) - 10, CUBE_Z, CUBE_Y + (j * CUBE_SIDE)-215}); // A refaire.
+				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE) - 10, CUBE_Z, CUBE_Y + (j * CUBE_SIDE) - 215}); // A refaire.
 			}
 		}
 		if (check == true) {
@@ -79,8 +81,7 @@ IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, s
 	IndieStudio::IEntity *cube = this->_graphical.createCube(
 		CUBE_SIDE,
 		texturePath,
-		IndieStudio::Pos(x, y, z)
-	);
+		IndieStudio::Pos(x, y, z));
 	return (cube);
 }
 
@@ -91,7 +92,7 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 			if (*i == del) {
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
-				return ;
+				return;
 			}
 		}
 	}
@@ -99,7 +100,7 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 
 //             GET
 
-std::vector<IndieStudio::IEntity *> IndieStudio::Map::get_Destruc_Cube(void) noexcept
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBrickCube(void) noexcept
 {
 	std::vector<IndieStudio::IEntity *> cube;
 
@@ -108,8 +109,12 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::get_Destruc_Cube(void) noe
 			cube.push_back(*i);
 		}
 	}
-	std::cout << "SIZE CUBE" << cube.size() << "\n";
 	return (cube);
+}
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallCube(void) const noexcept
+{
+	return (this->_wall_Vec);
 }
 
 std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get_All_Cube(void)
@@ -119,7 +124,7 @@ std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get
 	cube["Floor"] = this->_floor_Vec;
 	cube["Wall"] = this->_wall_Vec;
 	if (cube["Destruc"].size() == 0)
-		cube["Destruc"] = get_Destruc_Cube();
+		cube["Destruc"] = getBrickCube();
 	return (cube);
 }
 
@@ -127,7 +132,6 @@ std::vector<IndieStudio::Pos> IndieStudio::Map::get_Position_Start() const noexc
 {
 	return (_pos_start);
 }
-
 
 std::vector<std::string> IndieStudio::Map::get_texture_64() const noexcept
 {
@@ -137,6 +141,7 @@ std::vector<std::string> IndieStudio::Map::get_texture_64() const noexcept
 	texture.push_back(BRICK_TEXTURE_64);
 	return (texture);
 }
+
 std::vector<std::string> IndieStudio::Map::get_texture_128() const noexcept
 {
 	std::vector<std::string> texture;
@@ -145,6 +150,7 @@ std::vector<std::string> IndieStudio::Map::get_texture_128() const noexcept
 	texture.push_back(BRICK_TEXTURE_128);
 	return (texture);
 }
+
 std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
 {
 	std::vector<std::string> texture;
@@ -161,14 +167,13 @@ int IndieStudio::Map::set_Txt_Map(std::string map)
 	std::ifstream file(map);
 	std::string line;
 	if (file.is_open()) {
-		while(getline(file,line))
+		while (getline(file, line))
 			_map_txt_vec.push_back(reverseStr(line));
 		file.close();
 		adjustment_Map_Txt();
 		return (check_format_map());
-	}
-	else {
-		std::cout << "Can't open file, "<< map << ". Random generation map used\n";
+	} else {
+		std::cout << "Can't open file, " << map << ". Random generation map used\n";
 		return (-1);
 	}
 	return (0);
@@ -181,9 +186,9 @@ std::vector<std::string> IndieStudio::Map::set_Graphisme(std::string const path)
 	else if ("128" == path)
 		return (get_texture_128());
 	else if ("64" == path)
-		return(get_texture_64());
+		return (get_texture_64());
 	std::cout << "Graphism " << path << " doesnt exist, only 64, 128 and 256 exist. It set to 64 by default\n";
-	return(get_texture_64());
+	return (get_texture_64());
 }
 
 //              CHECK
@@ -192,8 +197,8 @@ int IndieStudio::Map::check_format_map() noexcept
 {
 	for (unsigned int j = 0; j != _map_txt_vec.size(); j++) {
 		for (unsigned int i = 0; i != _map_txt_vec[j].size() - 1; i++) {
-			if (_map_txt_vec[j][i] == ' ' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' 
-			|| _map_txt_vec[j][i] == 'P');
+			if (_map_txt_vec[j][i] == ' ' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' || _map_txt_vec[j][i] == 'P')
+				;
 			else {
 				std::cout << "Bad Format, Format : Wall = '#', Brick = 'B', Other = ' ', Positon Player = 'A/Z/E/R'. Random generation Used\n";
 				return (-1);
@@ -208,8 +213,8 @@ int IndieStudio::Map::check_format_map() noexcept
 void IndieStudio::Map::adjustment_Position_Start() noexcept
 {
 	if (_pos_start.size() < 4) {
-		for (int i = _pos_start.size()-1; i != 4; i++) {
-			_pos_start.push_back({0,0,0});
+		for (int i = _pos_start.size() - 1; i != 4; i++) {
+			_pos_start.push_back({0, 0, 0});
 		}
 	}
 	for (auto i = _pos_start.begin(); i != _pos_start.end(); i++) {
@@ -242,13 +247,14 @@ void IndieStudio::Map::adjustment_Map_Txt()
 }
 
 std::string IndieStudio::Map::reverseStr(std::string &str)
-{ 
-    int n = str.length(); 
-  
-    for (int i = 0; i < n / 2; i++) 
-        std::swap(str[i], str[n - i - 1]);
+{
+	int n = str.length();
+
+	for (int i = 0; i < n / 2; i++)
+		std::swap(str[i], str[n - i - 1]);
 	return (str);
-} 
+}
+
 void IndieStudio::Map::create_Start_Positon(void) noexcept
 {
 	delete_Cube(this->_cube_Destruc_map[1].at(0));

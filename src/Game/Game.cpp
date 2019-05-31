@@ -7,44 +7,34 @@
 
 #include "Game.hpp"
 
-IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) : _graphical(graphical), _render(render)
+IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
+	_graphical(graphical), _render(render)
 {
 	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical, "64", 15, 32));
-	//this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical, "64", "map/map.txt"));
 	this->createCharacters();
-	std::cout << "CHARACTER CREATED\n";
-	this->set_Map_Collision();
-	this->_map->delete_Cube(this->_map->get_Destruc_Cube().at(0));
-	this->_map->delete_Cube(this->_map->get_Destruc_Cube().at(0));
-	// this->set_Map_Collision();
-	// std::cout << this->_map->get_Destruc_Cube().size();
-	// // auto t = this->_map->get_Destruc_Cube();
-	// std::cout << "ALLOOOO "<< t.size() << "\n";
-	std::cout << "TESSSSSSSSSSSSSST\n";
+	this->setMapCollision();
 }
 
 IndieStudio::Game::~Game()
 {
 }
 
-void IndieStudio::Game::set_Map_Collision() noexcept
+void IndieStudio::Game::setMapCollision() noexcept
 {
-	std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
-	cube = _map->get_All_Cube();
-	for (auto i = cube["Destruc"].begin(); i != cube["Destruc"].end(); i++)
-		this->createCubeColision(*i);
-	for (auto i = cube["Floor"].begin(); i != cube["Floor"].end(); i++)
-		this->createCubeColision(*i);
-	for (auto i = cube["Wall"].begin(); i != cube["Wall"].end(); i++)
-		this->createCubeColision(*i);
-}
+	auto brick_vec = this->_map->getBrickCube();
+	auto wall_vec = this->_map->getWallCube();
 
+	for (auto brick_it = brick_vec.begin(); brick_it != brick_vec.end(); brick_it++)
+		this->createCubeColision(*brick_it);
+	for (auto wall_it = wall_vec.begin(); wall_it != wall_vec.end(); wall_it++)
+		this->createCubeColision(*wall_it);
+}
 
 void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 {
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 		IndieStudio::IEntity *entity = character_it->getEntity();
-		this->_graphical.createColision(cube, entity);
+		this->_graphical.createCollision(cube, entity);
 	}
 }
 
@@ -52,17 +42,13 @@ void IndieStudio::Game::createCharacters() noexcept
 {
 	auto Pos_Vec = _map->get_Position_Start();
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0))
-	);
+		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))
-	);
+		IndieStudio::Character(this->_graphical, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2))
-	);
+		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3))
-	);
+		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3)));
 }
 
 void IndieStudio::Game::render() noexcept
@@ -72,6 +58,7 @@ void IndieStudio::Game::render() noexcept
 		this->checkEvent();
 	}
 	this->_graphical.drawScene();
+	this->_map->delete_Cube(this->_map->getBrickCube().at(0));
 }
 
 int IndieStudio::Game::getRenderStatus(void) const noexcept
@@ -112,10 +99,10 @@ void IndieStudio::Game::moveCharacter() noexcept
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 		IndieStudio::Pos v = character_it->getEntity()->getPosition();
 		isMoving = character_it->getIsMoving();
-		checkMove(character_it, character_it->getMovingUp(),v._x, UP_ROT, true);
-		checkMove(character_it, character_it->getMovingDown(),v._x, DOWN_ROT, false);
-		checkMove(character_it, character_it->getMovingLeft(),v._z, LEFT_ROT, true);
-		checkMove(character_it, character_it->getMovingRight(),v._z, RIGHT_ROT, false);
+		checkMove(character_it, character_it->getMovingUp(), v._x, UP_ROT, true);
+		checkMove(character_it, character_it->getMovingDown(), v._x, DOWN_ROT, false);
+		checkMove(character_it, character_it->getMovingLeft(), v._z, LEFT_ROT, true);
+		checkMove(character_it, character_it->getMovingRight(), v._z, RIGHT_ROT, false);
 		if (character_it->getEntity()->getPosition() != v && isMoving == false)
 			character_it->getEntity()->setAnimation(RUN);
 		else if (character_it->getEntity()->getPosition() == v && isMoving == true) {

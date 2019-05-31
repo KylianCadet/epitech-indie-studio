@@ -12,12 +12,11 @@ IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::strin
 {
 	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
 	this->_model->setPosition(postion);
-	this->_deathSound = new IndieStudio::Audio(deathSoundPath);
+	this->_deathSound = std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio(deathSoundPath));
 }
 
 IndieStudio::Character::~Character()
 {
-	// delete this->_deathSound;
 }
 
 IndieStudio::Pos IndieStudio::Character::getPosition() noexcept
@@ -130,9 +129,9 @@ void IndieStudio::Character::setSpeed(float speed) noexcept
 	this->_speed = speed;
 }
 
-IndieStudio::Audio *IndieStudio::Character::getDeathSound() noexcept
+void IndieStudio::Character::playDeathSound() noexcept
 {
-	return (this->_deathSound);
+	this->_deathSound->playSound();
 }
 
 int IndieStudio::Character::getBombNb() const noexcept
@@ -143,9 +142,8 @@ int IndieStudio::Character::getBombNb() const noexcept
 void IndieStudio::Character::checkDeleteBomb() noexcept
 {
 	for (auto bomb_it = this->_bombArr.begin(); bomb_it != this->_bombArr.end(); bomb_it++)
-		if (bomb_it[0]->getAlive() == false) {
+		if (bomb_it->get()->getAlive() == false) {
 			this->_bombArr.erase(bomb_it);
-			delete bomb_it[0];
 			this->checkDeleteBomb();
 			return;
 		}
@@ -161,7 +159,7 @@ int IndieStudio::Character::getBombSize() const noexcept
 	return (this->_bombSize);
 }
 
-void IndieStudio::Character::addBomb(IndieStudio::Bomb *bomb) noexcept
+void IndieStudio::Character::addBomb(std::shared_ptr<IndieStudio::Bomb> bomb) noexcept
 {
 	this->_bombArr.push_back(bomb);
 }

@@ -110,14 +110,11 @@ void IndieStudio::Game::moveCharacter() noexcept
 		}
 		character_it->getEntity()->setPosition(v);
 		if (character_it->getDoingAction() == true) {
-			character_it->getDeathSound()->playSound();
-		}
-		if (character_it->getDoingAction() == true && this->_keyPressed == false) {
-			this->_keyPressed = true;
+			character_it->setDoingAction(false);
+			character_it->playDeathSound();
 			character_it->checkDeleteBomb();
 			if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
-				IndieStudio::Bomb *bomb = new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize());
-				character_it->addBomb(bomb);
+				character_it->addBomb(std::shared_ptr<IndieStudio::Bomb>(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize())));
 			}
 		}
 	}
@@ -125,17 +122,22 @@ void IndieStudio::Game::moveCharacter() noexcept
 
 void IndieStudio::Game::checkEvent(void) noexcept
 {
-	IndieStudio::IEvent event = this->_graphical.getEvent();
+	std::vector<bool> ActionKey;
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+		ActionKey.push_back(this->_event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())]);
 
-	if (event._key[IndieStudio::Key::ESC] == true)
+	this->_event = this->_graphical.getEvent();
+
+	if (this->_event._key[IndieStudio::Key::ESC] == true)
 		this->_render = PAUSE_MENU;
-	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-		character_it->setMovingUp(event._key[static_cast<IndieStudio::Key>(character_it->getUpKey())]);
-		character_it->setMovingLeft(event._key[static_cast<IndieStudio::Key>(character_it->getLeftKey())]);
-		character_it->setMovingDown(event._key[static_cast<IndieStudio::Key>(character_it->getDownKey())]);
-		character_it->setMovingRight(event._key[static_cast<IndieStudio::Key>(character_it->getRightKey())]);
-		character_it->setDoingAction(event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())]);
-		if (event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())] == false)
-			this->_keyPressed = false;
+
+	auto ActionKey_it = ActionKey.begin();
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
+		character_it->setMovingUp(this->_event._key[static_cast<IndieStudio::Key>(character_it->getUpKey())]);
+		character_it->setMovingLeft(this->_event._key[static_cast<IndieStudio::Key>(character_it->getLeftKey())]);
+		character_it->setMovingDown(this->_event._key[static_cast<IndieStudio::Key>(character_it->getDownKey())]);
+		character_it->setMovingRight(this->_event._key[static_cast<IndieStudio::Key>(character_it->getRightKey())]);
+		if (this->_event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())] == true && *ActionKey_it == false)
+			character_it->setDoingAction(true);
 	}
 }

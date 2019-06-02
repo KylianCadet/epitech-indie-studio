@@ -8,9 +8,8 @@
 #include "Game.hpp"
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render)
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", 15, 32))
 {
-	this->_map = std::unique_ptr<IndieStudio::Map>(new IndieStudio::Map(this->_graphical, "64", 15, 32));
 	this->createCharacters();
 	this->setMapCollision();
 }
@@ -22,7 +21,7 @@ IndieStudio::Game::~Game()
 void IndieStudio::Game::setMapCollision() noexcept
 {
 	// auto brick_vec = this->_map->getBrickCube();
-	auto wall_vec = this->_map->getWallCube();
+	auto wall_vec = this->_map.getWallCube();
 
 	// for (auto brick_it = brick_vec.begin(); brick_it != brick_vec.end(); brick_it++)
 	// 	this->createCubeColision(*brick_it);
@@ -40,7 +39,7 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 
 void IndieStudio::Game::createCharacters() noexcept
 {
-	auto Pos_Vec = _map->get_Position_Start();
+	auto Pos_Vec = _map.get_Position_Start();
 	this->_characterVec.push_back(
 		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0)));
 	this->_characterVec.push_back(
@@ -91,6 +90,16 @@ void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool 
 #define RUN 1
 #define STAND 0
 
+void IndieStudio::Game::checkDeleteBomb() noexcept
+{
+	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
+		if (bomb_it->get()->getAlive() == false) {
+			this->_bombVec.erase(bomb_it);
+			this->checkDeleteBomb();
+			return;
+		}
+}
+
 void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
@@ -113,8 +122,11 @@ void IndieStudio::Game::moveCharacter() noexcept
 			character_it->setDoingAction(false);
 			character_it->playDeathSound();
 			character_it->checkDeleteBomb();
+			this->checkDeleteBomb();
 			if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
-				character_it->addBomb(std::shared_ptr<IndieStudio::Bomb>(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize())));
+				std::shared_ptr<IndieStudio::Bomb> newBomb = std::shared_ptr<IndieStudio::Bomb>(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec));
+				character_it->addBomb(newBomb);
+				this->_bombVec.push_back(newBomb);
 			}
 		}
 	}

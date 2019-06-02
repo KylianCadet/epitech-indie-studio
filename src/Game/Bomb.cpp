@@ -5,31 +5,33 @@
 ** Bomb
 */
 
+#include "Bomb.hpp"
+#include "Audio.hpp"
 #include <chrono>
 #include <iostream>
 #include <thread>
-#include <iostream>
 #include <unistd.h>
-#include "Audio.hpp"
-#include "Bomb.hpp"
 
-#define WALL_SIZE 40.0f
+#define WALL_SIZE 40
 
 void setMiddle(float &vec)
 {
-	if ((int)vec % 40 != 0) {
-		float f = (int)vec % 40;
+	if ((int)vec % WALL_SIZE != 0) {
+		float f = (int)vec % WALL_SIZE;
 		if (f > 0)
-			vec += (20 - f);
+			vec += (WALL_SIZE / 2 - f);
 		else
-			vec -= (20 + f);
+			vec -= (WALL_SIZE / 2 + f);
 	}
 	vec = static_cast<int>(vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize) :
-	_graphical(graphical), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize)
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec) :
+	_graphical(graphical), _map(map), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize), _bombVec(bombVec)
 {
+	std::cout << "NEW BOM CREATED" << std::endl;
+	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
+		std::cout << "other bomb pos : " << std::endl << "\tx : " << bomb_it->get()->getPosition()._x << std::endl << "\tz : " << bomb_it->get()->getPosition()._z << std::endl;
 	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
 	setMiddle(vector._x);
 	setMiddle(vector._z);
@@ -38,6 +40,11 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 	this->createParticule(vector);
 	std::thread t1(&IndieStudio::Bomb::startCountdown, this);
 	t1.detach();
+}
+
+IndieStudio::Pos IndieStudio::Bomb::getPosition() const noexcept
+{
+	return (this->_bomb->getPosition());
 }
 
 IndieStudio::Bomb::~Bomb()
@@ -96,9 +103,10 @@ void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
 	this->playExplosionSound();
 }
 
-void IndieStudio::Bomb::destroyExplosionParticle() {
+void IndieStudio::Bomb::destroyExplosionParticle()
+{
 	for (std::vector<IndieStudio::IEntity *>::iterator it = this->_explosionParticule.begin();
-	it != this->_explosionParticule.end(); ++it) {
+		 it != this->_explosionParticule.end(); ++it) {
 		this->_graphical.deleteEntity(*it);
 	}
 }
@@ -120,9 +128,9 @@ void IndieStudio::Bomb::startCountdown(void)
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);
+	this->_alive = false;
 	sleep(2);
 	this->destroyExplosionParticle();
-	this->_alive = false;
 }
 
 bool IndieStudio::Bomb::getAlive() const noexcept

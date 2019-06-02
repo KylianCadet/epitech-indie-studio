@@ -29,13 +29,15 @@ namespace IndieStudio {
 		virtual void checkEvent(void) noexcept;
 		void moveCharacter() noexcept;
 		void setMapCollision() noexcept;
-		std::unique_ptr<IndieStudio::Map> _map;
+		void checkDeleteBomb() noexcept;
 
 	private:
+		IndieStudio::Map _map;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
-		std::vector<IndieStudio::IEntity *> _cubeVec;
+		// std::vector<IndieStudio::IEntity *> _cubeVec;
+		std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
 		IndieStudio::IEvent _event;
 		float _rot_x = 100;
 		float _rot_y = 0;

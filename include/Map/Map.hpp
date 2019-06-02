@@ -51,6 +51,7 @@ namespace IndieStudio {
 		std::vector<std::string> get_texture_64() const noexcept;
 		std::vector<std::string> get_texture_128() const noexcept;
 		std::vector<std::string> get_texture_256() const noexcept;
+		IndieStudio::IEntity *get_Cube_By_Position(IndieStudio::Pos pos);
 		void generate_map_by_txt(std::vector<std::string> texture_Path) noexcept;
 
 	protected:

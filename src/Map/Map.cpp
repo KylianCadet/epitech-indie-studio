@@ -160,6 +160,23 @@ std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
 	return (texture);
 }
 
+IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos pos)
+{
+	for (unsigned int i = 0; i != _cube_Destruc_Vec.size(); i++) {
+		if (_cube_Destruc_Vec.at(i)->getPosition() == pos)
+			return (_cube_Destruc_Vec.at(i));
+	}
+	for (unsigned int i = 0; i != _floor_Vec.size(); i++) {
+		if (_floor_Vec.at(i)->getPosition() == pos)
+			return (_floor_Vec.at(i));
+	}
+	for (unsigned int i = 0; i != _wall_Vec.size(); i++) {
+		if (_wall_Vec.at(i)->getPosition() == pos)
+			return (_wall_Vec.at(i));
+	}
+	return(nullptr);
+}
+
 //              SET
 
 int IndieStudio::Map::set_Txt_Map(std::string map)

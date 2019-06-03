@@ -79,16 +79,16 @@ std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieS
 void IndieStudio::Bomb::hit_Cube(IndieStudio::Pos position)
 {
 	for (int i = 1; i != _bombSize + 1; i++) {
-		auto cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, i * position._z + WALL_SIZE});
+		auto cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, position._z + (i * WALL_SIZE)});
 		if (cube != nullptr)
 			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, i * position._z - WALL_SIZE});
+		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, i * position._z - (i * WALL_SIZE)});
 		if (cube != nullptr)
 			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x + WALL_SIZE, position._y - 10, i * position._z});
+		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x + (i * WALL_SIZE), position._y - 10, position._z});
 		if (cube != nullptr)
 			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x - WALL_SIZE, position._y - 10, i * position._z});
+		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x - (i * WALL_SIZE), position._y - 10, position._z});
 		if (cube != nullptr)
 			this->_map.delete_Cube(cube);
 	}

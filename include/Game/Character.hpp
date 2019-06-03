@@ -43,17 +43,20 @@ namespace IndieStudio {
 		float getSpeed() const noexcept;
 		void setSpeed(float) noexcept;
 
-		int getBombNb() const noexcept;
-		void setBombNb(int) noexcept;
+		int get_Bomb_Current() const noexcept;
+		void set_Bomb_Current(int) noexcept;
 
 		int getBombSize() const noexcept;
 		void setBombSize(int) noexcept;
 
-		std::size_t getLaidBomb(void) const noexcept;
+		int getBombMax() const noexcept;
+		void setBombMax(int) noexcept;
 
-		void addBomb(std::shared_ptr<IndieStudio::Bomb>) noexcept;
+		// std::size_t getLaidBomb(void) const noexcept;
 
-		void checkDeleteBomb() noexcept;
+//		void addBomb(std::shared_ptr<IndieStudio::Bomb>) noexcept;
+
+//		void checkDeleteBomb() noexcept;
 
 		IndieStudio::IEntity *getEntity() noexcept;
 		void playDeathSound() noexcept;
@@ -65,7 +68,7 @@ namespace IndieStudio {
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;
 		std::shared_ptr<IndieStudio::Audio> _deathSound;
-		std::list<std::shared_ptr<IndieStudio::Bomb>> _bombArr;
+//		std::list<std::shared_ptr<IndieStudio::Bomb>> _bombArr;
 
 		bool _bot;
 		char _up;
@@ -79,8 +82,9 @@ namespace IndieStudio {
 		bool _movingRight = false;
 		bool _doingAction = false;
 		bool _isMoving = false;
-		float _speed = 1.0f;
-		int _bombNb = 1;
+		float _speed = 2.5f;
+		int _bomb_Max = 1;
+		int _bomb_current = 0;
 		int _bombSize = 1;
 	};
 }; // namespace IndieStudio

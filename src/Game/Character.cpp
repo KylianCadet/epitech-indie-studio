@@ -134,32 +134,48 @@ void IndieStudio::Character::playDeathSound() noexcept
 	this->_deathSound->playSound();
 }
 
-int IndieStudio::Character::getBombNb() const noexcept
+void IndieStudio::Character::set_Bomb_Current(int i) noexcept
 {
-	return (this->_bombNb);
+	this->_bomb_current = i;
 }
 
-void IndieStudio::Character::checkDeleteBomb() noexcept
+int IndieStudio::Character::get_Bomb_Current() const noexcept
 {
-	for (auto bomb_it = this->_bombArr.begin(); bomb_it != this->_bombArr.end(); bomb_it++)
-		if (bomb_it->get()->getAlive() == false) {
-			this->_bombArr.erase(bomb_it);
-			this->checkDeleteBomb();
-			return;
-		}
+	return (this->_bomb_current);
 }
 
-std::size_t IndieStudio::Character::getLaidBomb() const noexcept
+void IndieStudio::Character::setBombMax(int i) noexcept
 {
-	return (this->_bombArr.size());
+	this->_bomb_Max = i;
 }
+
+int IndieStudio::Character::getBombMax() const noexcept
+{
+	return (this->_bomb_Max);
+}
+
+
+// void IndieStudio::Character::checkDeleteBomb() noexcept
+// {
+// 	for (auto bomb_it = this->_bombArr.begin(); bomb_it != this->_bombArr.end(); bomb_it++)
+// 		if (bomb_it->get()->getAlive() == false) {
+// 			this->_bombArr.erase(bomb_it);
+// 			this->checkDeleteBomb();
+// 			return;
+// 		}
+// }
+
+// std::size_t IndieStudio::Character::getLaidBomb() const noexcept
+// {
+// 	return (this->_bombArr.size());
+// }
 
 int IndieStudio::Character::getBombSize() const noexcept
 {
 	return (this->_bombSize);
 }
 
-void IndieStudio::Character::addBomb(std::shared_ptr<IndieStudio::Bomb> bomb) noexcept
-{
-	this->_bombArr.push_back(bomb);
-}
+// void IndieStudio::Character::addBomb(std::shared_ptr<IndieStudio::Bomb> bomb) noexcept
+// {
+// 	this->_bombArr.push_back(bomb);
+// }

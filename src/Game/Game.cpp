@@ -6,9 +6,10 @@
 */
 
 #include "Game.hpp"
+#include <thread>
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", 15, 32))
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", "map/map.txt"))
 {
 	this->createCharacters();
 	this->setMapCollision();
@@ -120,13 +121,24 @@ void IndieStudio::Game::moveCharacter() noexcept
 		character_it->getEntity()->setPosition(v);
 		if (character_it->getDoingAction() == true) {
 			character_it->setDoingAction(false);
-			character_it->playDeathSound();
-			character_it->checkDeleteBomb();
+//			character_it->checkDeleteBomb();
 			this->checkDeleteBomb();
-			if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
-				std::shared_ptr<IndieStudio::Bomb> newBomb = std::shared_ptr<IndieStudio::Bomb>(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec));
-				character_it->addBomb(newBomb);
-				this->_bombVec.push_back(newBomb);
+			// if ((unsigned)character_it->getBombNb() > character_it->getLaidBomb()) {
+			 	//std::shared_ptr<IndieStudio::Bomb> newBomb = std::shared_ptr<IndieStudio::Bomb>(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec));
+			// 	character_it->addBomb(newBomb);
+			// 	this->_bombVec.push_back(newBomb);
+			// }
+			if (character_it->getBombMax() > character_it->get_Bomb_Current()) {
+				character_it->playDeathSound();
+				std::thread([this, character_it](){
+					std::shared_ptr<IndieStudio::Bomb> newBomb (new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec));
+					character_it->set_Bomb_Current(character_it->get_Bomb_Current() + 1);
+					this->_bombVec.push_back(newBomb);
+					newBomb->startCountdown();
+					character_it->set_Bomb_Current(character_it->get_Bomb_Current() - 1);
+					std::this_thread::sleep_for (std::chrono::seconds(2));
+					newBomb->destroyExplosionParticle();
+				}).detach();
 			}
 		}
 	}

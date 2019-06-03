@@ -38,8 +38,9 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 	this->_bomb->setPosition(vector);
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->createParticule(vector);
-	std::thread t1(&IndieStudio::Bomb::startCountdown, this);
-	t1.detach();
+	// std::thread t1(&IndieStudio::Bomb::startCountdown, this);
+	// t1.detach();
+	//startCountdown();
 }
 
 IndieStudio::Pos IndieStudio::Bomb::getPosition() const noexcept
@@ -129,8 +130,8 @@ void IndieStudio::Bomb::startCountdown(void)
 	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);
 	this->_alive = false;
-	sleep(2);
-	this->destroyExplosionParticle();
+	// sleep(2);
+	// this->destroyExplosionParticle();
 }
 
 bool IndieStudio::Bomb::getAlive() const noexcept

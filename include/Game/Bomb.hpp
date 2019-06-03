@@ -30,7 +30,7 @@ namespace IndieStudio {
 
 	private:
 		void createAutoParticle(IndieStudio::Pos position, int lifeTime);
-		void hit_Cube(IndieStudio::Pos position);
+		void checkHit(IndieStudio::Pos position, std::vector<bool> boolVec);
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::Map &_map;
 		IndieStudio::IEntity *_bomb;

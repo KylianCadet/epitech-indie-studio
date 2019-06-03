@@ -167,10 +167,6 @@ IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos po
 		if (brick.at(i)->getPosition() == pos)
 			return (brick.at(i));
 	}
-	for (unsigned int i = 0; i != _floor_Vec.size(); i++) {
-		if (_floor_Vec.at(i)->getPosition() == pos)
-			return (_floor_Vec.at(i));
-	}
 	for (unsigned int i = 0; i != _wall_Vec.size(); i++) {
 		if (_wall_Vec.at(i)->getPosition() == pos)
 			return (_wall_Vec.at(i));

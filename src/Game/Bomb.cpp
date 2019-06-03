@@ -116,22 +116,26 @@ void IndieStudio::Bomb::createAutoParticle(IndieStudio::Pos position, int lifeTi
 
 #include <chrono>
 
-void IndieStudio::Bomb::hit_Cube(IndieStudio::Pos position)
+void IndieStudio::Bomb::checkHit(IndieStudio::Pos position, std::vector<bool> boolVec)
 {
 	std::vector<IndieStudio::Pos> posVec;
 	for (int i = 1; i != _bombSize + 1; i++) {
 		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, position._z + (i * WALL_SIZE)));
-		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, i * position._z - (i * WALL_SIZE)));
+		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, position._z - (i * WALL_SIZE)));
 		posVec.push_back(IndieStudio::Pos(position._x + (i * WALL_SIZE), position._y - 10, position._z));
 		posVec.push_back(IndieStudio::Pos(position._x - (i * WALL_SIZE), position._y - 10, position._z));
-		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++) {
+		auto bool_it = boolVec.begin();
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++) {
 			auto cube = this->_map.get_Cube_By_Position(*pos_it);
-			if (cube != nullptr)
+			if (cube != nullptr && *bool_it == false) {
 				this->_map.delete_Cube(cube);
+				*bool_it = true;
+			}
 		}
-		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++)
+		bool_it = boolVec.begin();
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 			for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
-				if (bomb_it->get()->getPosition()._x == pos_it->_x && bomb_it->get()->getPosition()._z == pos_it->_z && bomb_it->get()->getAlive() == true)
+				if (bomb_it->get()->getPosition()._x == pos_it->_x && bomb_it->get()->getPosition()._z == pos_it->_z && bomb_it->get()->getAlive() == true && *bool_it == false)
 					bomb_it->get()->explosion();
 		std::thread([this, posVec]() {
 			std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
@@ -147,8 +151,10 @@ void IndieStudio::Bomb::hit_Cube(IndieStudio::Pos position)
 						}
 			}
 		}).detach();
-		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++)
-			this->createAutoParticle(*pos_it, EXPLOSION_DURATION);
+		bool_it = boolVec.begin();
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
+			if (*bool_it == false)
+				this->createAutoParticle(*pos_it, EXPLOSION_DURATION);
 		posVec.clear();
 	}
 }
@@ -158,7 +164,7 @@ void IndieStudio::Bomb::explosion()
 	this->_alive = false;
 	IndieStudio::Pos position = this->_bomb->getPosition();
 	this->createAutoParticle(position, EXPLOSION_DURATION);
-	hit_Cube(position);
+	this->checkHit(position, std::vector<bool>{false, false, false, false});
 	this->playExplosionSound();
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);

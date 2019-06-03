@@ -119,19 +119,16 @@ void IndieStudio::Bomb::playExplosionSound(void) noexcept
 
 void IndieStudio::Bomb::startCountdown(void)
 {
-	sleep(1);
-	this->_bomb->setScale(IndieStudio::Pos(22, 22, 22));
-	sleep(1);
-	this->_bomb->setScale(IndieStudio::Pos(24, 24, 24));
-	sleep(1);
-	this->_bomb->setScale(IndieStudio::Pos(26, 26, 26));
+	for (int i = 0, j = 22; i != 4; i++) {
+		std::this_thread::sleep_for (std::chrono::seconds(1));
+		this->_bomb->setScale(IndieStudio::Pos(22, 22, j));
+		j +=2;
+	}
 	this->explosion(this->_bomb->getPosition());
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);
 	this->_sound.playSound(true);
 	this->_alive = false;
-	// sleep(2);
-	// this->destroyExplosionParticle();
 }
 
 bool IndieStudio::Bomb::getAlive() const noexcept

@@ -13,8 +13,21 @@
 #include <unistd.h>
 
 #define WALL_SIZE 40
+#define EXPLOSION_DURATION 1
 
 void setMiddle(float &vec)
+{
+	if ((int)vec % WALL_SIZE != 0) {
+		float f = (int)vec % WALL_SIZE;
+		if (f >= 0)
+			vec += (WALL_SIZE / 2 - f);
+		else
+			vec -= (WALL_SIZE / 2 + f);
+	}
+	vec = static_cast<int>(vec);
+}
+
+int getMiddle(float vec)
 {
 	if ((int)vec % WALL_SIZE != 0) {
 		float f = (int)vec % WALL_SIZE;
@@ -24,23 +37,23 @@ void setMiddle(float &vec)
 			vec -= (WALL_SIZE / 2 + f);
 	}
 	vec = static_cast<int>(vec);
+	return (vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec) :
-	_graphical(graphical), _map(map), _sound(IndieStudio::Audio("assets/bomb/bomb.wav")), _bombSize(bombSize), _bombVec(bombVec)
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<IndieStudio::Character> &characterVec) :
+	_graphical(graphical),
+	_map(map),
+	_sound(IndieStudio::Audio("assets/bomb/bomb.wav")),
+	_bombSize(bombSize),
+	_bombVec(bombVec),
+	_bomb(graphical.createMesh("assets/bomb/dinamite.obj")),
+	_characterVec(characterVec)
 {
-	std::cout << "NEW BOM CREATED" << std::endl;
-	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
-		std::cout << "other bomb pos : " << std::endl << "\tx : " << bomb_it->get()->getPosition()._x << std::endl << "\tz : " << bomb_it->get()->getPosition()._z << std::endl;
-	this->_bomb = this->_graphical.createMesh("assets/bomb/dinamite.obj");
 	setMiddle(vector._x);
 	setMiddle(vector._z);
-	this->_bomb->setPosition(vector);
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
+	this->_bomb->setPosition(vector);
 	this->createParticule(vector);
-	// std::thread t1(&IndieStudio::Bomb::startCountdown, this);
-	// t1.detach();
-	//startCountdown();
 }
 
 IndieStudio::Pos IndieStudio::Bomb::getPosition() const noexcept
@@ -58,8 +71,9 @@ void IndieStudio::Bomb::createParticule(IndieStudio::Pos vector) noexcept
 		IndieStudio::Pos(vector._x, vector._y, vector._z),
 		IndieStudio::Pos(0.0f, 0.05f, 0.0f),
 		3, 10,
+		0,
 		IndieStudio::Pos(0, 0, 0),
-		IndieStudio::Pos(30, 30, 30));
+		IndieStudio::Pos(30, 30, 30), 0);
 }
 
 std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieStudio::Pos> vec)
@@ -76,51 +90,78 @@ std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieS
 	return (vec);
 }
 
+void IndieStudio::Bomb::createAutoParticle(IndieStudio::Pos position, int lifeTime)
+{
+	this->_graphical.createParticle(
+		IndieStudio::Pos(
+			position._x,
+			position._y,
+			position._z),
+		IndieStudio::Pos(
+			0,
+			0.01,
+			0),
+		10, 20,
+		2000,
+		IndieStudio::Pos(
+			255,
+			1,
+			1),
+		IndieStudio::Pos(
+			255,
+			255,
+			255),
+		lifeTime);
+}
+
+#include <chrono>
+
 void IndieStudio::Bomb::hit_Cube(IndieStudio::Pos position)
 {
+	std::vector<IndieStudio::Pos> posVec;
 	for (int i = 1; i != _bombSize + 1; i++) {
-		auto cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, position._z + (i * WALL_SIZE)});
-		if (cube != nullptr)
-			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x, position._y - 10, i * position._z - (i * WALL_SIZE)});
-		if (cube != nullptr)
-			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x + (i * WALL_SIZE), position._y - 10, position._z});
-		if (cube != nullptr)
-			this->_map.delete_Cube(cube);
-		cube = this->_map.get_Cube_By_Position(IndieStudio::Pos{position._x - (i * WALL_SIZE), position._y - 10, position._z});
-		if (cube != nullptr)
-			this->_map.delete_Cube(cube);
+		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, position._z + (i * WALL_SIZE)));
+		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, i * position._z - (i * WALL_SIZE)));
+		posVec.push_back(IndieStudio::Pos(position._x + (i * WALL_SIZE), position._y - 10, position._z));
+		posVec.push_back(IndieStudio::Pos(position._x - (i * WALL_SIZE), position._y - 10, position._z));
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++) {
+			auto cube = this->_map.get_Cube_By_Position(*pos_it);
+			if (cube != nullptr)
+				this->_map.delete_Cube(cube);
+		}
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++)
+			for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
+				if (bomb_it->get()->getPosition()._x == pos_it->_x && bomb_it->get()->getPosition()._z == pos_it->_z && bomb_it->get()->getAlive() == true)
+					bomb_it->get()->explosion();
+		std::thread([this, posVec]() {
+			std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
+			std::chrono::time_point<std::chrono::system_clock> end;
+			while (std::chrono::duration_cast<std::chrono::seconds>(end-start).count() < EXPLOSION_DURATION) {
+				end = std::chrono::system_clock::now();
+				std::this_thread::sleep_for(std::chrono::milliseconds(100));
+				for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++)
+					for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+						if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z)) {
+							character_it->playDeathSound();
+							character_it->setPosition(character_it->getSpawnPos());
+						}
+			}
+		}).detach();
+		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++)
+			this->createAutoParticle(*pos_it, EXPLOSION_DURATION);
+		posVec.clear();
 	}
 }
 
-void IndieStudio::Bomb::explosion(IndieStudio::Pos position)
+void IndieStudio::Bomb::explosion()
 {
-	std::vector<IndieStudio::Pos> vec;
-	vec = explosionDir(vec);
-	for (std::vector<IndieStudio::Pos>::iterator it = vec.begin(); it != vec.end(); ++it) {
-		hit_Cube(position);
-		IndieStudio::IEntity *particleSystem = this->_graphical.createParticle(
-			IndieStudio::Pos(
-				position._x,
-				position._y,
-				position._z),
-			IndieStudio::Pos(
-				it->_x,
-				it->_y,
-				it->_z),
-			0, 5 * _bombSize,
-			IndieStudio::Pos(
-				255,
-				1,
-				1),
-			IndieStudio::Pos(
-				255,
-				255,
-				255));
-		this->_explosionParticule.push_back(particleSystem);
-	}
+	this->_alive = false;
+	IndieStudio::Pos position = this->_bomb->getPosition();
+	this->createAutoParticle(position, EXPLOSION_DURATION);
+	hit_Cube(position);
 	this->playExplosionSound();
+	this->_graphical.deleteEntity(this->_bomb);
+	this->_graphical.deleteEntity(this->_particle);
 }
 
 void IndieStudio::Bomb::destroyExplosionParticle()
@@ -139,15 +180,12 @@ void IndieStudio::Bomb::playExplosionSound(void) noexcept
 void IndieStudio::Bomb::startCountdown(void)
 {
 	for (int i = 0, j = 22; i != 4; i++) {
-		std::this_thread::sleep_for (std::chrono::seconds(1));
-		this->_bomb->setScale(IndieStudio::Pos(22, 22, j));
-		j +=2;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		this->_bomb->setScale(IndieStudio::Pos(j, j, j));
+		j += 2;
 	}
-	this->explosion(this->_bomb->getPosition());
-	this->_graphical.deleteEntity(this->_bomb);
-	this->_graphical.deleteEntity(this->_particle);
-	this->_sound.playSound(true);
-	this->_alive = false;
+	if (this->_alive)
+		this->explosion();
 }
 
 bool IndieStudio::Bomb::getAlive() const noexcept

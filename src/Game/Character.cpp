@@ -7,11 +7,18 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos postion) :
-	_graphical(graphical), _bot(bot), _up(std::toupper(up)), _left(std::toupper(left)), _down(std::toupper(down)), _right(std::toupper(right)), _action(std::toupper(action))
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos position) :
+	_graphical(graphical),
+	_bot(bot),
+	_up(std::toupper(up)),
+	_left(std::toupper(left)),
+	_down(std::toupper(down)),
+	_right(std::toupper(right)),
+	_action(std::toupper(action)),
+	_spawnPos(position)
 {
 	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
-	this->_model->setPosition(postion);
+	this->_model->setPosition(position);
 	this->_deathSound = std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio(deathSoundPath));
 }
 
@@ -154,28 +161,12 @@ int IndieStudio::Character::getBombMax() const noexcept
 	return (this->_bomb_Max);
 }
 
-
-// void IndieStudio::Character::checkDeleteBomb() noexcept
-// {
-// 	for (auto bomb_it = this->_bombArr.begin(); bomb_it != this->_bombArr.end(); bomb_it++)
-// 		if (bomb_it->get()->getAlive() == false) {
-// 			this->_bombArr.erase(bomb_it);
-// 			this->checkDeleteBomb();
-// 			return;
-// 		}
-// }
-
-// std::size_t IndieStudio::Character::getLaidBomb() const noexcept
-// {
-// 	return (this->_bombArr.size());
-// }
-
 int IndieStudio::Character::getBombSize() const noexcept
 {
 	return (this->_bombSize);
 }
 
-// void IndieStudio::Character::addBomb(std::shared_ptr<IndieStudio::Bomb> bomb) noexcept
-// {
-// 	this->_bombArr.push_back(bomb);
-// }
+IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
+{
+	return (this->_spawnPos);
+}

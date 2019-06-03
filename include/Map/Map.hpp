@@ -8,25 +8,26 @@
 #ifndef MAP_HPP_
 #define MAP_HPP_
 
+#include <iostream>
+
 static const float CUBE_SIDE = 40.f;
 static const int CUBE_Y = -400;
 static const int CUBE_Z = 15;
 static const int CUBE_X = -220;
 static const int SIZE_MAP = 15;
-static const char *FLOOR_TEXTURE_256 = "assets/map/256/bedrock.png";
-static const char *WALL_TEXTURE_256 = "assets/map/256/black_concrete.png";
-static const char *BRICK_TEXTURE_256 = "assets/map/256/bricks.png";
-static const char *FLOOR_TEXTURE_128 = "assets/map/128/bedrock.png";
-static const char *WALL_TEXTURE_128 = "assets/map/128/black_concrete.png";
-static const char *BRICK_TEXTURE_128 = "assets/map/128/bricks.png";
-static const char *FLOOR_TEXTURE_64 = "assets/map/64/bedrock.png";
-static const char *WALL_TEXTURE_64 = "assets/map/64/black_concrete.png";
-static const char *BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
+static const std::string FLOOR_TEXTURE_256 = "assets/map/256/bedrock.png";
+static const std::string WALL_TEXTURE_256 = "assets/map/256/black_concrete.png";
+static const std::string BRICK_TEXTURE_256 = "assets/map/256/bricks.png";
+static const std::string FLOOR_TEXTURE_128 = "assets/map/128/bedrock.png";
+static const std::string WALL_TEXTURE_128 = "assets/map/128/black_concrete.png";
+static const std::string BRICK_TEXTURE_128 = "assets/map/128/bricks.png";
+static const std::string FLOOR_TEXTURE_64 = "assets/map/64/bedrock.png";
+static const std::string WALL_TEXTURE_64 = "assets/map/64/black_concrete.png";
+static const std::string BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
 
 #include "IGraphical.hpp"
 #include "IRender.hpp"
 #include <fstream>
-#include <iostream>
 #include <irrlicht.h>
 #include <map>
 #include <stdlib.h>

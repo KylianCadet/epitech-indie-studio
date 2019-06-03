@@ -9,7 +9,6 @@
 #define CHARACTER_HPP_
 
 #include "Audio.hpp"
-#include "Bomb.hpp"
 #include "IGraphical.hpp"
 #include <iostream>
 #include <list>
@@ -17,7 +16,7 @@
 namespace IndieStudio {
 	class Character {
 	public:
-		Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos postion = {0, 0, 0});
+		Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos position = IndieStudio::Pos(0, 0, 0));
 		~Character();
 		char getUpKey() const noexcept;
 		char getLeftKey() const noexcept;
@@ -52,23 +51,19 @@ namespace IndieStudio {
 		int getBombMax() const noexcept;
 		void setBombMax(int) noexcept;
 
-		// std::size_t getLaidBomb(void) const noexcept;
-
-//		void addBomb(std::shared_ptr<IndieStudio::Bomb>) noexcept;
-
-//		void checkDeleteBomb() noexcept;
-
 		IndieStudio::IEntity *getEntity() noexcept;
 		void playDeathSound() noexcept;
 
 		void setPosition(IndieStudio::Pos) noexcept;
 		IndieStudio::Pos getPosition() noexcept;
 
+		IndieStudio::Pos getSpawnPos() const noexcept;
+
 	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;
 		std::shared_ptr<IndieStudio::Audio> _deathSound;
-//		std::list<std::shared_ptr<IndieStudio::Bomb>> _bombArr;
+		IndieStudio::Pos _spawnPos;
 
 		bool _bot;
 		char _up;

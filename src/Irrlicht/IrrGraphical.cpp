@@ -24,28 +24,26 @@ IndieStudio::IrrGraphical::IrrGraphical()
 		irr::core::vector3df(0, 0, 0));
 
 	//     /* CAMERA */
-    
-    // irr::SKeyMap keyMap[5];                    // re-assigne les commandes
-    // keyMap[0].Action = irr::EKA_MOVE_FORWARD;  // avancer
-    // keyMap[0].KeyCode = irr::KEY_UP;        // w
-    // keyMap[1].Action = irr::EKA_MOVE_BACKWARD; // reculer
-    // keyMap[1].KeyCode = irr::KEY_DOWN;        // s
-    // keyMap[2].Action = irr::EKA_STRAFE_LEFT;   // a gauche
-    // keyMap[2].KeyCode = irr::KEY_LEFT;        // a
-    // keyMap[3].Action = irr::EKA_STRAFE_RIGHT;  // a droite
-    // keyMap[3].KeyCode = irr::KEY_RIGHT;        // d
-    // keyMap[4].Action = irr::EKA_JUMP_UP;       // saut
-    // keyMap[4].KeyCode = irr::KEY_SPACE;        // barre espace
 
-    // _sceneManager->addCameraSceneNodeFPS(       // ajout de la camera FPS
-    //     0,                                     // pas de noeud parent
-    //     100.0f,                                // vitesse de rotation
-    //     0.1f,                                  // vitesse de deplacement
-    //     -1,                                    // pas de numero d'ID
-    //     keyMap,                                // on change la keymap
-    //     5);                                    // avec une taille de 5
-	
+	// irr::SKeyMap keyMap[5];                    // re-assigne les commandes
+	// keyMap[0].Action = irr::EKA_MOVE_FORWARD;  // avancer
+	// keyMap[0].KeyCode = irr::KEY_UP;        // w
+	// keyMap[1].Action = irr::EKA_MOVE_BACKWARD; // reculer
+	// keyMap[1].KeyCode = irr::KEY_DOWN;        // s
+	// keyMap[2].Action = irr::EKA_STRAFE_LEFT;   // a gauche
+	// keyMap[2].KeyCode = irr::KEY_LEFT;        // a
+	// keyMap[3].Action = irr::EKA_STRAFE_RIGHT;  // a droite
+	// keyMap[3].KeyCode = irr::KEY_RIGHT;        // d
+	// keyMap[4].Action = irr::EKA_JUMP_UP;       // saut
+	// keyMap[4].KeyCode = irr::KEY_SPACE;        // barre espace
 
+	// _sceneManager->addCameraSceneNodeFPS(       // ajout de la camera FPS
+	//     0,                                     // pas de noeud parent
+	//     100.0f,                                // vitesse de rotation
+	//     0.1f,                                  // vitesse de deplacement
+	//     -1,                                    // pas de numero d'ID
+	//     keyMap,                                // on change la keymap
+	//     5);                                    // avec une taille de 5
 
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
@@ -104,7 +102,9 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createCube(float size, std::str
 	return (obj);
 }
 
-IndieStudio::IEntity *IndieStudio::IrrGraphical::createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax) const noexcept
+#include <thread>
+
+IndieStudio::IEntity *IndieStudio::IrrGraphical::createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, int disp, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax, int lifeTime)
 {
 	irr::scene::IParticleSystemSceneNode *particle = this->_sceneManager->addParticleSystemSceneNode(false);
 	irr::scene::IParticleEmitter *emitter = particle->createBoxEmitter(
@@ -114,14 +114,22 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createParticle(IndieStudio::Pos
 		irr::video::SColor(1, colorMin._x, colorMin._y, colorMin._z),
 		irr::video::SColor(1, colorMax._x, colorMax._y, colorMax._z),
 		1000, 1000,
-		0,
+		disp,
 		irr::core::dimension2df(13.0f, 13.0f),
 		irr::core::dimension2df(13.0f, 13.0f));
 	particle->setEmitter(emitter);
 	emitter->drop();
 	particle->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-	IndieStudio::IEntity *obj = new IndieStudio::IrrEntity(particle);
-	return (obj);
+	if (lifeTime != 0) {
+		std::thread([particle, lifeTime]() {
+			std::this_thread::sleep_for(std::chrono::seconds(lifeTime));
+			particle->setPosition(irr::core::vector3df(1000, 1000, 1000));
+		}).detach();
+	} else {
+		IndieStudio::IEntity *obj = new IndieStudio::IrrEntity(particle);
+		return (obj);
+	}
+	return (nullptr);
 }
 
 bool IndieStudio::IrrGraphical::run(void) const noexcept
@@ -184,10 +192,6 @@ void IndieStudio::IrrGraphical::createCollision(IndieStudio::IEntity *cube, Indi
 	IndieStudio::IrrEntity *irrCube = dynamic_cast<IndieStudio::IrrEntity *>(cube);
 	IndieStudio::IrrEntity *irrEntity = dynamic_cast<IndieStudio::IrrEntity *>(entity);
 
-	if (irrCube == nullptr)
-		std::cout << "failed to cast cubeNode" << std::endl;
-	if (irrEntity == nullptr)
-		std::cout << "failed to cast entityNode" << std::endl;
 	irr::scene::IMetaTriangleSelector *metaSelector = this->_sceneManager->createMetaTriangleSelector();
 	irr::scene::ITriangleSelector *selector = 0;
 	selector = this->_sceneManager->createTriangleSelectorFromBoundingBox(irrCube->getMesh());

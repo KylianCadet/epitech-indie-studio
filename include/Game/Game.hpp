@@ -13,6 +13,7 @@
 #include "IGraphical.hpp"
 #include "IRender.hpp"
 #include "Map.hpp"
+#include "Bomb.hpp"
 #include <vector>
 
 namespace IndieStudio {
@@ -36,7 +37,6 @@ namespace IndieStudio {
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
-		// std::vector<IndieStudio::IEntity *> _cubeVec;
 		std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
 		IndieStudio::IEvent _event;
 		float _rot_x = 100;

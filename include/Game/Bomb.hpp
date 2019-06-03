@@ -28,6 +28,7 @@ namespace IndieStudio {
 		IndieStudio::Pos getPosition(void) const noexcept;
 
 	private:
+		void hit_Cube(IndieStudio::Pos position);
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::Map &_map;
 		IndieStudio::IEntity *_bomb;

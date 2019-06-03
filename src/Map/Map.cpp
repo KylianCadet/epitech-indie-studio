@@ -162,9 +162,10 @@ std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
 
 IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos pos)
 {
-	for (unsigned int i = 0; i != _cube_Destruc_Vec.size(); i++) {
-		if (_cube_Destruc_Vec.at(i)->getPosition() == pos)
-			return (_cube_Destruc_Vec.at(i));
+	auto brick = getBrickCube();
+	for (unsigned int i = 0; i != brick.size(); i++) {
+		if (brick.at(i)->getPosition() == pos)
+			return (brick.at(i));
 	}
 	for (unsigned int i = 0; i != _floor_Vec.size(); i++) {
 		if (_floor_Vec.at(i)->getPosition() == pos)

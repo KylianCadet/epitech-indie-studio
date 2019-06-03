@@ -83,7 +83,7 @@ namespace IndieStudio {
 		bool _doingAction = false;
 		bool _isMoving = false;
 		float _speed = 2.5f;
-		int _bomb_Max = 1;
+		int _bomb_Max = 2;
 		int _bomb_current = 0;
 		int _bombSize = 1;
 	};

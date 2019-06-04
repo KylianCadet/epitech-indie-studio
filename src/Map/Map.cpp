@@ -15,7 +15,6 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 	this->generate_map(x, y, set_Graphisme(graphisme));
 	set_Density_Brick(getBrickCube(), 100 - densityBrick);
 	set_Density_Wall(getWallInsideCube(), 100 - densityWall);
-	std::cout << _floor_Vec.at(_floor_Vec.size() - 1)->getPosition()._x << "  " << _floor_Vec.at(_floor_Vec.size() - 1)->getPosition()._y << "  " << _floor_Vec.at(_floor_Vec.size() - 1)->getPosition()._z << "\n";
 }
 
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :
@@ -40,7 +39,7 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 			if (i == 0 || i == x - 1 || j == 0 || j == y - 1)
 				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(1)));
 			else {
-				if (i % 2 == 0 && j > 1 && j < y - 2 && j % 2 == 0 && i > 0 && i < x - 2)
+				if (i % 2 == 0 && j > 1 && j < y - 2 && j % 2 == 0 && i > 0 && i < x - 1)
 					this->_wall_inside_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(1)));
 				else {
 					check = true;
@@ -115,6 +114,11 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 
 
 //             GET
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getFloorCube(void) const noexcept
+{
+	return (this->_floor_Vec);
+}
 
 std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBrickCube(void) noexcept
 {

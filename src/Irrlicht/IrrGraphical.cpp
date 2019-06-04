@@ -182,7 +182,7 @@ void IndieStudio::IrrGraphical::deleteEntity(IndieStudio::IEntity *entity) const
 		this->_sceneManager->addToDeletionQueue(irrEntity->getAnimatedMesh());
 	if (irrEntity->getMesh() != nullptr) {
 		// this->_sceneManager->addToDeletionQueue(irrEntity->getMesh());
-		irrEntity->setPosition({1000, 1000, 1000});
+		irrEntity->setPosition({-1000, -1000, -1000});
 	}
 	if (irrEntity->getParticle() != nullptr)
 		this->_sceneManager->addToDeletionQueue(irrEntity->getParticle());

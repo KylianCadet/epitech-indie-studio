@@ -7,20 +7,27 @@
 
 #include "Game.hpp"
 #include <thread>
-//16, 17, 50, 100
+
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", 10, 11, 50, 100))
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, 50, 100))
 {
 	this->createCharacters();
 	this->setMapCollision();
-	this->_graphical.setCameraPosition(IndieStudio::Pos{360 / 2, 350, 360 / 2});
-	this->_graphical.setCameraTarget(IndieStudio::Pos{360 / 2, 0, 360 / 2});
+	this->setCameraPosition(SIZE_MAP_X, SIZE_MAP_Y);
 }
 
 IndieStudio::Game::~Game()
 {
 }
 
+
+void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
+{
+	float div = ((x + y) / 2) * 32;
+	auto cube = this->_map.getFloorCube().at(this->_map.getFloorCube().size() - 1);
+	this->_graphical.setCameraPosition(IndieStudio::Pos{-10, div, cube->getPosition()._z / 2});
+	this->_graphical.setCameraTarget(IndieStudio::Pos{cube->getPosition()._x / 2, 0, cube->getPosition()._z / 2});
+}
 void IndieStudio::Game::setMapCollision() noexcept
 {
 	auto brick_vec = this->_map.getBrickCube();

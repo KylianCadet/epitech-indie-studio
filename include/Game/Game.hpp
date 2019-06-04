@@ -16,6 +16,9 @@
 #include "Bomb.hpp"
 #include <vector>
 
+static const int SIZE_MAP_X = 15;
+static const int SIZE_MAP_Y = 15;
+
 namespace IndieStudio {
 	class Game : public IRender {
 	public:
@@ -31,6 +34,7 @@ namespace IndieStudio {
 		void moveCharacter() noexcept;
 		void setMapCollision() noexcept;
 		void checkDeleteBomb() noexcept;
+		void setCameraPosition(int x, int y) noexcept;
 
 	private:
 		IndieStudio::Map _map;

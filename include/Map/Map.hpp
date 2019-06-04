@@ -45,6 +45,7 @@ namespace IndieStudio {
 		void create_Start_Positon(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getBrickCube(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getWallCube(void) const noexcept;
+		std::vector<IndieStudio::IEntity *> getFloorCube(void) const noexcept;
 		void delete_Cube(IndieStudio::IEntity *);
 		void set_Texture_Cube(IndieStudio::IEntity *, std::string);
 		std::vector<IndieStudio::Pos> get_Position_Start() const noexcept;

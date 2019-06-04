@@ -17,8 +17,8 @@
 
 void setMiddle(float &vec)
 {
-	if ((int)vec % WALL_SIZE != 0) {
-		float f = (int)vec % WALL_SIZE;
+	if ((int)(vec + 20) % WALL_SIZE != 0) {
+		float f = (int)(vec + 20) % WALL_SIZE;
 		vec += (WALL_SIZE / 2 - f);
 	} else {
 		vec += WALL_SIZE / 2;
@@ -28,8 +28,8 @@ void setMiddle(float &vec)
 
 int getMiddle(float vec)
 {
-	if ((int)vec % WALL_SIZE != 0) {
-		float f = (int)vec % WALL_SIZE;
+	if ((int)(vec + WALL_SIZE / 2) % WALL_SIZE != 0) {
+		float f = (int)(vec + WALL_SIZE / 2) % WALL_SIZE;
 		vec += (WALL_SIZE / 2 - f);
 	} else {
 		vec += WALL_SIZE / 2;

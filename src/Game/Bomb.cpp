@@ -19,10 +19,9 @@ void setMiddle(float &vec)
 {
 	if ((int)vec % WALL_SIZE != 0) {
 		float f = (int)vec % WALL_SIZE;
-		if (f >= 0)
-			vec += (WALL_SIZE / 2 - f);
-		else
-			vec -= (WALL_SIZE / 2 + f);
+		vec += (WALL_SIZE / 2 - f);
+	} else {
+		vec += WALL_SIZE / 2;
 	}
 	vec = static_cast<int>(vec);
 }
@@ -31,10 +30,9 @@ int getMiddle(float vec)
 {
 	if ((int)vec % WALL_SIZE != 0) {
 		float f = (int)vec % WALL_SIZE;
-		if (f > 0)
-			vec += (WALL_SIZE / 2 - f);
-		else
-			vec -= (WALL_SIZE / 2 + f);
+		vec += (WALL_SIZE / 2 - f);
+	} else {
+		vec += WALL_SIZE / 2;
 	}
 	vec = static_cast<int>(vec);
 	return (vec);
@@ -51,6 +49,8 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 {
 	setMiddle(vector._x);
 	setMiddle(vector._z);
+	std::cout << "bomb x : " << vector._x << std::endl;
+	std::cout << "bomb z : " << vector._z << std::endl;
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->_bomb->setPosition(vector);
 	this->createParticule(vector);
@@ -140,7 +140,7 @@ void IndieStudio::Bomb::checkHit(IndieStudio::Pos position, std::vector<bool> bo
 		std::thread([this, posVec, boolVec]() {
 			std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 			std::chrono::time_point<std::chrono::system_clock> end;
-			while (std::chrono::duration_cast<std::chrono::seconds>(end-start).count() < EXPLOSION_DURATION + 1) {
+			while (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < EXPLOSION_DURATION + 1) {
 				end = std::chrono::system_clock::now();
 				std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				auto bool_it = boolVec.begin();
@@ -151,7 +151,8 @@ void IndieStudio::Bomb::checkHit(IndieStudio::Pos position, std::vector<bool> bo
 							character_it->setPosition(character_it->getSpawnPos());
 						}
 			}
-		}).detach();
+		})
+			.detach();
 		bool_it = boolVec.begin();
 		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 			if (*bool_it == false)

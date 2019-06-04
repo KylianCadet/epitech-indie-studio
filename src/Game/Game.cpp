@@ -9,7 +9,7 @@
 #include <thread>
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", "map/map.txt"))
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", 16, 17, 50, 100))
 {
 	this->createCharacters();
 	this->setMapCollision();

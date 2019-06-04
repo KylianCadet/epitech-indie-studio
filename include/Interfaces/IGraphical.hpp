@@ -35,6 +35,8 @@ namespace IndieStudio {
 		virtual void drawScene(void) const noexcept = 0;
 		virtual void drop(void) const noexcept = 0;
 		virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept = 0;
+		virtual void setCameraPosition(IndieStudio::Pos pos) = 0;
+		virtual void setCameraRotation(IndieStudio::Pos pos) = 0;
 		virtual IndieStudio::IEvent getEvent(void) const noexcept = 0;
 		virtual void deleteEntity(IndieStudio::IEntity *) const noexcept = 0;
 		virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept = 0;

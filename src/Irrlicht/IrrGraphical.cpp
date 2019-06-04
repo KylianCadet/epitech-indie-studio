@@ -6,7 +6,8 @@
 */
 
 #include "IrrGraphical.hpp"
-
+//0, 500, 100
+//100, 200, 100
 IndieStudio::IrrGraphical::IrrGraphical()
 {
 	this->_device = irr::createDevice(
@@ -18,11 +19,11 @@ IndieStudio::IrrGraphical::IrrGraphical()
 		true);
 	this->_sceneManager = this->_device->getSceneManager();
 	this->_driver = this->_device->getVideoDriver();
-	this->_sceneManager->addCameraSceneNode(
+	this->_camera = this->_sceneManager->addCameraSceneNode(
 		0,
-		irr::core::vector3df(-200, 500, 0),
+		irr::core::vector3df(0, 0, 0),
 		irr::core::vector3df(0, 0, 0));
-
+	std::cout << "ROTATION " << this->_camera->getRotation().X << "  " << this->_camera->getRotation().Y << "  " << this->_camera->getRotation().Z << "\n";
 	//     /* CAMERA */
 
 	// irr::SKeyMap keyMap[5];                    // re-assigne les commandes
@@ -255,4 +256,14 @@ void IndieStudio::IrrGraphical::setCustomRectangle(IndieStudio::IEntity *image, 
 	rectangle.UpperLeftCorner = position0;
 	rectangle.LowerRightCorner = position1;
 	irrImage->setRectangle(rectangle);
+}
+
+void IndieStudio::IrrGraphical::setCameraPosition(IndieStudio::Pos pos) noexcept
+{
+	this->_camera->setPosition(irr::core::vector3df{pos._x, pos._y, pos._z});
+}
+
+void IndieStudio::IrrGraphical::setCameraRotation(IndieStudio::Pos pos) noexcept
+{
+	this->_camera->setRotation(irr::core::vector3df{pos._x, pos._y, pos._z});
 }

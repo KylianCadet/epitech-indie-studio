@@ -11,9 +11,9 @@
 #include <iostream>
 
 static const float CUBE_SIDE = 40.f;
-static const int CUBE_Y = -100;
-static const int CUBE_Z = 15;
-static const int CUBE_X = -220;
+static const int CUBE_Y = 0;
+static const int CUBE_Z = 0;
+static const int CUBE_X = 0;
 static const int SIZE_MAP = 15;
 static const std::string FLOOR_TEXTURE_256 = "assets/map/256/bedrock.png";
 static const std::string WALL_TEXTURE_256 = "assets/map/256/black_concrete.png";
@@ -66,6 +66,7 @@ namespace IndieStudio {
 		std::vector<std::string> get_Txt_Map(void) const noexcept;
 		int check_format_map() noexcept;
 		void adjustment_Map_Txt();
+		void init_pos_start() noexcept;
 		std::vector<IndieStudio::IEntity *> getWallInsideCube(void) noexcept;
 		std::string reverseStr(std::string &str);
 		std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;

@@ -41,7 +41,7 @@ void IndieStudio::MenuPause::drawButtons(void) noexcept
 void IndieStudio::MenuPause::createImages(void) noexcept
 {
 	this->_wall = this->_graphical.createImage("assets/menu/wall.jpg", std::pair<int, int>(0, 0));
-	this->_titleMenu = this->_graphical.createImage("assets/menu/title2.png", std::pair<int, int>(-1, 100));
+	this->_titleMenu = this->_graphical.createImage("assets/menu/gamepaused.png", std::pair<int, int>(-1, 100));
 	this->_frameMenu = this->_graphical.createImage("assets/menu/frame.png", std::pair<int, int>(-1, 320));
 }
 

@@ -48,8 +48,19 @@ private:
 	void refreshSkin(void) noexcept override;
 
 private:
-	IEntity *_comingsoon;
+	IEntity *_player1;
+	IEntity *_forward;
+	IEntity *_back;
+	IEntity *_left;
+	IEntity *_right;
+	IEntity *_action;
 	IEntity *_escapeInfo;
+
+	IEntity *_Z;
+	IEntity *_S;
+	IEntity *_Q;
+	IEntity *_D;
+	IEntity *_E;
 };
 }; // namespace IndieStudio
 

@@ -15,7 +15,7 @@ IndieStudio::MenuOptions::MenuOptions(IndieStudio::IGraphical &graphical, IndieS
 	this->createButtons();
 	this->_menuAudio = new IndieStudio::MenuAudio(this->_graphical, this->_volume, this->_sounds);
 	this->_menuVideo = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
-	this->_menuControls = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
+	this->_menuControls = new IndieStudio::MenuControls(this->_graphical, this->_volume, this->_sounds);
 }
 
 IndieStudio::MenuOptions::~MenuOptions()

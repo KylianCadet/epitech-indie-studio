@@ -61,7 +61,7 @@ private:
 private:
 	MenuAudio *_menuAudio;
 	MenuVideo *_menuVideo;
-	MenuVideo *_menuControls;
+	MenuControls *_menuControls;
 
 	Button *_audio;
 	Button *_video;

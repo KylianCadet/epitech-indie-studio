@@ -18,6 +18,8 @@
 
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
+static const int DENSITY_BRICK = 50;
+static const int DENSITY_WALL = 100;
 
 namespace IndieStudio {
 	class Game : public IRender {
@@ -32,6 +34,7 @@ namespace IndieStudio {
 		virtual void setRenderStatus(int) noexcept;
 		virtual void checkEvent(void) noexcept;
 		void moveCharacter() noexcept;
+		void mapRender() noexcept;
 		void setMapCollision() noexcept;
 		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
@@ -47,6 +50,7 @@ namespace IndieStudio {
 		float _rot_y = 0;
 		float _rot_z = 0;
 		float _counter = 0;
+		bool _bonus = false;
 		Render &_render;
 	};
 }; // namespace IndieStudio

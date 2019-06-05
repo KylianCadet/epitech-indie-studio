@@ -7,7 +7,7 @@
 
 #include "Map.hpp"
 #include <thread>
-
+#include <functional>
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y, int densityBrick, int densityWall) :
 	_graphical(graphical)
 {
@@ -15,6 +15,7 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 	this->generate_map(x, y, set_Graphisme(graphisme));
 	set_Density_Brick(getBrickCube(), 100 - densityBrick);
 	set_Density_Wall(getWallInsideCube(), 100 - densityWall);
+	create_Bonus();
 }
 
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :
@@ -35,15 +36,15 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 	srand(time(NULL));
 	for (int j = 0, k = 0; j < y; j++) {
 		for (int i = 0; i < x; i++) {
-			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(0)));
+			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, CUBE_SIDE, texture_Path.at(FLOOR)));
 			if (i == 0 || i == x - 1 || j == 0 || j == y - 1)
-				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(1)));
+				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 			else {
 				if (i % 2 == 0 && j > 1 && j < y - 2 && j % 2 == 0 && i > 0 && i < x - 1)
-					this->_wall_inside_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(1)));
+					this->_wall_inside_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 				else {
 					check = true;
-					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(2)));
+					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(BRICK)));
 				}
 			}
 		}
@@ -60,15 +61,15 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 	bool check = false;
 	for (unsigned int j = 0, k = 0; j != _map_txt_vec.size(); j++) {
 		for (unsigned int i = 0; i < _map_txt_vec[j].size(); i++) {
-			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(0)));
+			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, CUBE_SIDE, texture_Path.at(FLOOR)));
 			if (_map_txt_vec[j][i] == '#')
-				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(1)));
+				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 			if (_map_txt_vec[j][i] == 'B') {
 				check = true;
-				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, texture_Path.at(2)));
+				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(BRICK)));
 			}
 			if (_map_txt_vec[j][i] == 'P') {
-				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)}); // A refaire.
+				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)});
 			}
 		}
 		if (check == true) {
@@ -79,10 +80,10 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 	adjustment_Position_Start();
 }
 
-IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, std::string texturePath) noexcept
+IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, float size, std::string texturePath) noexcept
 {
 	IndieStudio::IEntity *cube = this->_graphical.createCube(
-		CUBE_SIDE,
+		size,
 		texturePath,
 		IndieStudio::Pos(x, y, z));
 	return (cube);
@@ -104,14 +105,64 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
+				this->_free_Pos.push_back((*i)->getPosition());
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
 				return;
 			}
 		}
 	}
+	auto delBonus = [this, &del](std::vector<IndieStudio::IEntity *> &cube) {
+		for (unsigned int i = 0; i != cube.size(); i++) {
+			if (cube.at(i) == del) {
+				this->_graphical.deleteEntity(del);
+				cube.erase(cube.begin()+i);
+				return (cube);
+			}
+		}
+		return(cube);
+	};
+	auto bonus = getRedBonusBomb();
+	this->_Bonus_Red_Bomb_Vec = delBonus(bonus);
+	bonus = getRedBonusSpeed();
+	this->_Bonus_Red_Speed_Vec = delBonus(bonus);
+	bonus = getRedBonusFire();
+	this->_Bonus_Red_Fire_Vec = delBonus(bonus);
+	bonus = getBlueBonusBomb();
+	this->_Bonus_Blue_Bomb_Vec = delBonus(bonus);
+	bonus = getBlueBonusSpeed();
+	this->_Bonus_Blue_Speed_Vec = delBonus(bonus);
+	bonus = getBlueBonusFire();
+	this->_Bonus_Blue_Fire_Vec = delBonus(bonus);
+
 }
 
+void IndieStudio::Map::create_Bonus(void) noexcept
+{
+	auto texture = get_texture_Bonus();
+		while (_Bonus_Red_Bomb_Vec.size() + _Bonus_Red_Speed_Vec.size() +
+	_Bonus_Red_Fire_Vec.size() + _Bonus_Blue_Bomb_Vec.size() +
+	_Bonus_Blue_Fire_Vec.size() + _Bonus_Blue_Speed_Vec.size() < NB_BONUS) {
+			auto max = this->_free_Pos.size() - 1;
+			auto min = 0;
+			auto randPos = rand()%(max-min + 1) + min;
+			auto randTexture = rand()%(5-0 + 1) + 0;
+			auto pos = this->_free_Pos.at(randPos);
+			if (randTexture == RED_BOMB)
+				this->_Bonus_Red_Bomb_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			else if (randTexture == RED_FIRE)
+				this->_Bonus_Red_Fire_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			else if (randTexture == RED_SPEED)
+				this->_Bonus_Red_Speed_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			else if (randTexture == BLUE_BOMB)
+				this->_Bonus_Blue_Bomb_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			else if (randTexture == BLUE_FIRE)
+				this->_Bonus_Blue_Fire_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			else if (randTexture == BLUE_SPEED)
+				this->_Bonus_Blue_Speed_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+			this->_free_Pos.erase(this->_free_Pos.begin()+randPos);
+		}
+}
 
 //             GET
 
@@ -177,7 +228,17 @@ std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
 	texture.push_back(BRICK_TEXTURE_256);
 	return (texture);
 }
-
+std::vector<std::string> IndieStudio::Map::get_texture_Bonus() const noexcept
+{
+	std::vector<std::string> texture;
+	texture.push_back(RED_BOMB_BONUS);
+	texture.push_back(RED_FIRE_BONUS);
+	texture.push_back(RED_SPEED_BONUS);
+	texture.push_back(BLUE_BOMB_BONUS);
+	texture.push_back(BLUE_FIRE_BONUS);
+	texture.push_back(BLUE_SPEED_BONUS);
+	return (texture);
+}
 IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos pos)
 {
 	auto brick = getBrickCube();
@@ -191,6 +252,67 @@ IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos po
 			return (wall.at(i));
 	}
 	return(nullptr);
+}
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getRedBonusFire() noexcept
+{
+	return (this->_Bonus_Red_Fire_Vec);
+}
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getRedBonusBomb() noexcept
+{
+	return (this->_Bonus_Red_Bomb_Vec);
+}
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getRedBonusSpeed() noexcept
+{
+	return (this->_Bonus_Red_Speed_Vec);
+}
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBlueBonusFire() noexcept
+{
+	return (this->_Bonus_Blue_Fire_Vec);
+}
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBlueBonusBomb() noexcept
+{
+	return (this->_Bonus_Blue_Bomb_Vec);
+}
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBlueBonusSpeed() noexcept
+{
+	return (this->_Bonus_Blue_Speed_Vec);
+}
+
+
+int IndieStudio::Map::getBonus(IndieStudio::Pos pos, std::vector<IndieStudio::IEntity *> bonus) noexcept
+{
+	std::function<bool(IndieStudio::Pos, IndieStudio::Pos)> isTrue = [](IndieStudio::Pos posA, IndieStudio::Pos posB) {
+		if (posB._x >= posA._x - 10 && posB._x < posA._x + 10 && posB._z > posA._z - 10 && posB._z < posA._z + 10)
+			return (true);
+		return (false);
+	};
+	for (auto i = bonus.begin(); i != bonus.end(); i++) {
+		auto bonusPos = (*i)->getPosition();
+		if (isTrue(bonusPos, pos) == true) {
+			delete_Cube((*i));
+			return (1);
+		}
+	}
+	return (0);
+}
+
+int IndieStudio::Map::getMalus(IndieStudio::Pos pos, std::vector<IndieStudio::IEntity *> bonus) noexcept
+{
+	std::function<bool(IndieStudio::Pos, IndieStudio::Pos)> isTrue = [](IndieStudio::Pos posA, IndieStudio::Pos posB) {
+		if (posB._x >= posA._x - 10 && posB._x < posA._x + 10 && posB._z > posA._z - 10 && posB._z < posA._z + 10)
+			return (true);
+		return (false);
+	};
+	for (auto i = bonus.begin(); i != bonus.end(); i++) {
+		auto bonusPos = (*i)->getPosition();
+		if (isTrue(bonusPos, pos) == true) {
+			delete_Cube((*i));
+			return (-1);
+		}
+	}
+	return (0);
 }
 
 //              SET
@@ -342,6 +464,30 @@ void IndieStudio::Map::create_Start_Positon(void) noexcept
 	adjustment_Position_Start();
 }
 
+void IndieStudio::Map::animeBonus() noexcept
+{
+	static bool direction = false;
+	float high = _Bonus_Red_Bomb_Vec.at(0)->getPosition()._y;
+	auto parser = [&](std::vector<IndieStudio::IEntity *> bonus, bool direction) {
+		for (auto i = bonus.begin(); i != bonus.end(); i++) {
+			if (direction == false)
+				(*i)->setPosition(IndieStudio::Pos{(*i)->getPosition()._x, (*i)->getPosition()._y + (float)0.05, (*i)->getPosition()._z});
+			else
+				(*i)->setPosition(IndieStudio::Pos{(*i)->getPosition()._x, (*i)->getPosition()._y - (float)0.05, (*i)->getPosition()._z});
+		}
+		return (bonus);
+	};
+	if (high >= 65)
+		direction = true;
+	else if (high <= 60)
+		direction = false;
+	this->_Bonus_Red_Bomb_Vec = parser(this->_Bonus_Red_Bomb_Vec, direction);
+	this->_Bonus_Red_Fire_Vec = parser(this->_Bonus_Red_Fire_Vec, direction);
+	this->_Bonus_Red_Speed_Vec = parser(this->_Bonus_Red_Speed_Vec, direction);
+	this->_Bonus_Blue_Bomb_Vec = parser(this->_Bonus_Blue_Bomb_Vec, direction);
+	this->_Bonus_Blue_Fire_Vec = parser(this->_Bonus_Blue_Fire_Vec, direction);
+	this->_Bonus_Blue_Speed_Vec = parser(this->_Bonus_Blue_Speed_Vec, direction);
+}
 IndieStudio::Map::~Map()
 {
 }

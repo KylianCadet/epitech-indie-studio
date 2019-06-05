@@ -9,7 +9,7 @@
 #include <thread>
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, 50, 100))
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL))
 {
 	this->createCharacters();
 	this->setMapCollision();
@@ -64,6 +64,7 @@ void IndieStudio::Game::render() noexcept
 {
 	if (this->_render == GAME) {
 		this->moveCharacter();
+		this->mapRender();
 		this->checkEvent();
 	}
 	this->_graphical.drawScene();
@@ -141,6 +142,8 @@ void IndieStudio::Game::moveCharacter() noexcept
 				}).detach();
 			}
 		}
+		character_it->setBonus(this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusSpeed()), this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusFire()), this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusBomb()));
+		character_it->setBonus(this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusSpeed()), this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusFire()), this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusBomb()));
 	}
 }
 
@@ -164,4 +167,16 @@ void IndieStudio::Game::checkEvent(void) noexcept
 		if (this->_event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())] == true && *ActionKey_it == false)
 			character_it->setDoingAction(true);
 	}
+}
+
+void IndieStudio::Game::mapRender() noexcept
+{
+	if (this->_bonus == false)
+		std::thread([this]() {
+			this->_bonus = true;
+			std::this_thread::sleep_for(std::chrono::seconds(7));
+			this->_map.create_Bonus();
+			this->_bonus = false;
+		}).detach();
+	this->_map.animeBonus();
 }

@@ -14,11 +14,12 @@
 #include "IRender.hpp"
 #include "Map.hpp"
 #include "Bomb.hpp"
+#include "Bonus.hpp"
 #include <vector>
 
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
-static const int DENSITY_BRICK = 50;
+static const int DENSITY_BRICK = 0;
 static const int DENSITY_WALL = 100;
 
 namespace IndieStudio {
@@ -35,12 +36,14 @@ namespace IndieStudio {
 		virtual void checkEvent(void) noexcept;
 		void moveCharacter() noexcept;
 		void mapRender() noexcept;
+		void bonusRender() noexcept;
 		void setMapCollision() noexcept;
 		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
 
 	private:
 		IndieStudio::Map _map;
+		IndieStudio::Bonus _bonus;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
@@ -50,7 +53,7 @@ namespace IndieStudio {
 		float _rot_y = 0;
 		float _rot_z = 0;
 		float _counter = 0;
-		bool _bonus = false;
+		bool _bonus_bool = false;
 		Render &_render;
 	};
 }; // namespace IndieStudio

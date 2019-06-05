@@ -19,7 +19,7 @@
 
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
-static const int DENSITY_BRICK = 0;
+static const int DENSITY_BRICK = 50;
 static const int DENSITY_WALL = 100;
 
 namespace IndieStudio {

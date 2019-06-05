@@ -18,12 +18,6 @@
 #include <vector>
 
 static const int NB_BONUS = 10;
-// static const std::string RED_FIRE_BONUS = "assets/map/64/red_punch.png";
-// static const std::string RED_SPEED_BONUS = "assets/map/64/red_speed.png";
-// static const std::string RED_BOMB_BONUS = "assets/map/64/red_bomb.png";
-// static const std::string BLUE_FIRE_BONUS = "assets/map/64/blue_punch.png";
-// static const std::string BLUE_SPEED_BONUS = "assets/map/64/blue_speed.png";
-// static const std::string BLUE_BOMB_BONUS = "assets/map/64/blue_bomb.png";
 static const std::string RED_FIRE_BONUS = "assets/powerUp/fireUp.png";//"assets/map/64/red_punch.png";
 static const std::string RED_SPEED_BONUS = "assets/powerUp/speedUp.png";//"assets/map/64/red_speed.png";
 static const std::string RED_BOMB_BONUS = "assets/powerUp/bombUp.png";//"assets/map/64/red_bomb.png";

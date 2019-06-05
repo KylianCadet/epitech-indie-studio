@@ -9,8 +9,12 @@
 #include <thread>
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL))
+	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
+	_bonus(IndieStudio::Bonus(graphical))
 {
+	this->_bonus.addFreePosition(this->_map.getFreePos());
+	this->_map.clearFreePos();
+	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X, SIZE_MAP_Y);
@@ -75,7 +79,7 @@ void IndieStudio::Game::render() noexcept
 	} else if (_render == GAME_COOP) {
 		std::cout << "COOP" << std::endl;
 		this->moveCharacter();
-		this->mapRender();
+		this->bonusRender();
 		this->checkEvent();
 	}
 	this->_graphical.drawScene();
@@ -153,8 +157,8 @@ void IndieStudio::Game::moveCharacter() noexcept
 				}).detach();
 			}
 		}
-		character_it->setBonus(this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusSpeed()), this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusFire()), this->_map.getBonus(character_it->getPosition(), this->_map.getRedBonusBomb()));
-		character_it->setBonus(this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusSpeed()), this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusFire()), this->_map.getMalus(character_it->getPosition(), this->_map.getBlueBonusBomb()));
+		character_it->setBonus(this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusSpeed()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusFire()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusBomb()));
+		character_it->setBonus(this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusSpeed()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusFire()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusBomb()));
 	}
 }
 
@@ -180,14 +184,16 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	}
 }
 
-void IndieStudio::Game::mapRender() noexcept
+void IndieStudio::Game::bonusRender() noexcept
 {
-	if (this->_bonus == false)
+	this->_bonus.addFreePosition(this->_map.getFreePos());
+	this->_map.clearFreePos();
+	if (this->_bonus_bool == false)
 		std::thread([this]() {
-			this->_bonus = true;
+			this->_bonus_bool = true;
 			std::this_thread::sleep_for(std::chrono::seconds(7));
-			this->_map.create_Bonus();
-			this->_bonus = false;
+			this->_bonus.create_Bonus();
+			this->_bonus_bool = false;
 		}).detach();
-	this->_map.animeBonus();
+	this->_bonus.animeBonus();
 }

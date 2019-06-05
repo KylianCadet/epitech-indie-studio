@@ -100,11 +100,11 @@ void IndieStudio::MenuNew::returnAction(void) noexcept
 {
 	this->_sounds->_buttonReturnSound->playSound();
 	if (this->_buttonStatus == BTN_NEW_SOLO)
-		this->_renderStatus = MENU_NEW_GAME;
+		this->_renderStatus = MENU_NEW_GAME_SOLO;
 	else if (this->_buttonStatus == BTN_NEW_COOP)
-		this->_renderStatus = MENU_NEW_GAME;
+		this->_renderStatus = MENU_NEW_GAME_COOP;
 	else if (this->_buttonStatus == BTN_NEW_1VS1)
-		this->_renderStatus = MENU_NEW_GAME;
+		this->_renderStatus = MENU_NEW_GAME_1V1;
 	else if (this->_buttonStatus == BTN_NEW_BACK)
 		this->_renderStatus = MENU_NEW_BACK;
 }

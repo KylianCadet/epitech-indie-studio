@@ -54,28 +54,29 @@ void IndieStudio::MenuMain::drawImages(void) noexcept
 	this->_graphical.drawImage(this->_frameMenu);
 }
 
-void IndieStudio::MenuMain::checkActions(void) noexcept
-{
+void IndieStudio::MenuMain::checkActions(void) noexcept {
 
-	if (this->_menuOptions->getCurrentMenuActive() == MENU_OPTIONS_BACK)
-	{
+	if (this->_menuOptions->getCurrentMenuActive() == MENU_OPTIONS_BACK) {
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuOptions->setMenuActive(MENU_OPTIONS_MAIN);
 		this->_menuOptions->setButtonActive(BTN_OPTIONS_AUDIO);
-	}
-	else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK)
-	{
+	} else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK) {
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuLoad->setMenuActive(MENU_LOAD_MAIN);
-	}
-	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK)
-	{
+	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK) {
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 		this->_menuNew->setButtonActive(BTN_NEW_SOLO);
-	}
-	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME)
-	{
+	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_SOLO) {
+		_renderStatus = MENU_MAIN_GAME_SOLO;
+		_menuNew->setMenuActive(MENU_MAIN_GAME_SOLO);
+	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_1V1) {
+		_renderStatus = MENU_MAIN_GAME_1V1;
+		_menuNew->setMenuActive(MENU_MAIN_GAME_1V1);
+	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_COOP) {
+		_renderStatus = MENU_MAIN_GAME_COOP;
+		_menuNew->setMenuActive(MENU_MAIN_GAME_COOP);
+	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME) {
 		this->_renderStatus = MENU_MAIN_GAME;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 	}

@@ -10,6 +10,9 @@
 
 enum Render {
 	GAME,
+	GAME_SOLO,
+	GAME_1V1,
+	GAME_COOP,
 	MAIN_MENU,
 	PAUSE_MENU
 };

@@ -66,7 +66,18 @@ void IndieStudio::Game::createCharacters() noexcept
 
 void IndieStudio::Game::render() noexcept
 {
-	if (this->_render == GAME) {
+	if (this->_render == GAME_SOLO) {
+		std::cout << "SOLO" << std::endl;
+		this->moveCharacter();
+		this->mapRender();
+		this->checkEvent();
+	} else if (_render == GAME_1V1) {
+		std::cout << "1v1" << std::endl;
+		this->moveCharacter();
+		this->mapRender();
+		this->checkEvent();
+	} else if (_render == GAME_COOP) {
+		std::cout << "COOP" << std::endl;
 		this->moveCharacter();
 		this->bonusRender();
 		this->checkEvent();

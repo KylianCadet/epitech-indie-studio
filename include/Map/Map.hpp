@@ -24,6 +24,12 @@ static const std::string BRICK_TEXTURE_128 = "assets/map/128/bricks.png";
 static const std::string FLOOR_TEXTURE_64 = "assets/map/64/bedrock.png";
 static const std::string WALL_TEXTURE_64 = "assets/map/64/black_concrete.png";
 static const std::string BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
+static const std::string RED_FIRE_BONUS = "assets/powerUp/fireUp.png";//"assets/map/64/red_punch.png";
+static const std::string RED_SPEED_BONUS = "assets/powerUp/speedUp.png";//"assets/map/64/red_speed.png";
+static const std::string RED_BOMB_BONUS = "assets/powerUp/bombUp.png";//"assets/map/64/red_bomb.png";
+static const std::string BLUE_FIRE_BONUS = "assets/powerUp/fireDown.png";//"assets/map/64/blue_punch.png";
+static const std::string BLUE_SPEED_BONUS = "assets/powerUp/speedDown.png";//"assets/map/64/blue_speed.png";
+static const std::string BLUE_BOMB_BONUS = "assets/powerUp/bombDown.png";//"assets/map/64/blue_bomb.png";
 
 #include "IGraphical.hpp"
 #include "IRender.hpp"

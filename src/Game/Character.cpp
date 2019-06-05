@@ -179,7 +179,7 @@ IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
 void IndieStudio::Character::setBonus(int speed, int bombSize, int bombMax) noexcept
 {
 	if (speed != 0 || bombSize != 0 || bombMax != 0) {
-		this->setSpeed(getSpeed() + speed);
+		this->setSpeed(getSpeed() + speed/2);
 		this->setBombSize(getBombSize() + bombSize);
 		this->setBombMax(getBombMax() + bombMax);
 	}

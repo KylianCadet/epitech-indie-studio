@@ -39,17 +39,17 @@ void IndieStudio::Bonus::create_Bonus(void) noexcept
 			auto randTexture = rand()%(5-0 + 1) + 0;
 			auto pos = this->_free_Pos.at(randPos);
 			if (randTexture == RED_BOMB)
-				this->_Bonus_Red_Bomb_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Red_Bomb_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			else if (randTexture == RED_FIRE)
-				this->_Bonus_Red_Fire_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Red_Fire_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			else if (randTexture == RED_SPEED)
-				this->_Bonus_Red_Speed_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Red_Speed_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			else if (randTexture == BLUE_BOMB)
-				this->_Bonus_Blue_Bomb_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Blue_Bomb_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			else if (randTexture == BLUE_FIRE)
-				this->_Bonus_Blue_Fire_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Blue_Fire_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			else if (randTexture == BLUE_SPEED)
-				this->_Bonus_Blue_Speed_Vec.push_back(createCubes(pos._x, pos._z, pos._y, (float) 20, texture.at(randTexture)));
+				this->_Bonus_Blue_Speed_Vec.push_back(createCubes(pos._x, pos._z, this->high, (float) 20, texture.at(randTexture)));
 			this->_free_Pos.erase(this->_free_Pos.begin()+randPos);
 		}
 }
@@ -172,21 +172,29 @@ void IndieStudio::Bonus::addFreePosition(std::vector<IndieStudio::Pos> pos) noex
 
 void IndieStudio::Bonus::animeBonus() noexcept
 {
-	static bool direction = false;
-	float high = _Bonus_Red_Bomb_Vec.at(0)->getPosition()._y;
-	auto parser = [&](std::vector<IndieStudio::IEntity *> bonus, bool direction) {
-		for (auto i = bonus.begin(); i != bonus.end(); i++) {
-			if (direction == false)
+	auto parser = [&](std::vector<IndieStudio::IEntity *> bonus, bool &direction) {
+       for (auto i = bonus.begin(); i != bonus.end(); i++) {
+			if (direction == false) {
 				(*i)->setPosition(IndieStudio::Pos{(*i)->getPosition()._x, (*i)->getPosition()._y + (float)0.05, (*i)->getPosition()._z});
-			else
+            }
+			else {
 				(*i)->setPosition(IndieStudio::Pos{(*i)->getPosition()._x, (*i)->getPosition()._y - (float)0.05, (*i)->getPosition()._z});
+            }
 		}
 		return (bonus);
 	};
-	if (high >= 67)
-		direction = true;
-	else if (high <= 60)
-		direction = false;
+	if (direction == true) {
+        this->high -= (float)0.1;
+        if (high < 60) {
+		    direction = false;
+        }
+    }
+	else if (direction == false) {
+        this->high += (float)0.1;
+        if (high > 67) {
+		    direction = true;
+        }
+    }
 	this->_Bonus_Red_Bomb_Vec = parser(this->_Bonus_Red_Bomb_Vec, direction);
 	this->_Bonus_Red_Fire_Vec = parser(this->_Bonus_Red_Fire_Vec, direction);
 	this->_Bonus_Red_Speed_Vec = parser(this->_Bonus_Red_Speed_Vec, direction);

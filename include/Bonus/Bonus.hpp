@@ -24,6 +24,8 @@ static const std::string RED_BOMB_BONUS = "assets/map/64/red_bomb.png";
 static const std::string BLUE_FIRE_BONUS = "assets/map/64/blue_punch.png";
 static const std::string BLUE_SPEED_BONUS = "assets/map/64/blue_speed.png";
 static const std::string BLUE_BOMB_BONUS = "assets/map/64/blue_bomb.png";
+static const float CUBE_BONUS_Y = 60.f;
+
 
 namespace IndieStudio {
     class Bonus {
@@ -63,6 +65,8 @@ namespace IndieStudio {
             std::vector<IndieStudio::IEntity *> _Bonus_Blue_Fire_Vec;
             std::vector<IndieStudio::IEntity *> _Bonus_Blue_Bomb_Vec;
             std::vector<IndieStudio::Pos> _free_Pos;
+            float high = 60.f;
+            bool direction = false;
     };
 }
 

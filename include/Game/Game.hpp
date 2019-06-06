@@ -17,9 +17,9 @@
 #include "Bonus.hpp"
 #include <vector>
 
-static const int SIZE_MAP_X = 15;
-static const int SIZE_MAP_Y = 15;
-static const int DENSITY_BRICK = 50;
+static const int SIZE_MAP_X = 0;
+static const int SIZE_MAP_Y = 0;
+static const int DENSITY_BRICK = 40;
 static const int DENSITY_WALL = 100;
 static const int DENSITY_BONUS = 33;
 

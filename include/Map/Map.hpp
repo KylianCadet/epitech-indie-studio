@@ -54,8 +54,8 @@ namespace IndieStudio {
 		std::vector<std::string> get_texture_256() const noexcept;
 		IndieStudio::IEntity *get_Cube_By_Position(IndieStudio::Pos pos);
 		void generate_map_by_txt(std::vector<std::string> texture_Path) noexcept;
-		void set_Density_Brick(std::vector<IndieStudio::IEntity *>, int);
-		void set_Density_Wall(std::vector<IndieStudio::IEntity *>, int);
+		void set_Density_Brick(float);
+		void set_Density_Wall(float);
 		std::vector<IndieStudio::Pos> getFreePos(void) noexcept;
 		void clearFreePos() noexcept;
 	protected:

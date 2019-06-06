@@ -12,9 +12,9 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 	_graphical(graphical)
 {
 	init_pos_start();
-	this->generate_map(x, y, set_Graphisme(graphisme));
-	set_Density_Brick(getBrickCube(), 100 - densityBrick);
-	set_Density_Wall(getWallInsideCube(), 100 - densityWall);
+	this->generate_map(x < 6 ? 6 : x, y < 6 ? 6 : y, set_Graphisme(graphisme));
+	set_Density_Wall(100 - densityWall);
+	set_Density_Brick(100 - densityBrick);
 }
 
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :
@@ -228,31 +228,21 @@ std::vector<std::string> IndieStudio::Map::set_Graphisme(std::string const path)
 	return (get_texture_64());
 }
 
-void IndieStudio::Map::set_Density_Brick(std::vector<IndieStudio::IEntity *> cube, int percent)
+void IndieStudio::Map::set_Density_Brick(float percent)
 {
-	if (percent == 0)
-		return;
-	int density = 100 / percent;
-	if (density == 0)
-		return;
-	for (unsigned int i = 0; i < cube.size(); i++) {
-		if (rand() % density == 0) {
-			delete_Cube(cube[i]);
-		}
+	auto nb = (percent / 100) * this->getBrickCube().size();
+	for (unsigned int i = 0; i < nb; i++) {
+		auto randPos = rand()%(this->getBrickCube().size()-0 + 1) + 0;
+			delete_Cube(this->getBrickCube()[randPos]);
 	}
 }
 
-void IndieStudio::Map::set_Density_Wall(std::vector<IndieStudio::IEntity *> cube, int percent)
+void IndieStudio::Map::set_Density_Wall(float percent)
 {
-	if (percent == 0)
-		return;
-	int density = 100 / percent;
-	if (density == 0)
-		return;
-	for (unsigned int i = 0; i < cube.size(); i++) {
-		if (rand() % density == 0) {
-			delete_Wall(cube[i]);
-		}
+	auto nb = (percent / 100) * this->getWallInsideCube().size();
+	for (unsigned int i = 0; i < nb; i++) {
+		auto randPos = rand()%(this->getWallInsideCube().size()-0 + 1) + 0;
+			delete_Wall(this->getWallInsideCube()[randPos]);
 	}
 }
 

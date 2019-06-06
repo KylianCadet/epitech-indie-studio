@@ -19,7 +19,7 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
-	this->setCameraPosition(SIZE_MAP_X, SIZE_MAP_Y);
+	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
 }
 
 IndieStudio::Game::~Game()

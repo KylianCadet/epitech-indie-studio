@@ -230,7 +230,11 @@ std::vector<std::string> IndieStudio::Map::set_Graphisme(std::string const path)
 
 void IndieStudio::Map::set_Density_Brick(std::vector<IndieStudio::IEntity *> cube, int percent)
 {
+	if (percent == 0)
+		return;
 	int density = 100 / percent;
+	if (density == 0)
+		return;
 	for (unsigned int i = 0; i < cube.size(); i++) {
 		if (rand() % density == 0) {
 			delete_Cube(cube[i]);

@@ -30,9 +30,15 @@ IndieStudio::IEntity *IndieStudio::Bonus::createCubes(float x, float z, float y,
 void IndieStudio::Bonus::create_Bonus(void) noexcept
 {
 	auto texture = get_texture_Bonus();
+	auto condition = [this]() {
+		int nb = NB_BONUS;
+		if (this->_free_Pos.size() < NB_BONUS)
+			return(this->_free_Pos.size());
+		return ((std::size_t)nb);
+	};
 		while (_Bonus_Red_Bomb_Vec.size() + _Bonus_Red_Speed_Vec.size() +
 	_Bonus_Red_Fire_Vec.size() + _Bonus_Blue_Bomb_Vec.size() +
-	_Bonus_Blue_Fire_Vec.size() + _Bonus_Blue_Speed_Vec.size() < NB_BONUS) {
+	_Bonus_Blue_Fire_Vec.size() + _Bonus_Blue_Speed_Vec.size() < condition()) {
 			auto max = this->_free_Pos.size() - 1;
 			auto min = 0;
 			auto randPos = rand()%(max-min + 1) + min;

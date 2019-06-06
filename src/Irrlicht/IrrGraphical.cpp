@@ -203,7 +203,7 @@ void IndieStudio::IrrGraphical::createCollision(IndieStudio::IEntity *cube, Indi
 	irr::scene::ISceneNodeAnimatorCollisionResponse *anim = this->_sceneManager->createCollisionResponseAnimator(
 		metaSelector,
 		node,
-		irr::core::vector3df(20, 20, 20),
+		irr::core::vector3df(15, 15, 15),
 		irr::core::vector3df(0, 0, 0));
 	node->addAnimator(anim);
 	anim->drop();

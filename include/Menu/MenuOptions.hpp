@@ -29,7 +29,7 @@ namespace IndieStudio
 class MenuOptions : public Menu
 {
 public:
-	MenuOptions(IGraphical &, Volume *, MenuSounds *);
+	MenuOptions(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuOptions();
 
 public:

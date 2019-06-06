@@ -7,15 +7,15 @@
 
 #include "MenuPause.hpp"
 
-IndieStudio::MenuPause::MenuPause(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(graphical, volume, sounds)
+IndieStudio::MenuPause::MenuPause(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config)
+	: Menu(graphical, volume, sounds, config)
 {
 	this->_renderStatus = MENU_PAUSE_MAIN;
 	this->_buttonStatus = BTN_PAUSE_BACK;
 	this->createButtons();
 	this->createImages();
 	this->_menuRestart = new IndieStudio::MenuRestart(this->_graphical, this->_volume, this->_sounds);
-	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds);
+	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds, this->_config);
 }
 
 IndieStudio::MenuPause::~MenuPause()

@@ -12,9 +12,10 @@
 #include <iostream>
 
 #include "IMenu.hpp"
-#include "IGraphical.hpp"
 #include "Button.hpp"
+#include "Config.hpp"
 #include "Volume.hpp"
+#include "IGraphical.hpp"
 #include "MenuSounds.hpp"
 
 namespace IndieStudio
@@ -22,7 +23,7 @@ namespace IndieStudio
 class Menu : public IMenu
 {
 public:
-	Menu(IGraphical &, Volume *, MenuSounds *);
+	Menu(IGraphical &, Volume *, MenuSounds *, Config *config = nullptr);
 
 	virtual void setButtonSwitch(int, int) noexcept;
 	virtual void setMenuActive(int) noexcept;
@@ -34,6 +35,7 @@ protected:
 	int _renderStatus;
 	int _buttonStatus;
 
+	Config *_config;
 	Volume *_volume;
 	MenuSounds *_sounds;
 	IGraphical &_graphical;

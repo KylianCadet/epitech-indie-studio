@@ -7,8 +7,8 @@
 
 #include "MenuControls.hpp"
 
-IndieStudio::MenuControls::MenuControls(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(graphical, volume, sounds)
+IndieStudio::MenuControls::MenuControls(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config)
+	: Menu(graphical, volume, sounds, config)
 {
 	this->_renderStatus = MENU_CONTROLS_MAIN;
 	this->createButtons();
@@ -29,10 +29,10 @@ void IndieStudio::MenuControls::drawButtons(void) noexcept
 
 void IndieStudio::MenuControls::createImages(void) noexcept
 {
-	int x = 865;
+	int x = 875;
 	int pos = 385;
 	int off = 70;
-	int x2 = 960;
+	int x2 = 970;
 	int pos2 = 385;
 	int off2 = 70;
 	this->_player1 = this->_graphical.createImage("assets/menu/controls/player1.png", std::pair<int, int>(-1, 362.5));

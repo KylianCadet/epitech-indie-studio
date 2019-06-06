@@ -7,12 +7,12 @@
 
 #include "MenuManager.hpp"
 
-IndieStudio::MenuManager::MenuManager(Render &renderStatus, IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume)
-	: _renderStatus(renderStatus), _graphical(graphical), _volume(volume)
+IndieStudio::MenuManager::MenuManager(Render &renderStatus, IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::Config *config)
+	: _renderStatus(renderStatus), _graphical(graphical), _volume(volume), _config(config)
 {
 	this->_sounds = new IndieStudio::MenuSounds(this->_volume);
-	this->_menuMain = new IndieStudio::MenuMain(this->_graphical, this->_volume, this->_sounds);
-	this->_menuPause = new IndieStudio::MenuPause(this->_graphical, this->_volume, this->_sounds);
+	this->_menuMain = new IndieStudio::MenuMain(this->_graphical, this->_volume, this->_sounds, this->_config);
+	this->_menuPause = new IndieStudio::MenuPause(this->_graphical, this->_volume, this->_sounds, this->_config);
 	this->_volume->refreshVolume();
 }
 

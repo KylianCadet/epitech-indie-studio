@@ -7,8 +7,9 @@
 
 #include "Menu.hpp"
 
-IndieStudio::Menu::Menu(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds) : _graphical(graphical)
+IndieStudio::Menu::Menu(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config) : _graphical(graphical)
 {
+	this->_config = config;
 	this->_volume = volume;
 	this->_sounds = sounds;
 }

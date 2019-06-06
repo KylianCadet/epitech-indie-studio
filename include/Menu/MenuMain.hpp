@@ -33,7 +33,7 @@ namespace IndieStudio
 class MenuMain : public Menu
 {
 public:
-	MenuMain(IGraphical &, Volume *, MenuSounds *);
+	MenuMain(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuMain();
 
 public:

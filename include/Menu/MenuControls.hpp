@@ -18,7 +18,7 @@ namespace IndieStudio
 class MenuControls : public Menu
 {
 public:
-	MenuControls(IGraphical &, Volume *, MenuSounds *);
+	MenuControls(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuControls();
 
 public:

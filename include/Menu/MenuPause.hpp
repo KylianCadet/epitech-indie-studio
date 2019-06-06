@@ -28,7 +28,7 @@ namespace IndieStudio
 class MenuPause : public Menu
 {
 public:
-	MenuPause(IGraphical &, Volume *, MenuSounds *);
+	MenuPause(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuPause();
 
 public:

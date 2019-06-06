@@ -23,7 +23,7 @@ namespace IndieStudio
 class MenuManager
 {
 public:
-	MenuManager(Render &, IGraphical &, Volume *);
+	MenuManager(Render &, IGraphical &, Volume *, Config *);
 	~MenuManager();
 
 	void render(void) noexcept;
@@ -43,6 +43,7 @@ private:
 	MenuMain *_menuMain;
 	MenuPause *_menuPause;
 
+	Config *_config;
 	Volume *_volume;
 	MenuSounds *_sounds;
 	IGraphical &_graphical;

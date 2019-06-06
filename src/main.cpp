@@ -10,6 +10,7 @@
 #include "MenuManager.hpp"
 #include "MusicManager.hpp"
 #include "Volume.hpp"
+#include "Config.hpp"
 #include "IrrGraphical.hpp"
 
 int main()
@@ -17,9 +18,10 @@ int main()
 	IndieStudio::IrrGraphical graphical;
 	Render render = Render::MAIN_MENU;
 
+	IndieStudio::Config *config = new IndieStudio::Config();
 	IndieStudio::Volume *volume = new IndieStudio::Volume();
 	IndieStudio::MusicManager musicManager(volume);
-	IndieStudio::MenuManager menu(render, graphical, volume);
+	IndieStudio::MenuManager menu(render, graphical, volume, config);
 	IndieStudio::Game game(graphical, render);
 
 	while (graphical.run())

@@ -7,15 +7,15 @@
 
 #include "MenuOptions.hpp"
 
-IndieStudio::MenuOptions::MenuOptions(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(graphical, volume, sounds)
+IndieStudio::MenuOptions::MenuOptions(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config)
+	: Menu(graphical, volume, sounds, config)
 {
 	this->_renderStatus = MENU_OPTIONS_MAIN;
 	this->_buttonStatus = BTN_OPTIONS_AUDIO;
 	this->createButtons();
 	this->_menuAudio = new IndieStudio::MenuAudio(this->_graphical, this->_volume, this->_sounds);
 	this->_menuVideo = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
-	this->_menuControls = new IndieStudio::MenuControls(this->_graphical, this->_volume, this->_sounds);
+	this->_menuControls = new IndieStudio::MenuControls(this->_graphical, this->_volume, this->_sounds, this->_config);
 }
 
 IndieStudio::MenuOptions::~MenuOptions()

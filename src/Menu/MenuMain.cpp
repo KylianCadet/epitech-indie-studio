@@ -7,8 +7,8 @@
 
 #include "MenuMain.hpp"
 
-IndieStudio::MenuMain::MenuMain(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds)
-	: Menu(graphical, volume, sounds)
+IndieStudio::MenuMain::MenuMain(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config)
+	: Menu(graphical, volume, sounds, config)
 {
 	this->_renderStatus = MENU_MAIN_MAIN;
 	this->_buttonStatus = BTN_MAIN_NEWGAME;
@@ -16,7 +16,7 @@ IndieStudio::MenuMain::MenuMain(IndieStudio::IGraphical &graphical, IndieStudio:
 	this->createImages();
 	this->_menuNew = new IndieStudio::MenuNew(this->_graphical, this->_volume, this->_sounds);
 	this->_menuLoad = new IndieStudio::MenuLoad(this->_graphical, this->_volume, this->_sounds);
-	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds);
+	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds, this->_config);
 }
 
 IndieStudio::MenuMain::~MenuMain()

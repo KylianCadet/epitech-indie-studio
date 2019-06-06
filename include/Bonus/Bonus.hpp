@@ -31,7 +31,7 @@ static const float CUBE_BONUS_Y = 60.f;
 namespace IndieStudio {
     class Bonus {
         public:
-            Bonus(IndieStudio::IGraphical &graphical);
+            Bonus(IndieStudio::IGraphical &graphical, int density = 33);
             ~Bonus();
             IndieStudio::IEntity *createCubes(float, float, float, float ,const std::string) noexcept;
             void create_Bonus(void) noexcept;
@@ -68,6 +68,7 @@ namespace IndieStudio {
             std::vector<IndieStudio::Pos> _free_Pos;
             float high = 60.f;
             bool direction = false;
+            float _density;
     };
 }
 

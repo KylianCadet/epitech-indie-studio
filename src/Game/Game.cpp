@@ -12,7 +12,7 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	_graphical(graphical),
 	_render(render),
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
-	_bonus(IndieStudio::Bonus(graphical))
+	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS))
 {
 	std::cout << "MAP\n";
 	this->_bonus.addFreePosition(this->_map.getFreePos());

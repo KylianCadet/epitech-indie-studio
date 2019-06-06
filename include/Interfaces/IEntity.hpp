@@ -18,7 +18,7 @@ namespace IndieStudio {
 			float _y;
 			float _z;
 			bool operator ==(const Pos &p) {
-				if (p._x == this->_x && p._y == this->_y && p._z == this->_z)
+				if (p._x == this->_x && p._z == this->_z)
 					return (true);
 				return (false);
 			};

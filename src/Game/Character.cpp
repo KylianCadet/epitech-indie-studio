@@ -166,7 +166,27 @@ int IndieStudio::Character::getBombSize() const noexcept
 	return (this->_bombSize);
 }
 
+void IndieStudio::Character::setBombSize(int i) noexcept
+{
+	this->_bombSize = i;
+}
+
 IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
 {
 	return (this->_spawnPos);
+}
+
+void IndieStudio::Character::setBonus(int speed, int bombSize, int bombMax) noexcept
+{
+	if (speed != 0 || bombSize != 0 || bombMax != 0) {
+		this->setSpeed(getSpeed() + speed/2);
+		this->setBombSize(getBombSize() + bombSize);
+		this->setBombMax(getBombMax() + bombMax);
+	}
+	if (getSpeed() < SPEED)
+		setSpeed(SPEED);
+	if (getBombSize() < BOMBSIZE)
+		setBombSize(BOMBSIZE);
+	if (getBombMax() < BOMBMAX)
+		setBombMax(BOMBMAX);
 }

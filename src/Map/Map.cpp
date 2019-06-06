@@ -7,11 +7,14 @@
 
 #include "Map.hpp"
 #include <thread>
-
-IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y) :
+#include <functional>
+IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, int x, int y, int densityBrick, int densityWall) :
 	_graphical(graphical)
 {
+	init_pos_start();
 	this->generate_map(x, y, set_Graphisme(graphisme));
+	set_Density_Brick(getBrickCube(), 100 - densityBrick);
+	set_Density_Wall(getWallInsideCube(), 100 - densityWall);
 }
 
 IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme, std::string map) :
@@ -30,16 +33,16 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 	bool check = false;
 	srand(time(NULL));
 	for (int j = 0, k = 0; j < y; j++) {
-		for (int i = 1; i < x; i++) {
-			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z - CUBE_SIDE, texture_Path.at(0)));
-			if (i == 1 || i == x - 1 || j == 0 || j == y - 1)
-				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
+		for (int i = 0; i < x; i++) {
+			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, CUBE_SIDE, texture_Path.at(FLOOR)));
+			if (i == 0 || i == x - 1 || j == 0 || j == y - 1)
+				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 			else {
-				if (rand() % 3 == 0 && j > 3 && j < y - 3)
-					this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
+				if (i % 2 == 0 && j > 1 && j < y - 2 && j % 2 == 0 && i > 0 && i < x - 1)
+					this->_wall_inside_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 				else {
 					check = true;
-					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
+					this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(BRICK)));
 				}
 			}
 		}
@@ -54,17 +57,17 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path) noexcept
 {
 	bool check = false;
-	for (unsigned int j = 0, k = 0; j != _map_txt_vec.size(); j++) {
+	for (unsigned int j = 0, k = 0; j < _map_txt_vec.size(); j++) {
 		for (unsigned int i = 0; i < _map_txt_vec[j].size(); i++) {
-			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z - CUBE_SIDE, texture_Path.at(0)));
+			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, CUBE_SIDE, texture_Path.at(FLOOR)));
 			if (_map_txt_vec[j][i] == '#')
-				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(1)));
+				this->_wall_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(WALL)));
 			if (_map_txt_vec[j][i] == 'B') {
 				check = true;
-				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, texture_Path.at(2)));
+				this->_cube_Destruc_map[k].push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_SIDE, texture_Path.at(BRICK)));
 			}
 			if (_map_txt_vec[j][i] == 'P') {
-				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE) - 10, CUBE_Z, CUBE_Y + (j * CUBE_SIDE) - 215}); // A refaire.
+				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)});
 			}
 		}
 		if (check == true) {
@@ -75,14 +78,24 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 	adjustment_Position_Start();
 }
 
-IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, std::string texturePath) noexcept
+IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, float size, std::string texturePath) noexcept
 {
-	z += -220;
 	IndieStudio::IEntity *cube = this->_graphical.createCube(
-		CUBE_SIDE,
+		size,
 		texturePath,
 		IndieStudio::Pos(x, y, z));
 	return (cube);
+}
+
+void IndieStudio::Map::delete_Wall(IndieStudio::IEntity *del)
+{
+	for (auto i = _wall_inside_Vec.begin(); i != _wall_inside_Vec.end(); i++) {
+		if (*i == del) {
+			this->_graphical.deleteEntity(del);
+			this->_wall_inside_Vec.erase(i);
+			return;
+		}
+	}
 }
 
 void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
@@ -90,6 +103,7 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
+				this->_free_Pos.push_back((*i)->getPosition());
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
 				return;
@@ -100,11 +114,16 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 
 //             GET
 
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getFloorCube(void) const noexcept
+{
+	return (this->_floor_Vec);
+}
+
 std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBrickCube(void) noexcept
 {
 	std::vector<IndieStudio::IEntity *> cube;
 
-	for (unsigned int j = 0; j != this->_cube_Destruc_map.size(); j++) {
+	for (unsigned int j = 0; j < this->_cube_Destruc_map.size(); j++) {
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			cube.push_back(*i);
 		}
@@ -114,18 +133,16 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::getBrickCube(void) noexcep
 
 std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallCube(void) const noexcept
 {
-	return (this->_wall_Vec);
+	auto cube = this->_wall_Vec;
+	for (auto i = _wall_inside_Vec.begin(); i != _wall_inside_Vec.end(); i++) {
+		cube.push_back(*i);
+	}
+	return (cube);
 }
 
-std::map<std::string, std::vector<IndieStudio::IEntity *>> IndieStudio::Map::get_All_Cube(void)
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallInsideCube(void) noexcept 
 {
-	std::map<std::string, std::vector<IndieStudio::IEntity *>> cube;
-
-	cube["Floor"] = this->_floor_Vec;
-	cube["Wall"] = this->_wall_Vec;
-	if (cube["Destruc"].size() == 0)
-		cube["Destruc"] = getBrickCube();
-	return (cube);
+	return (_wall_inside_Vec);
 }
 
 std::vector<IndieStudio::Pos> IndieStudio::Map::get_Position_Start() const noexcept
@@ -163,15 +180,21 @@ std::vector<std::string> IndieStudio::Map::get_texture_256() const noexcept
 IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos pos)
 {
 	auto brick = getBrickCube();
-	for (unsigned int i = 0; i != brick.size(); i++) {
+	for (unsigned int i = 0; i < brick.size(); i++) {
 		if (brick.at(i)->getPosition() == pos)
 			return (brick.at(i));
 	}
-	for (unsigned int i = 0; i != _wall_Vec.size(); i++) {
-		if (_wall_Vec.at(i)->getPosition() == pos)
-			return (_wall_Vec.at(i));
+	auto wall = getWallCube();
+	for (unsigned int i = 0; i < wall.size(); i++) {
+		if (wall.at(i)->getPosition() == pos)
+			return (wall.at(i));
 	}
 	return(nullptr);
+}
+
+std::vector<IndieStudio::Pos> IndieStudio::Map::getFreePos(void) noexcept
+{
+	return (this->_free_Pos);
 }
 
 //              SET
@@ -185,7 +208,7 @@ int IndieStudio::Map::set_Txt_Map(std::string map)
 			_map_txt_vec.push_back(reverseStr(line));
 		file.close();
 		adjustment_Map_Txt();
-		return (check_format_map());
+		return (check_format_map_txt());
 	} else {
 		std::cout << "Can't open file, " << map << ". Random generation map used\n";
 		return (-1);
@@ -205,12 +228,44 @@ std::vector<std::string> IndieStudio::Map::set_Graphisme(std::string const path)
 	return (get_texture_64());
 }
 
+void IndieStudio::Map::set_Density_Brick(std::vector<IndieStudio::IEntity *> cube, int percent)
+{
+	int density = 100 / percent;
+	for (unsigned int i = 0; i < cube.size(); i++) {
+		if (rand() % density == 0) {
+			delete_Cube(cube[i]);
+		}
+	}
+}
+
+void IndieStudio::Map::set_Density_Wall(std::vector<IndieStudio::IEntity *> cube, int percent)
+{
+	if (percent == 0)
+		return;
+	int density = 100 / percent;
+	if (density == 0)
+		return;
+	for (unsigned int i = 0; i < cube.size(); i++) {
+		if (rand() % density == 0) {
+			delete_Wall(cube[i]);
+		}
+	}
+}
+
+void IndieStudio::Map::init_pos_start() noexcept
+{
+	_pos_start.push_back(IndieStudio::Pos{0,0,0});
+	_pos_start.push_back(IndieStudio::Pos{0,0,0});
+	_pos_start.push_back(IndieStudio::Pos{0,0,0});
+	_pos_start.push_back(IndieStudio::Pos{0,0,0});
+}
+
 //              CHECK
 
-int IndieStudio::Map::check_format_map() noexcept
+int IndieStudio::Map::check_format_map_txt() noexcept
 {
-	for (unsigned int j = 0; j != _map_txt_vec.size(); j++) {
-		for (unsigned int i = 0; i != _map_txt_vec[j].size() - 1; i++) {
+	for (unsigned int j = 0; j < _map_txt_vec.size(); j++) {
+		for (unsigned int i = 0; i < _map_txt_vec[j].size() - 1; i++) {
 			if (_map_txt_vec[j][i] == ' ' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' || _map_txt_vec[j][i] == 'P')
 				;
 			else {
@@ -271,6 +326,7 @@ std::string IndieStudio::Map::reverseStr(std::string &str)
 
 void IndieStudio::Map::create_Start_Positon(void) noexcept
 {
+	_pos_start.clear();
 	delete_Cube(this->_cube_Destruc_map[1].at(0));
 	delete_Cube(this->_cube_Destruc_map[0].at(1));
 	_pos_start.push_back(this->_cube_Destruc_map[0].at(0)->getPosition());
@@ -290,6 +346,10 @@ void IndieStudio::Map::create_Start_Positon(void) noexcept
 	adjustment_Position_Start();
 }
 
+void IndieStudio::Map::clearFreePos() noexcept
+{
+	this->_free_Pos.clear();
+}
 IndieStudio::Map::~Map()
 {
 }

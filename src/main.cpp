@@ -26,7 +26,7 @@ int main()
 	{
 		graphical.startRender();
 		musicManager.refreshMusic(render);
-		if (render == Render::GAME)
+		if (render == Render::GAME_SOLO || render == Render::GAME_1V1 || render == Render::GAME_COOP)
 			game.render();
 		else if (render == Render::MAIN_MENU || Render::PAUSE_MENU)
 			menu.render();

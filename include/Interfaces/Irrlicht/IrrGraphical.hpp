@@ -30,6 +30,8 @@ namespace IndieStudio {
 		virtual void drawScene(void) const noexcept;
 		virtual void drop(void) const noexcept;
 		virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept;
+		virtual void setCameraPosition(IndieStudio::Pos) noexcept;
+		virtual void setCameraRotation(IndieStudio::Pos pos) noexcept;
 		virtual bool OnEvent(const irr::SEvent &event);
 		virtual IndieStudio::IEvent getEvent(void) const noexcept;
 		virtual void deleteEntity(IndieStudio::IEntity *) const noexcept;
@@ -46,6 +48,7 @@ namespace IndieStudio {
 		irr::IrrlichtDevice *_device;
 		irr::scene::ISceneManager *_sceneManager;
 		irr::video::IVideoDriver *_driver;
+		irr::scene::ICameraSceneNode *_camera;
 	};
 }; // namespace IndieStudio
 

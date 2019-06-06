@@ -11,9 +11,9 @@
 #include <iostream>
 
 static const float CUBE_SIDE = 40.f;
-static const int CUBE_Y = -400;
-static const int CUBE_Z = 15;
-static const int CUBE_X = -220;
+static const int CUBE_Y = 0;
+static const int CUBE_Z = 0;
+static const int CUBE_X = 0;
 static const int SIZE_MAP = 15;
 static const std::string FLOOR_TEXTURE_256 = "assets/map/256/bedrock.png";
 static const std::string WALL_TEXTURE_256 = "assets/map/256/black_concrete.png";
@@ -37,15 +37,15 @@ static const std::string BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
 namespace IndieStudio {
 	class Map {
 	public:
-		Map(IndieStudio::IGraphical &graphical, std::string graphisme = "64", int x = 15, int y = 32);
+		Map(IndieStudio::IGraphical &graphical, std::string graphisme = "64", int x = 15, int y = 32, int densityBrick = 50, int densityWall = 100);
 		Map(IndieStudio::IGraphical &graphical, std::string graphisme = "64", std::string map = NULL);
 		~Map();
-		IndieStudio::IEntity *createCubes(float, float, float, const std::string) noexcept;
+		IndieStudio::IEntity *createCubes(float, float, float, float ,const std::string) noexcept;
 		void generate_map(int, int, std::vector<std::string> texture_Path) noexcept;
-		std::map<std::string, std::vector<IndieStudio::IEntity *>> get_All_Cube(void);
 		void create_Start_Positon(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getBrickCube(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getWallCube(void) const noexcept;
+		std::vector<IndieStudio::IEntity *> getFloorCube(void) const noexcept;
 		void delete_Cube(IndieStudio::IEntity *);
 		void set_Texture_Cube(IndieStudio::IEntity *, std::string);
 		std::vector<IndieStudio::Pos> get_Position_Start() const noexcept;
@@ -54,25 +54,37 @@ namespace IndieStudio {
 		std::vector<std::string> get_texture_256() const noexcept;
 		IndieStudio::IEntity *get_Cube_By_Position(IndieStudio::Pos pos);
 		void generate_map_by_txt(std::vector<std::string> texture_Path) noexcept;
-
+		void set_Density_Brick(std::vector<IndieStudio::IEntity *>, int);
+		void set_Density_Wall(std::vector<IndieStudio::IEntity *>, int);
+		std::vector<IndieStudio::Pos> getFreePos(void) noexcept;
+		void clearFreePos() noexcept;
 	protected:
 	private:
+		enum Texture {
+			FLOOR,
+			WALL,
+			BRICK
+		};
 		void adjustment_Position_Start() noexcept;
 		void save_Texture() noexcept;
+		void delete_Wall(IndieStudio::IEntity *);
 		std::vector<std::string> set_Graphisme(const std::string path) const noexcept;
 		int set_Txt_Map(const std::string);
 		std::vector<std::string> get_Txt_Map(void) const noexcept;
-		int check_format_map() noexcept;
+		int check_format_map_txt() noexcept;
 		void adjustment_Map_Txt();
+		void init_pos_start() noexcept;
+		std::vector<IndieStudio::IEntity *> getWallInsideCube(void) noexcept;
 		std::string reverseStr(std::string &str);
 		std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Pos> _pos_start;
 		std::vector<IndieStudio::IEntity *> _cube_Destruc_Vec;
 		std::vector<IndieStudio::IEntity *> _wall_Vec;
+		std::vector<IndieStudio::IEntity *> _wall_inside_Vec;
 		std::vector<IndieStudio::IEntity *> _floor_Vec;
+		std::vector<IndieStudio::Pos> _free_Pos;
 		std::map<int, std::vector<IndieStudio::IEntity *>> _cube_Destruc_map;
-		std::map<std::string, std::vector<std::string>> _texture_Path;
 		std::vector<std::string> _map_txt_vec;
 	};
 }; // namespace IndieStudio

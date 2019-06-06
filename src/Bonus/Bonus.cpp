@@ -32,11 +32,15 @@ IndieStudio::IEntity *IndieStudio::Bonus::createCubes(float x, float z, float y,
 void IndieStudio::Bonus::create_Bonus(void) noexcept
 {
 	auto texture = get_texture_Bonus();
-	auto condition = ((this->_density / 100) * this->_free_Pos.size());
-	std::cout << "CONDITION = " << condition << " FREE_POS = " << this->_free_Pos.size() << " DENSITY = "<< this->_density <<"\n";
+	auto condition = [this](){
+		auto nb = (this->_density / 100) * this->_free_Pos.size();
+		if (nb < this->_min_density)
+			return (this->_min_density);
+		return (nb);
+	};
 		while (_Bonus_Red_Bomb_Vec.size() + _Bonus_Red_Speed_Vec.size() +
 	_Bonus_Red_Fire_Vec.size() + _Bonus_Blue_Bomb_Vec.size() +
-	_Bonus_Blue_Fire_Vec.size() + _Bonus_Blue_Speed_Vec.size() < condition) {
+	_Bonus_Blue_Fire_Vec.size() + _Bonus_Blue_Speed_Vec.size() < condition()) {
 			auto max = this->_free_Pos.size() - 1;
 			auto min = 0;
 			auto randPos = rand()%(max-min + 1) + min;
@@ -170,6 +174,8 @@ void IndieStudio::Bonus::addFreePosition(std::vector<IndieStudio::Pos> pos) noex
     for (unsigned i = 0; i < pos.size(); i++) {
         this->_free_Pos.push_back(pos.at(i));
     }
+	if (this->_min_density == 0)
+		this->_min_density = (this->_density / 100) * this->_free_Pos.size();
 }
 
 //////// OTHER /////////

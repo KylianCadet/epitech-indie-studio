@@ -14,10 +14,8 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS))
 {
-	std::cout << "MAP\n";
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
-	std::cout << "BONUS\n";
 	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
@@ -189,12 +187,13 @@ void IndieStudio::Game::bonusRender() noexcept
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
-	if (this->_bonus_bool == false)
+	if (this->_bonus_bool == false) {
+		this->_bonus_bool = true;
+		this->_bonus.create_Bonus();
 		std::thread([this]() {
-			this->_bonus_bool = true;
 			std::this_thread::sleep_for(std::chrono::seconds(7));
-			this->_bonus.create_Bonus();
 			this->_bonus_bool = false;
 		}).detach();
+	}
 	this->_bonus.animeBonus();
 }

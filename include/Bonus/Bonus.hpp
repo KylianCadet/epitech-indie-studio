@@ -69,6 +69,7 @@ namespace IndieStudio {
             float high = 60.f;
             bool direction = false;
             float _density;
+            float _min_density = 0;
     };
 }
 

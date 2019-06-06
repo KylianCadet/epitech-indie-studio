@@ -9,7 +9,9 @@
 #include <thread>
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
-	_graphical(graphical), _render(render), _map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
+	_graphical(graphical),
+	_render(render),
+	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical))
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
@@ -24,7 +26,6 @@ IndieStudio::Game::~Game()
 {
 }
 
-
 void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
 {
 	float div = ((x + y) / 2) * 32;
@@ -32,6 +33,7 @@ void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
 	this->_graphical.setCameraPosition(IndieStudio::Pos{-10, div, cube->getPosition()._z / 2});
 	this->_graphical.setCameraTarget(IndieStudio::Pos{cube->getPosition()._x / 2, 0, cube->getPosition()._z / 2});
 }
+
 void IndieStudio::Game::setMapCollision() noexcept
 {
 	auto brick_vec = this->_map.getBrickCube();
@@ -67,17 +69,14 @@ void IndieStudio::Game::createCharacters() noexcept
 void IndieStudio::Game::render() noexcept
 {
 	if (this->_render == GAME_SOLO) {
-//		std::cout << "SOLO" << std::endl;
 		this->moveCharacter();
 		this->bonusRender();
 		this->checkEvent();
 	} else if (_render == GAME_1V1) {
-//		std::cout << "1v1" << std::endl;
 		this->moveCharacter();
 		this->bonusRender();
 		this->checkEvent();
 	} else if (_render == GAME_COOP) {
-//		std::cout << "COOP" << std::endl;
 		this->moveCharacter();
 		this->bonusRender();
 		this->checkEvent();

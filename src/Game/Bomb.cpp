@@ -76,20 +76,6 @@ void IndieStudio::Bomb::createParticule(IndieStudio::Pos vector) noexcept
 		IndieStudio::Pos(30, 30, 30), 0);
 }
 
-std::vector<IndieStudio::Pos> IndieStudio::Bomb::explosionDir(std::vector<IndieStudio::Pos> vec)
-{
-	float size = 0.05 * _bombSize;
-	IndieStudio::Pos up(size, 0.0f, 0.0f);
-	IndieStudio::Pos down(size * -1, 0.0f, 0.0f);
-	IndieStudio::Pos right(0.0f, 0.0f, size);
-	IndieStudio::Pos left(0.0f, 0.0f, size * -1);
-	vec.push_back(up);
-	vec.push_back(down);
-	vec.push_back(right);
-	vec.push_back(left);
-	return (vec);
-}
-
 void IndieStudio::Bomb::createAutoParticle(IndieStudio::Pos position, int lifeTime)
 {
 	this->_graphical.createParticle(
@@ -116,6 +102,47 @@ void IndieStudio::Bomb::createAutoParticle(IndieStudio::Pos position, int lifeTi
 
 #include <chrono>
 
+void IndieStudio::Bomb::checkHitCube(std::vector<IndieStudio::Pos> posVec, std::vector<bool> &boolVec)
+{
+	auto bool_it = boolVec.begin();
+	for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++) {
+		auto cube = this->_map.get_Cube_By_Position(*pos_it);
+		if (cube != nullptr && *bool_it == false) {
+			this->_map.delete_Cube(cube);
+			*bool_it = true;
+		}
+	}
+}
+
+void IndieStudio::Bomb::checkHitBomb(std::vector<IndieStudio::Pos> posVec, std::vector<bool> &boolVec)
+{
+	auto bool_it = boolVec.begin();
+	for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
+		for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
+			if (bomb_it->get()->getPosition()._x == pos_it->_x && bomb_it->get()->getPosition()._z == pos_it->_z && bomb_it->get()->getAlive() == true && *bool_it == false)
+				bomb_it->get()->explosion();
+}
+
+void IndieStudio::Bomb::checkHitPlayer(std::vector<IndieStudio::Pos> posVec, std::vector<bool> &boolVec)
+{
+	posVec.push_back(this->_bomb->getPosition());
+	std::thread([this, posVec, boolVec]() {
+		std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
+		std::chrono::time_point<std::chrono::system_clock> end;
+		while (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < EXPLOSION_DURATION + 1) {
+			end = std::chrono::system_clock::now();
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			auto bool_it = boolVec.begin();
+			for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
+				for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+					if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false) {
+						character_it->playDeathSound();
+						character_it->setPosition(character_it->getSpawnPos());
+					}
+		}
+	}).detach();
+}
+
 void IndieStudio::Bomb::checkHit(IndieStudio::Pos position, std::vector<bool> boolVec)
 {
 	std::vector<IndieStudio::Pos> posVec;
@@ -124,36 +151,10 @@ void IndieStudio::Bomb::checkHit(IndieStudio::Pos position, std::vector<bool> bo
 		posVec.push_back(IndieStudio::Pos(position._x, position._y - 10, position._z - (i * WALL_SIZE)));
 		posVec.push_back(IndieStudio::Pos(position._x + (i * WALL_SIZE), position._y - 10, position._z));
 		posVec.push_back(IndieStudio::Pos(position._x - (i * WALL_SIZE), position._y - 10, position._z));
+		this->checkHitCube(posVec, boolVec);
+		this->checkHitBomb(posVec, boolVec);
+		this->checkHitPlayer(posVec, boolVec);
 		auto bool_it = boolVec.begin();
-		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++) {
-			auto cube = this->_map.get_Cube_By_Position(*pos_it);
-			if (cube != nullptr && *bool_it == false) {
-				this->_map.delete_Cube(cube);
-				*bool_it = true;
-			}
-		}
-		bool_it = boolVec.begin();
-		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
-			for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
-				if (bomb_it->get()->getPosition()._x == pos_it->_x && bomb_it->get()->getPosition()._z == pos_it->_z && bomb_it->get()->getAlive() == true && *bool_it == false)
-					bomb_it->get()->explosion();
-		std::thread([this, posVec, boolVec]() {
-			std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
-			std::chrono::time_point<std::chrono::system_clock> end;
-			while (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < EXPLOSION_DURATION + 1) {
-				end = std::chrono::system_clock::now();
-				std::this_thread::sleep_for(std::chrono::milliseconds(100));
-				auto bool_it = boolVec.begin();
-				for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
-					for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-						if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false) {
-							character_it->playDeathSound();
-							character_it->setPosition(character_it->getSpawnPos());
-						}
-			}
-		})
-			.detach();
-		bool_it = boolVec.begin();
 		for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 			if (*bool_it == false)
 				this->createAutoParticle(*pos_it, EXPLOSION_DURATION);

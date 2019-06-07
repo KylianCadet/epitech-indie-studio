@@ -9,10 +9,10 @@
 #define BOMB_HPP_
 
 #include "Audio.hpp"
+#include "Character.hpp"
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
 #include "Map.hpp"
-#include "Character.hpp"
 
 namespace IndieStudio {
 	class Bomb {
@@ -22,15 +22,19 @@ namespace IndieStudio {
 		void createParticule(IndieStudio::Pos vector) noexcept;
 		void startCountdown(void);
 		void explosion(void);
-		std::vector<IndieStudio::Pos> explosionDir(std::vector<IndieStudio::Pos> vec);
-		void playExplosionSound(void) noexcept;
 		bool getAlive(void) const noexcept;
-		void destroyExplosionParticle(void);
 		IndieStudio::Pos getPosition(void) const noexcept;
 
 	private:
+		void checkHitCube(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
+		void checkHitBomb(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
+		void checkHitPlayer(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
+		void playExplosionSound(void) noexcept;
+		void destroyExplosionParticle(void);
 		void createAutoParticle(IndieStudio::Pos position, int lifeTime);
 		void checkHit(IndieStudio::Pos position, std::vector<bool> boolVec);
+
+	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::Map &_map;
 		IndieStudio::IEntity *_bomb;

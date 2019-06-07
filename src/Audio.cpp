@@ -22,7 +22,7 @@ IndieStudio::Audio::~Audio()
 
 void IndieStudio::Audio::playSound(bool forced) noexcept
 {
-	if (this->_sound.getStatus() != sf::SoundSource::Status::Playing)
+	if (this->_sound.getStatus() != sf::SoundSource::Status::Playing || forced)
 		this->_sound.play();
 }
 

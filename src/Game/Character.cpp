@@ -136,9 +136,9 @@ void IndieStudio::Character::setSpeed(float speed) noexcept
 	this->_speed = speed;
 }
 
-void IndieStudio::Character::playDeathSound() noexcept
+void IndieStudio::Character::playDeathSound(bool b) noexcept
 {
-	this->_deathSound->playSound();
+	this->_deathSound->playSound(b);
 }
 
 void IndieStudio::Character::set_Bomb_Current(int i) noexcept
@@ -176,10 +176,10 @@ IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
 	return (this->_spawnPos);
 }
 
-void IndieStudio::Character::setBonus(int speed, int bombSize, int bombMax) noexcept
+void IndieStudio::Character::setBonus(float speed, int bombSize, int bombMax) noexcept
 {
 	if (speed != 0 || bombSize != 0 || bombMax != 0) {
-		this->setSpeed(getSpeed() + speed/2);
+		this->setSpeed(getSpeed() + speed / 4);
 		this->setBombSize(getBombSize() + bombSize);
 		this->setBombMax(getBombMax() + bombMax);
 	}

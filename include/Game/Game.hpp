@@ -43,6 +43,7 @@ namespace IndieStudio {
 		void setCameraPosition(int x, int y) noexcept;
 
 	private:
+		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
 		int _renderStatus = MAIN_MENU;

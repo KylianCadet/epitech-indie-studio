@@ -12,7 +12,8 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	_graphical(graphical),
 	_render(render),
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
-	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS))
+	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
+	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav")))
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
@@ -118,7 +119,7 @@ void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool 
 void IndieStudio::Game::checkDeleteBomb() noexcept
 {
 	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
-		if (bomb_it->get()->getAlive() == false) {
+		if (bomb_it->get()->getTotalDeath() == true) {
 			this->_bombVec.erase(bomb_it);
 			this->checkDeleteBomb();
 			return;
@@ -147,7 +148,7 @@ void IndieStudio::Game::moveCharacter() noexcept
 			character_it->setDoingAction(false);
 			this->checkDeleteBomb();
 			if (character_it->getBombMax() > character_it->get_Bomb_Current()) {
-				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec, this->_characterVec));
+				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound));
 				this->_bombVec.push_back(newBomb);
 				character_it->set_Bomb_Current(character_it->get_Bomb_Current() + 1);
 				std::thread([character_it, newBomb]() {

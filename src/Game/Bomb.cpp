@@ -38,10 +38,10 @@ int getMiddle(float vec)
 	return (vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<IndieStudio::Character> &characterVec) :
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<IndieStudio::Character> &characterVec, std::shared_ptr<IndieStudio::Audio> audio) :
 	_graphical(graphical),
 	_map(map),
-	_sound(IndieStudio::Audio("assets/bomb/bomb.wav")),
+	_sound(audio),
 	_bombSize(bombSize),
 	_bombVec(bombVec),
 	_bomb(graphical.createMesh("assets/bomb/dinamite.obj")),
@@ -49,8 +49,6 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 {
 	setMiddle(vector._x);
 	setMiddle(vector._z);
-	std::cout << "bomb x : " << vector._x << std::endl;
-	std::cout << "bomb z : " << vector._z << std::endl;
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->_bomb->setPosition(vector);
 	this->createParticule(vector);
@@ -131,15 +129,16 @@ void IndieStudio::Bomb::checkHitPlayer(std::vector<IndieStudio::Pos> posVec, std
 		std::chrono::time_point<std::chrono::system_clock> end;
 		while (std::chrono::duration_cast<std::chrono::seconds>(end - start).count() < EXPLOSION_DURATION + 1) {
 			end = std::chrono::system_clock::now();
-			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			std::this_thread::sleep_for(std::chrono::milliseconds(200));
 			auto bool_it = boolVec.begin();
 			for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 				for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
 					if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false) {
-						character_it->playDeathSound();
+						character_it->playDeathSound(true);
 						character_it->setPosition(character_it->getSpawnPos());
 					}
 		}
+		this->_totalDeath = true;
 	}).detach();
 }
 
@@ -183,7 +182,7 @@ void IndieStudio::Bomb::destroyExplosionParticle()
 
 void IndieStudio::Bomb::playExplosionSound(void) noexcept
 {
-	this->_sound.playSound(true);
+	this->_sound->playSound(true);
 }
 
 void IndieStudio::Bomb::startCountdown(void)
@@ -200,4 +199,9 @@ void IndieStudio::Bomb::startCountdown(void)
 bool IndieStudio::Bomb::getAlive() const noexcept
 {
 	return (this->_alive);
+}
+
+bool IndieStudio::Bomb::getTotalDeath() const noexcept
+{
+	return (this->_totalDeath);
 }

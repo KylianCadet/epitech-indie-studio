@@ -55,13 +55,14 @@ namespace IndieStudio {
 		void setBombMax(int) noexcept;
 
 		IndieStudio::IEntity *getEntity() noexcept;
-		void playDeathSound() noexcept;
+		void playDeathSound(bool b = false) noexcept;
 
 		void setPosition(IndieStudio::Pos) noexcept;
 		IndieStudio::Pos getPosition() noexcept;
 
 		IndieStudio::Pos getSpawnPos() const noexcept;
-		void setBonus (int, int, int) noexcept;
+		void setBonus(float, int, int) noexcept;
+
 	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;

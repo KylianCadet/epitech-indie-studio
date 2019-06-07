@@ -8,13 +8,12 @@
 #ifndef IGRAPHICAL_HPP_
 #define IGRAPHICAL_HPP_
 
-enum Render {
-	GAME,
-	GAME_SOLO,
-	GAME_1V1,
-	GAME_COOP,
-	MAIN_MENU,
-	PAUSE_MENU
+namespace IndieStudio {
+	enum Render {
+		GAME,
+		MAIN_MENU,
+		PAUSE_MENU
+	};
 };
 
 #include "IEntity.hpp"

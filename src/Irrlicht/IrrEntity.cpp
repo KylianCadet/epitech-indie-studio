@@ -93,5 +93,3 @@ irr::core::rect<irr::s32> IndieStudio::IrrEntity::getRectangle() const noexcept
 {
 	return (this->_rectangle);
 }
-
-

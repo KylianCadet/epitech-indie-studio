@@ -69,15 +69,7 @@ void IndieStudio::Game::createCharacters() noexcept
 
 void IndieStudio::Game::render() noexcept
 {
-	if (this->_render == GAME_SOLO) {
-		this->moveCharacter();
-		this->bonusRender();
-		this->checkEvent();
-	} else if (_render == GAME_1V1) {
-		this->moveCharacter();
-		this->bonusRender();
-		this->checkEvent();
-	} else if (_render == GAME_COOP) {
+	if (this->_render == GAME) {
 		this->moveCharacter();
 		this->bonusRender();
 		this->checkEvent();
@@ -131,6 +123,8 @@ void IndieStudio::Game::moveCharacter() noexcept
 	bool isMoving = false;
 
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+		if (character_it->getDeath() == true)
+			continue;
 		IndieStudio::Pos newPos = character_it->getEntity()->getPosition();
 		isMoving = character_it->getIsMoving();
 		checkMove(character_it, character_it->getMovingUp(), newPos._x, UP_ROT, true);

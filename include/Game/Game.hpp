@@ -11,7 +11,6 @@
 #include "Character.hpp"
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
-#include "IRender.hpp"
 #include "Map.hpp"
 #include "Bomb.hpp"
 #include "Bonus.hpp"
@@ -24,7 +23,7 @@ static const int DENSITY_WALL = 100;
 static const int DENSITY_BONUS = 33;
 
 namespace IndieStudio {
-	class Game : public IRender {
+	class Game {
 	public:
 		Game(IndieStudio::IGraphical &graphical, Render &render);
 		~Game();

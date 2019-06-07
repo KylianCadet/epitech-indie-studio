@@ -26,7 +26,6 @@ static const std::string WALL_TEXTURE_64 = "assets/map/64/black_concrete.png";
 static const std::string BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
 
 #include "IGraphical.hpp"
-#include "IRender.hpp"
 #include <fstream>
 #include <irrlicht.h>
 #include <map>

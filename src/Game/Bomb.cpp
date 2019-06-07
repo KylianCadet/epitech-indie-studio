@@ -133,10 +133,8 @@ void IndieStudio::Bomb::checkHitPlayer(std::vector<IndieStudio::Pos> posVec, std
 			auto bool_it = boolVec.begin();
 			for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 				for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-					if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false) {
-						character_it->playDeathSound(true);
-						character_it->setPosition(character_it->getSpawnPos());
-					}
+					if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false && character_it->getDeath() == false)
+						character_it->death();
 		}
 		this->_totalDeath = true;
 	}).detach();

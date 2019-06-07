@@ -63,6 +63,9 @@ namespace IndieStudio {
 		IndieStudio::Pos getSpawnPos() const noexcept;
 		void setBonus(float, int, int) noexcept;
 
+		void death(void) noexcept;
+		bool getDeath(void) const noexcept;
+
 	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;
@@ -81,6 +84,7 @@ namespace IndieStudio {
 		bool _movingRight = false;
 		bool _doingAction = false;
 		bool _isMoving = false;
+		bool _death = false;
 		float _speed = SPEED;
 		int _bomb_Max = BOMBMAX;
 		int _bomb_current = 0;

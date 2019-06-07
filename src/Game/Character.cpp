@@ -190,3 +190,23 @@ void IndieStudio::Character::setBonus(float speed, int bombSize, int bombMax) no
 	if (getBombMax() < BOMBMAX)
 		setBombMax(BOMBMAX);
 }
+
+#include <thread>
+
+#define DEATH 19
+
+bool IndieStudio::Character::getDeath(void) const noexcept
+{
+	return (this->_death);
+}
+
+void IndieStudio::Character::death(void) noexcept
+{
+	this->_death = true;
+	this->playDeathSound();
+	std::thread([this] {
+		this->getEntity()->setAnimation(DEATH);
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		this->setPosition(IndieStudio::Pos(1000, 1000, 1000));
+	}).detach();
+}

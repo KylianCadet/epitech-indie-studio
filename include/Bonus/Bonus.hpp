@@ -9,7 +9,6 @@
 #define BONUS_HPP_
 
 #include "IGraphical.hpp"
-#include "IRender.hpp"
 #include <fstream>
 #include <irrlicht.h>
 #include <map>

@@ -13,7 +13,6 @@
 #include <unistd.h>
 
 #include "Audio.hpp"
-#include "IRender.hpp"
 #include "MenuMain.hpp"
 #include "MenuPause.hpp"
 #include "IGraphical.hpp"

@@ -23,29 +23,6 @@ IndieStudio::IrrGraphical::IrrGraphical()
 		0,
 		irr::core::vector3df(0, 0, 0),
 		irr::core::vector3df(0, 0, 0));
-	std::cout << "ROTATION " << this->_camera->getRotation().X << "  " << this->_camera->getRotation().Y << "  " << this->_camera->getRotation().Z << "\n";
-	//     /* CAMERA */
-
-	// irr::SKeyMap keyMap[5];                    // re-assigne les commandes
-	// keyMap[0].Action = irr::EKA_MOVE_FORWARD;  // avancer
-	// keyMap[0].KeyCode = irr::KEY_UP;        // w
-	// keyMap[1].Action = irr::EKA_MOVE_BACKWARD; // reculer
-	// keyMap[1].KeyCode = irr::KEY_DOWN;        // s
-	// keyMap[2].Action = irr::EKA_STRAFE_LEFT;   // a gauche
-	// keyMap[2].KeyCode = irr::KEY_LEFT;        // a
-	// keyMap[3].Action = irr::EKA_STRAFE_RIGHT;  // a droite
-	// keyMap[3].KeyCode = irr::KEY_RIGHT;        // d
-	// keyMap[4].Action = irr::EKA_JUMP_UP;       // saut
-	// keyMap[4].KeyCode = irr::KEY_SPACE;        // barre espace
-
-	// _sceneManager->addCameraSceneNodeFPS(       // ajout de la camera FPS
-	//     0,                                     // pas de noeud parent
-	//     100.0f,                                // vitesse de rotation
-	//     0.1f,                                  // vitesse de deplacement
-	//     -1,                                    // pas de numero d'ID
-	//     keyMap,                                // on change la keymap
-	//     5);                                    // avec une taille de 5
-
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
 }
@@ -180,10 +157,8 @@ void IndieStudio::IrrGraphical::deleteEntity(IndieStudio::IEntity *entity) const
 
 	if (irrEntity->getAnimatedMesh() != nullptr)
 		this->_sceneManager->addToDeletionQueue(irrEntity->getAnimatedMesh());
-	if (irrEntity->getMesh() != nullptr) {
-		// this->_sceneManager->addToDeletionQueue(irrEntity->getMesh());
+	if (irrEntity->getMesh() != nullptr)
 		irrEntity->setPosition({-1000, -1000, -1000});
-	}
 	if (irrEntity->getParticle() != nullptr)
 		this->_sceneManager->addToDeletionQueue(irrEntity->getParticle());
 }

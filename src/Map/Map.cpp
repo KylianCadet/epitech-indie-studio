@@ -92,6 +92,7 @@ void IndieStudio::Map::delete_Wall(IndieStudio::IEntity *del)
 	for (auto i = _wall_inside_Vec.begin(); i != _wall_inside_Vec.end(); i++) {
 		if (*i == del) {
 			this->_graphical.deleteEntity(del);
+			this->_free_Absolute_Pos.push_back((*i)->getPosition());
 			this->_wall_inside_Vec.erase(i);
 			return;
 		}
@@ -104,6 +105,7 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
 				this->_free_Pos.push_back((*i)->getPosition());
+				this->_free_Absolute_Pos.push_back((*i)->getPosition());
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
 				return;
@@ -195,6 +197,32 @@ IndieStudio::IEntity *IndieStudio::Map::get_Cube_By_Position(IndieStudio::Pos po
 std::vector<IndieStudio::Pos> IndieStudio::Map::getFreePos(void) noexcept
 {
 	return (this->_free_Pos);
+}
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getAllCube(void) noexcept
+{
+	auto add = [this](std::vector<IndieStudio::IEntity *> &dest, std::vector<IndieStudio::IEntity *> src) {
+		for (unsigned i = 0; i != src.size(); i++)
+			dest.push_back(src[i]);
+			return(dest);
+	};
+	std::vector<IndieStudio::IEntity *> cube; 
+	add(cube,getBrickCube());
+	add(cube,getWallCube());
+	return (cube);
+}
+
+std::vector<IndieStudio::Pos> IndieStudio::Map::getFree_Absolute_Pos(void) noexcept
+{
+	for (unsigned int i = 0; i != getWallCube().size(); i++) {
+		for (unsigned j = 0; j != this->_free_Absolute_Pos.size(); j++) {
+			if (this->_free_Absolute_Pos[j] == getWallCube()[i]->getPosition()) {
+				std::cout << "ET BAH VOILA LA SOURCE DE CE FUCKING PROBLEME\n ";
+				this->_free_Absolute_Pos.erase(this->_free_Absolute_Pos.begin()+j);
+			}
+		}
+	}
+	return (this->_free_Absolute_Pos);
 }
 
 //              SET

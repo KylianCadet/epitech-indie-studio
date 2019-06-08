@@ -51,11 +51,13 @@ namespace IndieStudio {
 		std::vector<std::string> get_texture_64() const noexcept;
 		std::vector<std::string> get_texture_128() const noexcept;
 		std::vector<std::string> get_texture_256() const noexcept;
+		std::vector<IndieStudio::IEntity *> getAllCube(void) noexcept;
 		IndieStudio::IEntity *get_Cube_By_Position(IndieStudio::Pos pos);
 		void generate_map_by_txt(std::vector<std::string> texture_Path) noexcept;
 		void set_Density_Brick(float);
 		void set_Density_Wall(float);
 		std::vector<IndieStudio::Pos> getFreePos(void) noexcept;
+		std::vector<IndieStudio::Pos> getFree_Absolute_Pos(void) noexcept;
 		void clearFreePos() noexcept;
 	protected:
 	private:
@@ -83,6 +85,7 @@ namespace IndieStudio {
 		std::vector<IndieStudio::IEntity *> _wall_inside_Vec;
 		std::vector<IndieStudio::IEntity *> _floor_Vec;
 		std::vector<IndieStudio::Pos> _free_Pos;
+		std::vector<IndieStudio::Pos> _free_Absolute_Pos;
 		std::map<int, std::vector<IndieStudio::IEntity *>> _cube_Destruc_map;
 		std::vector<std::string> _map_txt_vec;
 	};

@@ -9,10 +9,6 @@
 #define MENUNEW_HPP_
 
 static const int MENU_NEW_GAME = -1;
-static const int MENU_NEW_GAME_SOLO = -2;
-static const int MENU_NEW_GAME_COOP = -3;
-static const int MENU_NEW_GAME_1V1 = -4;
-
 static const int MENU_NEW_MAIN = 0;
 static const int MENU_NEW_BACK = 1;
 

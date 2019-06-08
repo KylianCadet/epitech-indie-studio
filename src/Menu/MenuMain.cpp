@@ -67,15 +67,6 @@ void IndieStudio::MenuMain::checkActions(void) noexcept {
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 		this->_menuNew->setButtonActive(BTN_NEW_SOLO);
-	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_SOLO) {
-		_renderStatus = MENU_MAIN_GAME_SOLO;
-		_menuNew->setMenuActive(MENU_MAIN_GAME_SOLO);
-	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_1V1) {
-		_renderStatus = MENU_MAIN_GAME_1V1;
-		_menuNew->setMenuActive(MENU_MAIN_GAME_1V1);
-	} else if (_menuNew->getCurrentMenuActive() == MENU_NEW_GAME_COOP) {
-		_renderStatus = MENU_MAIN_GAME_COOP;
-		_menuNew->setMenuActive(MENU_MAIN_GAME_COOP);
 	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME) {
 		this->_renderStatus = MENU_MAIN_GAME;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);

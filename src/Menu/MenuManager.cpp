@@ -22,26 +22,29 @@ IndieStudio::MenuManager::~MenuManager()
 
 void IndieStudio::MenuManager::checkActions(void) noexcept
 {
-	if (this->_renderStatus == MAIN_MENU) {
-		if (_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME_SOLO)
-			_renderStatus = GAME;                                               //SOLO MODE
-		else if (_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME_1V1)
-			_renderStatus = GAME;                                     //1V1 MODE
-		else if (_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME_COOP)
-			_renderStatus = GAME;                                    //COOP MODE
-//		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_GAME)
-//			this->_renderStatus = GAME_SOLO;                                         ///TO CHANGE
-		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_EXIT) {
+	if (this->_renderStatus == MAIN_MENU)
+	{
+		if (this->_menuMain->getCurrentMenuActive() == MENU_NEW_GAME)
+		{
+			this->_renderStatus = GAME;
+			this->_menuMain->setMenuActive(MENU_MAIN_MAIN);
+		}
+		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_EXIT)
+		{
 			usleep(100000);
 			this->_graphical.drop();
 			exit(0);
 		}
 	}
-	else if (this->_renderStatus == PAUSE_MENU) {
-		if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_BACK) {
-			this->_renderStatus = GAME;	///CHANGES TO DO
+	else if (this->_renderStatus == PAUSE_MENU)
+	{
+		if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_BACK)
+		{
+			this->_renderStatus = GAME;
 			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);
-		} else if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_QUIT) {
+		}
+		else if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_QUIT)
+		{
 			this->_renderStatus = MAIN_MENU;
 			this->_menuPause->setButtonActive(BTN_PAUSE_BACK);
 			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);

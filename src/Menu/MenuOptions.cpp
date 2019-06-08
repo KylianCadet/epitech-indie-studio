@@ -188,7 +188,7 @@ void IndieStudio::MenuOptions::leftActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
 		this->leftAction();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->leftAction();
+		this->_menuControls->leftActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->leftAction();
 }
@@ -202,7 +202,7 @@ void IndieStudio::MenuOptions::rightActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
 		this->rightAction();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->rightAction();
+		this->_menuControls->rightActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->rightAction();
 }

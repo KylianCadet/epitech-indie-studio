@@ -218,6 +218,12 @@ void IndieStudio::IrrGraphical::setSkin(IndieStudio::IEntity *image, std::string
 	irrImage->setImage(this->_driver->getTexture(skin.c_str()));
 }
 
+void IndieStudio::IrrGraphical::set2DPos(IndieStudio::IEntity *image, std::pair<int, int> pos) noexcept
+{
+	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);
+	irrImage->set2Dpos(pos);
+}
+
 void IndieStudio::IrrGraphical::setCustomRectangle(IndieStudio::IEntity *image, int p0X, int p0Y, int p1X, int p1Y) noexcept
 {
 	IndieStudio::IrrEntity *irrImage = dynamic_cast<IndieStudio::IrrEntity *>(image);

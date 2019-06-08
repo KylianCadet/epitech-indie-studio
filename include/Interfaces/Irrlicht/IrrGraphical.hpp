@@ -38,6 +38,7 @@ namespace IndieStudio {
 		virtual IndieStudio::IEntity *createImage(std::string texturePath, std::pair<int, int> pos) const noexcept;
 		virtual void drawImage(IndieStudio::IEntity *) const noexcept;
 		virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept;
+		virtual void set2DPos(IndieStudio::IEntity *, std::pair<int, int>) noexcept;
 		virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept;
 		void holdParticle(irr::scene::IParticleSystemSceneNode *particle) const;
 

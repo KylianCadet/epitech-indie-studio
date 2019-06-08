@@ -93,3 +93,8 @@ irr::core::rect<irr::s32> IndieStudio::IrrEntity::getRectangle() const noexcept
 {
 	return (this->_rectangle);
 }
+
+void IndieStudio::IrrEntity::set2Dpos(std::pair<int, int> pos) noexcept
+{
+	this->_pos = pos;
+}

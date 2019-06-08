@@ -51,7 +51,7 @@ void IndieStudio::MenuMain::drawImages(void) noexcept
 	this->_graphical.drawImage(this->_wall);
 	this->_graphical.drawImage(this->_titleMenu);
 	this->_graphical.drawImage(this->_titleMenu);
-	this->_graphical.drawImage(this->_frameMenu);
+	// this->_graphical.drawImage(this->_frameMenu);
 }
 
 void IndieStudio::MenuMain::checkActions(void) noexcept {

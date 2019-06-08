@@ -33,6 +33,7 @@ namespace IndieStudio {
 			irr::core::position2d<irr::s32> get2DPos() const noexcept;
 			irr::core::rect<irr::s32> getRectangle() const noexcept;
 			void setRectangle(irr::core::rect<irr::s32>) noexcept;
+			void set2Dpos(std::pair<int, int>) noexcept;
 
 
 

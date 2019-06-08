@@ -14,6 +14,12 @@ static const int MENU_CONTROLS_BACK = 1;
 static const int MENU_CONTROLS_PLY_1 = 0;
 static const int MENU_CONTROLS_PLY_2 = 1;
 
+static const int BTN_CONTROLS_UP = 0;
+static const int BTN_CONTROLS_DOWN = 1;
+static const int BTN_CONTROLS_LEFT = 2;
+static const int BTN_CONTROLS_RIGHT = 3;
+static const int BTN_CONTROLS_BOMB = 4;
+
 #include "Menu.hpp"
 
 namespace IndieStudio
@@ -21,9 +27,15 @@ namespace IndieStudio
 
 struct letter
 {
-	std::string _str;
+	char _id;
 	Button *_btn;
 	Key _key;
+};
+
+struct KeyB
+{
+	Key _key;
+	bool _status;
 };
 
 class MenuControls : public Menu
@@ -31,6 +43,8 @@ class MenuControls : public Menu
 public:
 	MenuControls(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuControls();
+	void createLetters(void) noexcept;
+	void drawLetter(KeyB, std::pair<int, int>) noexcept;
 
 public:
 	void drawMenuManager(void) noexcept override;
@@ -61,22 +75,35 @@ private:
 private:
 	int _playerStatus;
 
-	IEntity *_player1;
-	IEntity *_player2;
-	Button *_forward;
-	Button *_back;
-	Button *_left;
-	Button *_right;
-	Button *_bomb;
+	Button *_player1;
+	Button *_player2;
 	IEntity *_escapeInfo;
+
+	Button *_upBtn1;
+	Button *_downBtn1;
+	Button *_leftBtn1;
+	Button *_rightBtn1;
+	Button *_bombBtn1;
+
+	Button *_upBtn2;
+	Button *_downBtn2;
+	Button *_leftBtn2;
+	Button *_rightBtn2;
+	Button *_bombBtn2;
 
 	std::vector<letter> _letters;
 
-	letter _upKey;
-	letter _downKey;
-	letter _leftKey;
-	letter _rightKey;
-	letter _bombKey;
+	KeyB _upKey1;
+	KeyB _downKey1;
+	KeyB _leftKey1;
+	KeyB _rightKey1;
+	KeyB _bombKey1;
+
+	KeyB _upKey2;
+	KeyB _downKey2;
+	KeyB _leftKey2;
+	KeyB _rightKey2;
+	KeyB _bombKey2;
 };
 }; // namespace IndieStudio
 

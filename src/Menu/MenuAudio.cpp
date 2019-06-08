@@ -26,10 +26,10 @@ void IndieStudio::MenuAudio::createButtons(void) noexcept
 {
 	this->_music = new Button(this->_graphical, "assets/menu/options/music.png", "assets/menu/options/musicA.png", std::pair<int, int>(-1, 550));
 	this->_effects = new Button(this->_graphical, "assets/menu/options/effects.png", "assets/menu/options/effectsA.png", std::pair<int, int>(-1, 750));
-	this->_leftMusicArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 405));
-	this->_leftEffectArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 605));
-	this->_rightMusicArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 405));
-	this->_rightEffectArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 605));
+	this->_leftMusicArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 420));
+	this->_leftEffectArrow = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(-1, 620));
+	this->_rightMusicArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 420));
+	this->_rightEffectArrow = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(-1, 620));
 }
 
 void IndieStudio::MenuAudio::drawButtons(void) noexcept

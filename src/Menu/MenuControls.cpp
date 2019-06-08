@@ -7,27 +7,21 @@
 
 #include "MenuControls.hpp"
 
-IndieStudio::Key operator++(IndieStudio::Key other, int i)
-{
-	return (static_cast<IndieStudio::Key>(static_cast<char>(other) + i));
-}
-
 IndieStudio::MenuControls::MenuControls(IndieStudio::IGraphical &graphical, IndieStudio::Volume *volume, IndieStudio::MenuSounds *sounds, IndieStudio::Config *config)
 	: Menu(graphical, volume, sounds, config)
 {
 	this->_renderStatus = MENU_CONTROLS_MAIN;
+	this->_buttonStatus = BTN_CONTROLS_UP;
 	this->_playerStatus = MENU_CONTROLS_PLY_1;
 	this->createButtons();
 	this->createImages();
-	for (auto it = this->_letters.begin(); it != this->_letters.end(); it++)
-		std::cout << (*it)._str << std::endl;
 }
 
 IndieStudio::MenuControls::~MenuControls()
 {
 }
 
-void IndieStudio::MenuControls::createButtons(void) noexcept
+void IndieStudio::MenuControls::createLetters(void) noexcept
 {
 	IndieStudio::Key key = A;
 	letter tmp;
@@ -35,53 +29,104 @@ void IndieStudio::MenuControls::createButtons(void) noexcept
 	std::string act = "assets/menu/controls/letters/#";
 	for (char c = 'A'; c <= 'Z'; c++)
 	{
-		tmp._str = c;
-		tmp._btn = new Button(this->_graphical, def + c + ".png", act + c + ".png", std::pair<int, int>(-1, 500));
-		tmp._key = key++;
+		tmp._id = c;
+		tmp._btn = new Button(this->_graphical, def + c + ".png", act + c + ".png", std::pair<int, int>(975, 450));
+		tmp._key = key;
+		key = static_cast<IndieStudio::Key>(static_cast<int>(key) + 1);
 		this->_letters.push_back(tmp);
 	}
+	Config config;
+	IndieStudio::playerKeybinds keybinds1 = config.getKeybinds1();
+	this->_upKey1._key = keybinds1.up;
+	this->_downKey1._key = keybinds1.down;
+	this->_leftKey1._key = keybinds1.left;
+	this->_rightKey1._key = keybinds1.right;
+	this->_bombKey1._key = keybinds1.bomb;
+	IndieStudio::playerKeybinds keybinds2 = config.getKeybinds2();
+	this->_upKey2._key = keybinds2.up;
+	this->_downKey2._key = keybinds2.down;
+	this->_leftKey2._key = keybinds2.left;
+	this->_rightKey2._key = keybinds2.right;
+	this->_bombKey2._key = keybinds2.bomb;
+}
+
+void IndieStudio::MenuControls::createButtons(void) noexcept
+{
+	int x = 770;
+	int x3 = 990;
+	int pos = 375;
+	int off = 70;
+	this->_upBtn1 = new Button(this->_graphical, "assets/menu/controls/up.png", "assets/menu/controls/upA.png", std::pair<int, int>(x, (pos += off)));
+	this->_downBtn1 = new Button(this->_graphical, "assets/menu/controls/down.png", "assets/menu/controls/downA.png", std::pair<int, int>(x, (pos += off)));
+	this->_leftBtn1 = new Button(this->_graphical, "assets/menu/controls/left.png", "assets/menu/controls/leftA.png", std::pair<int, int>(x, (pos += off)));
+	this->_rightBtn1 = new Button(this->_graphical, "assets/menu/controls/right.png", "assets/menu/controls/rightA.png", std::pair<int, int>(x, (pos += off)));
+	this->_bombBtn1 = new Button(this->_graphical, "assets/menu/controls/bomb.png", "assets/menu/controls/bombA.png", std::pair<int, int>(x, (pos += off)));
+	pos = 375;
+	this->_upBtn2 = new Button(this->_graphical, "assets/menu/controls/up.png", "assets/menu/controls/upA.png", std::pair<int, int>(x3, (pos += off)));
+	this->_downBtn2 = new Button(this->_graphical, "assets/menu/controls/down.png", "assets/menu/controls/downA.png", std::pair<int, int>(x3, (pos += off)));
+	this->_leftBtn2 = new Button(this->_graphical, "assets/menu/controls/left.png", "assets/menu/controls/leftA.png", std::pair<int, int>(x3, (pos += off)));
+	this->_rightBtn2 = new Button(this->_graphical, "assets/menu/controls/right.png", "assets/menu/controls/rightA.png", std::pair<int, int>(x3, (pos += off)));
+	this->_bombBtn2 = new Button(this->_graphical, "assets/menu/controls/bomb.png", "assets/menu/controls/bombA.png", std::pair<int, int>(x3, (pos += off)));
+	this->createLetters();
+}
+
+void IndieStudio::MenuControls::drawLetter(IndieStudio::KeyB keyB, std::pair<int, int> pos) noexcept
+{
+	for (auto it = this->_letters.begin(); it != this->_letters.end(); it++)
+		if ((*it)._key == keyB._key)
+		{
+			(*it)._btn->setPosition(pos);
+			if (keyB._status)
+				(*it)._btn->setActiveSkin();
+			else
+				(*it)._btn->setDefaultSkin();
+			(*it)._btn->drawButton();
+		}
 }
 
 void IndieStudio::MenuControls::drawButtons(void) noexcept
 {
-	// for (auto it = this->_letters.begin(); it != this->_letters.end(); it++)
-	// 	(*it)._btn->drawButton();
+	int x1 = 770;
+	int x2 = x1 + 80;
+	int x3 = 990;
+	int x4 = x3 + 80;
+	int pos = 375;
+	int off1 = 70;
+	int off2 = 71;
+	this->_upBtn1->drawButton();
+	this->_downBtn1->drawButton();
+	this->_leftBtn1->drawButton();
+	this->_rightBtn1->drawButton();
+	this->_bombBtn1->drawButton();
+	this->_upBtn2->drawButton();
+	this->_downBtn2->drawButton();
+	this->_leftBtn2->drawButton();
+	this->_rightBtn2->drawButton();
+	this->_bombBtn2->drawButton();
+	this->drawLetter(this->_upKey1, std::pair<int, int>(x2, (pos += off2)));
+	this->drawLetter(this->_downKey1, std::pair<int, int>(x2, (pos += off2)));
+	this->drawLetter(this->_leftKey1, std::pair<int, int>(x2, (pos += off2)));
+	this->drawLetter(this->_rightKey1, std::pair<int, int>(x2, (pos += off2)));
+	this->drawLetter(this->_bombKey1, std::pair<int, int>(x2, (pos += off2)));
+	pos = 375;
+	this->drawLetter(this->_upKey2, std::pair<int, int>(x4, (pos += off2)));
+	this->drawLetter(this->_downKey2, std::pair<int, int>(x4, (pos += off2)));
+	this->drawLetter(this->_leftKey2, std::pair<int, int>(x4, (pos += off2)));
+	this->drawLetter(this->_rightKey2, std::pair<int, int>(x4, (pos += off2)));
+	this->drawLetter(this->_bombKey2, std::pair<int, int>(x4, (pos += off2)));
 }
 
 void IndieStudio::MenuControls::createImages(void) noexcept
 {
-	int x = 875;
-	int pos = 385;
-	int off = 70;
-	int x2 = 970;
-	int pos2 = 385;
-	int off2 = 70;
-	this->_player1 = this->_graphical.createImage("assets/menu/controls/player1.png", std::pair<int, int>(-1, 362.5));
-	this->_player2 = this->_graphical.createImage("assets/menu/controls/player2.png", std::pair<int, int>(-1, 362.5));
-	this->_forward = new Button(this->_graphical, "assets/menu/controls/up.png", "assets/menu/controls/upA.png", std::pair<int, int>(x, (pos += off)));
-	this->_left = new Button(this->_graphical, "assets/menu/controls/down.png", "assets/menu/controls/downA.png", std::pair<int, int>(x, (pos += off)));
-	this->_right = new Button(this->_graphical, "assets/menu/controls/left.png", "assets/menu/controls/leftA.png", std::pair<int, int>(x, (pos += off)));
-	this->_bomb = new Button(this->_graphical, "assets/menu/controls/right.png", "assets/menu/controls/rightA.png", std::pair<int, int>(x, (pos += off)));
-	this->_back = new Button(this->_graphical, "assets/menu/controls/bomb.png", "assets/menu/controls/bombA.png", std::pair<int, int>(x, (pos += off)));
+	this->_player1 = new Button(this->_graphical, "assets/menu/controls/player1.png", "assets/menu/controls/player1A.png", std::pair<int, int>(675, 375));
+	this->_player2 = new Button(this->_graphical, "assets/menu/controls/player2.png", "assets/menu/controls/player2A.png", std::pair<int, int>(895, 375));
 	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
-	// this->_D = this->_graphical.createImage("assets/menu/controls/letters/D.png", std::pair<int, int>(x2, (pos2 += off2)));
 }
 
 void IndieStudio::MenuControls::drawImages(void) noexcept
 {
-	if (this->_playerStatus == MENU_CONTROLS_PLY_1)
-	{
-		this->_graphical.drawImage(this->_player1);
-	}
-	else if (this->_playerStatus == MENU_CONTROLS_PLY_2)
-	{
-		this->_graphical.drawImage(this->_player2);
-	}
-	this->_forward->drawButton();
-	this->_back->drawButton();
-	this->_left->drawButton();
-	this->_right->drawButton();
-	this->_bomb->drawButton();
+	this->_player1->drawButton();
+	this->_player2->drawButton();
 	this->_graphical.drawImage(this->_escapeInfo);
 }
 
@@ -107,6 +152,166 @@ void IndieStudio::MenuControls::drawMenuManager(void) noexcept
 
 void IndieStudio::MenuControls::refreshSkin(void) noexcept
 {
+	if (this->_playerStatus == MENU_CONTROLS_PLY_1)
+	{
+		this->_player1->setActiveSkin();
+		this->_player2->setDefaultSkin();
+		this->_upBtn2->setDefaultSkin();
+		this->_downBtn2->setDefaultSkin();
+		this->_leftBtn2->setDefaultSkin();
+		this->_rightBtn2->setDefaultSkin();
+		this->_bombBtn2->setDefaultSkin();
+		this->_upKey2._status = false;
+		this->_downKey2._status = false;
+		this->_leftKey2._status = false;
+		this->_rightKey2._status = false;
+		this->_bombKey2._status = false;
+		if (this->_buttonStatus == BTN_CONTROLS_UP)
+		{
+			this->_upBtn1->setActiveSkin();
+			this->_downBtn1->setDefaultSkin();
+			this->_leftBtn1->setDefaultSkin();
+			this->_rightBtn1->setDefaultSkin();
+			this->_bombBtn1->setDefaultSkin();
+			this->_upKey1._status = true;
+			this->_downKey1._status = false;
+			this->_leftKey1._status = false;
+			this->_rightKey1._status = false;
+			this->_bombKey1._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_DOWN)
+		{
+			this->_upBtn1->setDefaultSkin();
+			this->_downBtn1->setActiveSkin();
+			this->_leftBtn1->setDefaultSkin();
+			this->_rightBtn1->setDefaultSkin();
+			this->_bombBtn1->setDefaultSkin();
+			this->_upKey1._status = false;
+			this->_downKey1._status = true;
+			this->_leftKey1._status = false;
+			this->_rightKey1._status = false;
+			this->_bombKey1._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_LEFT)
+		{
+			this->_upBtn1->setDefaultSkin();
+			this->_downBtn1->setDefaultSkin();
+			this->_leftBtn1->setActiveSkin();
+			this->_rightBtn1->setDefaultSkin();
+			this->_bombBtn1->setDefaultSkin();
+			this->_upKey1._status = false;
+			this->_downKey1._status = false;
+			this->_leftKey1._status = true;
+			this->_rightKey1._status = false;
+			this->_bombKey1._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_RIGHT)
+		{
+			this->_upBtn1->setDefaultSkin();
+			this->_downBtn1->setDefaultSkin();
+			this->_leftBtn1->setDefaultSkin();
+			this->_rightBtn1->setActiveSkin();
+			this->_bombBtn1->setDefaultSkin();
+			this->_upKey1._status = false;
+			this->_downKey1._status = false;
+			this->_leftKey1._status = false;
+			this->_rightKey1._status = true;
+			this->_bombKey1._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_BOMB)
+		{
+			this->_upBtn1->setDefaultSkin();
+			this->_downBtn1->setDefaultSkin();
+			this->_leftBtn1->setDefaultSkin();
+			this->_rightBtn1->setDefaultSkin();
+			this->_bombBtn1->setActiveSkin();
+			this->_upKey1._status = false;
+			this->_downKey1._status = false;
+			this->_leftKey1._status = false;
+			this->_rightKey1._status = false;
+			this->_bombKey1._status = true;
+		}
+	}
+	else if (this->_playerStatus == MENU_CONTROLS_PLY_2)
+	{
+		this->_player1->setDefaultSkin();
+		this->_player2->setActiveSkin();
+		this->_upBtn1->setDefaultSkin();
+		this->_downBtn1->setDefaultSkin();
+		this->_leftBtn1->setDefaultSkin();
+		this->_rightBtn1->setDefaultSkin();
+		this->_bombBtn1->setDefaultSkin();
+		this->_upKey1._status = false;
+		this->_downKey1._status = false;
+		this->_leftKey1._status = false;
+		this->_rightKey1._status = false;
+		this->_bombKey1._status = false;
+		if (this->_buttonStatus == BTN_CONTROLS_UP)
+		{
+			this->_upBtn2->setActiveSkin();
+			this->_downBtn2->setDefaultSkin();
+			this->_leftBtn2->setDefaultSkin();
+			this->_rightBtn2->setDefaultSkin();
+			this->_bombBtn2->setDefaultSkin();
+			this->_upKey2._status = true;
+			this->_downKey2._status = false;
+			this->_leftKey2._status = false;
+			this->_rightKey2._status = false;
+			this->_bombKey2._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_DOWN)
+		{
+			this->_upBtn2->setDefaultSkin();
+			this->_downBtn2->setActiveSkin();
+			this->_leftBtn2->setDefaultSkin();
+			this->_rightBtn2->setDefaultSkin();
+			this->_bombBtn2->setDefaultSkin();
+			this->_upKey2._status = false;
+			this->_downKey2._status = true;
+			this->_leftKey2._status = false;
+			this->_rightKey2._status = false;
+			this->_bombKey2._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_LEFT)
+		{
+			this->_upBtn2->setDefaultSkin();
+			this->_downBtn2->setDefaultSkin();
+			this->_leftBtn2->setActiveSkin();
+			this->_rightBtn2->setDefaultSkin();
+			this->_bombBtn2->setDefaultSkin();
+			this->_upKey2._status = false;
+			this->_downKey2._status = false;
+			this->_leftKey2._status = true;
+			this->_rightKey2._status = false;
+			this->_bombKey2._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_RIGHT)
+		{
+			this->_upBtn2->setDefaultSkin();
+			this->_downBtn2->setDefaultSkin();
+			this->_leftBtn2->setDefaultSkin();
+			this->_rightBtn2->setActiveSkin();
+			this->_bombBtn2->setDefaultSkin();
+			this->_upKey2._status = false;
+			this->_downKey2._status = false;
+			this->_leftKey2._status = false;
+			this->_rightKey2._status = true;
+			this->_bombKey2._status = false;
+		}
+		else if (this->_buttonStatus == BTN_CONTROLS_BOMB)
+		{
+			this->_upBtn2->setDefaultSkin();
+			this->_downBtn2->setDefaultSkin();
+			this->_leftBtn2->setDefaultSkin();
+			this->_rightBtn2->setDefaultSkin();
+			this->_bombBtn2->setActiveSkin();
+			this->_upKey2._status = false;
+			this->_downKey2._status = false;
+			this->_leftKey2._status = false;
+			this->_rightKey2._status = false;
+			this->_bombKey2._status = true;
+		}
+	}
 }
 
 void IndieStudio::MenuControls::returnAction(void) noexcept
@@ -167,8 +372,12 @@ void IndieStudio::MenuControls::rightActionManager(void) noexcept
 
 void IndieStudio::MenuControls::upActionManager(void) noexcept
 {
+	this->_sounds->_buttonSwitchSound->playSound();
+	this->setButtonSwitch(-1, 4);
 }
 
 void IndieStudio::MenuControls::downActionManager(void) noexcept
 {
+	this->_sounds->_buttonSwitchSound->playSound();
+	this->setButtonSwitch(1, 4);
 }

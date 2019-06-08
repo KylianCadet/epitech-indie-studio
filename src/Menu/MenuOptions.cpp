@@ -216,7 +216,7 @@ void IndieStudio::MenuOptions::upActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
 		this->upAction();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->upAction();
+		this->_menuControls->upActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->upAction();
 }
@@ -230,7 +230,7 @@ void IndieStudio::MenuOptions::downActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
 		this->downAction();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
-		this->downAction();
+		this->_menuControls->downActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
 		this->downAction();
 }

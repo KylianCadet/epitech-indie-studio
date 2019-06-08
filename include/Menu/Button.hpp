@@ -25,6 +25,7 @@ public:
 	void drawButton(void) noexcept;
 	void setDefaultSkin(void) noexcept;
 	void setActiveSkin(void) noexcept;
+	void setPosition(std::pair<int, int>) noexcept;
 
 private:
 	bool _active;

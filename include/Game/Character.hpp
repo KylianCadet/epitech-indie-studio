@@ -18,7 +18,7 @@ static const int BOMBSIZE = 1;
 namespace IndieStudio {
 	class Character {
 	public:
-		Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos position = IndieStudio::Pos(0, 0, 0));
+		Character(IndieStudio::IGraphical &graphical, std::string name, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos position = IndieStudio::Pos(0, 0, 0));
 		~Character();
 		char getUpKey() const noexcept;
 		char getLeftKey() const noexcept;
@@ -66,12 +66,16 @@ namespace IndieStudio {
 		bool getDeath(void) const noexcept;
 
 		bool getBot() noexcept;
+
+		std::string getName(void) const noexcept;
+
 	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;
 		std::shared_ptr<IndieStudio::Audio> _deathSound;
 		IndieStudio::Pos _spawnPos;
 
+		std::string _name;
 		bool _bot;
 		char _up;
 		char _left;

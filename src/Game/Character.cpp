@@ -7,7 +7,7 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos position) :
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string name, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos position) :
 	_graphical(graphical),
 	_bot(bot),
 	_up(std::toupper(up)),
@@ -15,7 +15,8 @@ IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::strin
 	_down(std::toupper(down)),
 	_right(std::toupper(right)),
 	_action(std::toupper(action)),
-	_spawnPos(position)
+	_spawnPos(position),
+	_name(name)
 {
 	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
 	this->_model->setPosition(position);
@@ -24,6 +25,11 @@ IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::strin
 
 IndieStudio::Character::~Character()
 {
+}
+
+std::string IndieStudio::Character::getName() const noexcept
+{
+	return (this->_name);
 }
 
 IndieStudio::Pos IndieStudio::Character::getPosition() noexcept

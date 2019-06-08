@@ -23,12 +23,14 @@ namespace IndieStudio {
 		virtual IndieStudio::IEntity *createCube(float size, std::string texturePath, IndieStudio::Pos pos, IndieStudio::Pos scale) const noexcept;
 		virtual IndieStudio::IEntity *createParticle(IndieStudio::Pos boxPos, IndieStudio::Pos dirPos, int min, int max, int disp, IndieStudio::Pos colorMin, IndieStudio::Pos colorMax, int lifeTime);
 		virtual void createCollision(IndieStudio::IEntity *cube, IndieStudio::IEntity *entity) const noexcept;
+		virtual IndieStudio::Pos getCameraPos(void) const noexcept;
 		virtual void setCursorVisible(bool b) noexcept;
 		virtual bool run(void) const noexcept;
 		virtual void startRender(void) const noexcept;
 		virtual void endRender(void) const noexcept;
 		virtual void drawScene(void) const noexcept;
 		virtual void drop(void) const noexcept;
+		virtual void drawText(std::string) noexcept;
 		virtual void setCameraTarget(IndieStudio::Pos pos) const noexcept;
 		virtual void setCameraPosition(IndieStudio::Pos) noexcept;
 		virtual void setCameraRotation(IndieStudio::Pos pos) noexcept;
@@ -50,6 +52,7 @@ namespace IndieStudio {
 		irr::scene::ISceneManager *_sceneManager;
 		irr::video::IVideoDriver *_driver;
 		irr::scene::ICameraSceneNode *_camera;
+		irr::gui::IGUIEnvironment *_gui;
 	};
 }; // namespace IndieStudio
 

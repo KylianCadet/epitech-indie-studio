@@ -8,18 +8,18 @@
 #ifndef GAME_HPP_
 #define GAME_HPP_
 
+#include "Bomb.hpp"
+#include "Bonus.hpp"
 #include "Character.hpp"
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
-#include "Map.hpp"
-#include "Bomb.hpp"
-#include "Bonus.hpp"
 #include "IaMouvement.hpp"
-#include <vector>
-#include <thread>
+#include "Map.hpp"
 #include <functional>
 #include <iostream>
- 
+#include <thread>
+#include <vector>
+
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
 static const int DENSITY_BRICK = 30;
@@ -31,9 +31,16 @@ namespace IndieStudio {
 	public:
 		Game(IndieStudio::IGraphical &graphical, Render &render);
 		~Game();
+
+	public:
+		void render() noexcept;
+
+	private:
+		void reset() noexcept;
+		std::size_t getAliveCharacter() const noexcept;
+		void playEnding();
 		void createCubes() noexcept;
 		void createCharacters() noexcept;
-		void render() noexcept;
 		void createCubeColision(IndieStudio::IEntity *cube) noexcept;
 		virtual int getRenderStatus(void) const noexcept;
 		virtual void setRenderStatus(int) noexcept;
@@ -45,11 +52,12 @@ namespace IndieStudio {
 		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
 		void threadPool();
+
 	private:
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
-		std::vector <IndieStudio::IaMouvement> _iaMouvement;
+		std::vector<IndieStudio::IaMouvement> _iaMouvement;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
@@ -61,7 +69,8 @@ namespace IndieStudio {
 		float _rot_z = 0;
 		float _counter = 0;
 		bool _bonus_bool = false;
-		Render &_render;
+		IndieStudio::Render &_render;
+		bool _win = false;
 	};
 }; // namespace IndieStudio
 

@@ -71,27 +71,54 @@ void IndieStudio::Game::createCharacters() noexcept
 {
 	auto Pos_Vec = _map.get_Position_Start();
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0)));
+		IndieStudio::Character(this->_graphical, "Yoshi", "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1)));
+		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2)));
+		IndieStudio::Character(this->_graphical, "Eric Cartman", "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2)));
 	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3)));
-	IndieStudio::IaMouvement a,b,c,d;
+		IndieStudio::Character(this->_graphical, "Fox", "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3)));
+	IndieStudio::IaMouvement a, b, c, d;
 	this->_iaMouvement.push_back(a);
 	this->_iaMouvement.push_back(b);
 	this->_iaMouvement.push_back(c);
 	this->_iaMouvement.push_back(d);
 }
 
+std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
+{
+	std::size_t alive = 0;
+
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+		if (character_it->getDeath() == false)
+			alive++;
+	return (alive);
+}
+
+#define WIN_ANIM 8
+#define DOWN_ROT 180
+
+void IndieStudio::Game::playEnding()
+{
+	IndieStudio::Character *winner;
+
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+		if (character_it->getDeath() == false)
+			winner = character_it.base();
+	winner->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
+	winner->getEntity()->setAnimation(WIN_ANIM);
+	// this->_graphical.drawText(winner->getName() + " WIN");
+}
+
 void IndieStudio::Game::render() noexcept
 {
-	if (this->_render == GAME) {
+	if (this->getAliveCharacter() == 1 && this->_win == false) {
+		this->_win = true;
+		this->playEnding();
+	} else if (this->_win == false)
 		this->moveCharacter();
-		this->bonusRender();
-		this->checkEvent();
-	}
+	this->bonusRender();
+	this->checkEvent();
 	this->_graphical.drawScene();
 }
 
@@ -106,7 +133,6 @@ void IndieStudio::Game::setRenderStatus(int status) noexcept
 }
 
 #define UP_ROT 0
-#define DOWN_ROT 180
 #define RIGHT_ROT 90
 #define LEFT_ROT 270
 
@@ -155,9 +181,9 @@ void IndieStudio::Game::moveCharacter() noexcept
 			// if (character_it->th == true) {
 			// 	character_it->th = false;
 			// 	std::thread([this, ia_Id, character_it](){
-				this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
-				// character_it->th = true;
-				// }).detach();
+			this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			// character_it->th = true;
+			// }).detach();
 			// }
 		}
 		isMoving = character_it->getIsMoving();
@@ -182,12 +208,22 @@ void IndieStudio::Game::moveCharacter() noexcept
 				std::thread([character_it, newBomb]() {
 					newBomb->startCountdown();
 					character_it->set_Bomb_Current(character_it->get_Bomb_Current() - 1);
-				}).detach();
+				})
+					.detach();
 			}
 		}
 		character_it->setBonus(this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusSpeed()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusFire()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusBomb()));
 		character_it->setBonus(this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusSpeed()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusFire()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusBomb()));
 	}
+}
+
+void IndieStudio::Game::reset(void) noexcept
+{
+	auto posVec = _map.get_Position_Start();
+	std::size_t i = 0;
+
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, i++)
+		character_it->setPosition(posVec.at(i));
 }
 
 void IndieStudio::Game::checkEvent(void) noexcept
@@ -201,8 +237,14 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	if (this->_event._key[IndieStudio::Key::ESC] == true)
 		this->_render = PAUSE_MENU;
 
+	if (this->_event._key[IndieStudio::Key::RETURN] == true && this->_win == true) {
+		// this->_render = MAIN_MENU;
+		// this->_reset = true;
+	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
+		if (character_it->getDeath() == true)
+			continue;
 		character_it->setMovingUp(this->_event._key[static_cast<IndieStudio::Key>(character_it->getUpKey())]);
 		character_it->setMovingLeft(this->_event._key[static_cast<IndieStudio::Key>(character_it->getLeftKey())]);
 		character_it->setMovingDown(this->_event._key[static_cast<IndieStudio::Key>(character_it->getDownKey())]);
@@ -222,7 +264,8 @@ void IndieStudio::Game::bonusRender() noexcept
 		std::thread([this]() {
 			std::this_thread::sleep_for(std::chrono::seconds(7));
 			this->_bonus_bool = false;
-		}).detach();
+		})
+			.detach();
 	}
 	this->_bonus.animeBonus();
 }

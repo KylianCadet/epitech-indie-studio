@@ -25,6 +25,7 @@ IndieStudio::IrrGraphical::IrrGraphical()
 		irr::core::vector3df(0, 0, 0));
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
+	this->_gui = this->_device->getGUIEnvironment();
 }
 
 IndieStudio::IrrGraphical::~IrrGraphical()
@@ -102,12 +103,21 @@ IndieStudio::IEntity *IndieStudio::IrrGraphical::createParticle(IndieStudio::Pos
 		std::thread([particle, lifeTime]() {
 			std::this_thread::sleep_for(std::chrono::seconds(lifeTime));
 			particle->setPosition(irr::core::vector3df(1000, 1000, 1000));
-		}).detach();
+		})
+			.detach();
 	} else {
 		IndieStudio::IEntity *obj = new IndieStudio::IrrEntity(particle);
 		return (obj);
 	}
 	return (nullptr);
+}
+
+IndieStudio::Pos IndieStudio::IrrGraphical::getCameraPos(void) const noexcept
+{
+	irr::core::vector3df irrPos = this->_camera->getPosition();
+	IndieStudio::Pos pos(irrPos.X, irrPos.Y, irrPos.Z);
+
+	return (pos);
 }
 
 bool IndieStudio::IrrGraphical::run(void) const noexcept
@@ -128,11 +138,18 @@ void IndieStudio::IrrGraphical::endRender(void) const noexcept
 void IndieStudio::IrrGraphical::drawScene(void) const noexcept
 {
 	this->_sceneManager->drawAll();
+	this->_gui->drawAll();
 }
 
 void IndieStudio::IrrGraphical::drop(void) const noexcept
 {
 	this->_device->drop();
+}
+
+void IndieStudio::IrrGraphical::drawText(std::string str) noexcept
+{
+	const wchar_t *txt = irr::core::stringw(str.c_str()).c_str();
+	this->_gui->addStaticText(txt, irr::core::rect<irr::s32>(900, 300, 1200, 400), true);
 }
 
 void IndieStudio::IrrGraphical::setCameraTarget(IndieStudio::Pos pos) const noexcept

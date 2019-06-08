@@ -14,11 +14,15 @@
 #include "Map.hpp"
 #include "Bomb.hpp"
 #include "Bonus.hpp"
+#include "IaMouvement.hpp"
 #include <vector>
-
+#include <thread>
+#include <functional>
+#include <iostream>
+ 
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
-static const int DENSITY_BRICK = 40;
+static const int DENSITY_BRICK = 30;
 static const int DENSITY_WALL = 100;
 static const int DENSITY_BONUS = 33;
 
@@ -40,15 +44,17 @@ namespace IndieStudio {
 		void setMapCollision() noexcept;
 		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
-
+		void threadPool();
 	private:
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
+		std::vector <IndieStudio::IaMouvement> _iaMouvement;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Character> _characterVec;
 		std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
+		std::vector<std::thread> _th;
 		IndieStudio::IEvent _event;
 		float _rot_x = 100;
 		float _rot_y = 0;

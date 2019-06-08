@@ -12,7 +12,6 @@
 #include "IGraphical.hpp"
 #include <iostream>
 #include <list>
-
 static const float SPEED = 2.5f;
 static const int BOMBMAX = 2;
 static const int BOMBSIZE = 1;
@@ -66,6 +65,7 @@ namespace IndieStudio {
 		void death(void) noexcept;
 		bool getDeath(void) const noexcept;
 
+		bool getBot() noexcept;
 	private:
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::IEntity *_model;

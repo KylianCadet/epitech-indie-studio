@@ -27,6 +27,19 @@ IndieStudio::Game::~Game()
 {
 }
 
+void IndieStudio::Game::threadPool()
+{
+	// for (int i = 0; i != 4; i++) {
+	// 	_th.emplace_back(std::thread(IndieStudio::IaMouvement::Ia,_characterVec[i], this->_bombVec, this->_map.getFree_Absolute_Pos())).detach();
+	// }
+	// 	for (auto i = _th.begin(); i != _th.end(); i++) {
+	// 	i->join();
+	// }
+	// auto test = std::bind(&IndieStudio::IaMouvement::Ia, this->_bombVec, this->_map.getFree_Absolute_Pos());
+	// //std::thread p1(test);
+	// t1.detach();
+}
+
 void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
 {
 	float div = ((x + y) / 2) * 32;
@@ -65,6 +78,11 @@ void IndieStudio::Game::createCharacters() noexcept
 		IndieStudio::Character(this->_graphical, "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2)));
 	this->_characterVec.push_back(
 		IndieStudio::Character(this->_graphical, "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3)));
+	IndieStudio::IaMouvement a,b,c,d;
+	this->_iaMouvement.push_back(a);
+	this->_iaMouvement.push_back(b);
+	this->_iaMouvement.push_back(c);
+	this->_iaMouvement.push_back(d);
 }
 
 void IndieStudio::Game::render() noexcept
@@ -121,11 +139,27 @@ void IndieStudio::Game::checkDeleteBomb() noexcept
 void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
-
-	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+	int ia_Id = 0;
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ia_Id++) {
 		if (character_it->getDeath() == true)
 			continue;
 		IndieStudio::Pos newPos = character_it->getEntity()->getPosition();
+		if (character_it->getBot() == true) {
+			// auto test = new IndieStudio::IaMouvement();
+			// std::thread([this, test, character_it](){
+			// 	while (character_it->getPosition()._x != 80)
+			// 		character_it->setMovingUp(true);
+			// 	character_it->setMovingUp(false);
+			// 	//test->Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			// }).detach();
+			// if (character_it->th == true) {
+			// 	character_it->th = false;
+			// 	std::thread([this, ia_Id, character_it](){
+				this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+				// character_it->th = true;
+				// }).detach();
+			// }
+		}
 		isMoving = character_it->getIsMoving();
 		checkMove(character_it, character_it->getMovingUp(), newPos._x, UP_ROT, true);
 		checkMove(character_it, character_it->getMovingDown(), newPos._x, DOWN_ROT, false);

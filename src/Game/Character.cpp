@@ -176,6 +176,10 @@ IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
 	return (this->_spawnPos);
 }
 
+bool IndieStudio::Character::getBot() noexcept
+{
+	return(this->_bot);
+}
 void IndieStudio::Character::setBonus(float speed, int bombSize, int bombMax) noexcept
 {
 	if (speed != 0 || bombSize != 0 || bombMax != 0) {

@@ -27,6 +27,7 @@ include_directories	(include/Map)
 include_directories	(include/Interfaces)
 include_directories	(include/Interfaces/Irrlicht)
 include_directories	(include/Bonus)
+include_directories	(include/Ia)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 

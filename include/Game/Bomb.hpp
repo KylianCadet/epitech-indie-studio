@@ -13,7 +13,6 @@
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
 #include "Map.hpp"
-
 namespace IndieStudio {
 	class Bomb {
 	public:

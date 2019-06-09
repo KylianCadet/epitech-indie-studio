@@ -29,7 +29,7 @@ namespace IndieStudio {
 		IndieStudio::Volume *_volume = new IndieStudio::Volume();
 		IndieStudio::MusicManager _musicManager;
 		IndieStudio::MenuManager _menu;
-		IndieStudio::Game _game;
+		std::unique_ptr<IndieStudio::Game> _game = nullptr;
 
 
 	};

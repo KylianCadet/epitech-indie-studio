@@ -12,6 +12,7 @@
 #include <iostream>
 #include <unistd.h>
 
+#include "Game.hpp"
 #include "Audio.hpp"
 #include "MenuMain.hpp"
 #include "MenuPause.hpp"

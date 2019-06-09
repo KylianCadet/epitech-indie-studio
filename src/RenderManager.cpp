@@ -15,8 +15,7 @@
 IndieStudio::RenderManager::RenderManager(IndieStudio::IGraphical &graphical) :
 	_graphical(graphical),
 	_musicManager(this->_volume),
-	_menu(this->_render, this->_graphical, this->_volume, this->_config),
-	_game(this->_graphical, this->_render)
+	_menu(this->_render, this->_graphical, this->_volume, this->_config)
 {
 }
 
@@ -27,8 +26,15 @@ IndieStudio::RenderManager::~RenderManager()
 void IndieStudio::RenderManager::render(void) noexcept
 {
 	this->_musicManager.refreshMusic(this->_render);
-	if (this->_render == Render::GAME)
-		this->_game.render();
-	else if (this->_render == Render::MAIN_MENU || Render::PAUSE_MENU)
+	if (this->_render == Render::GAME) {
+		if (this->_game == nullptr)
+			this->_game = std::unique_ptr<IndieStudio::Game>(new IndieStudio::Game(this->_graphical, this->_render));
+		this->_game->render();
+		if (this->_game->isOver()) {
+			this->_game->destroy();
+			this->_game.reset();
+			this->_game = nullptr;
+		}
+	} else if (this->_render == Render::MAIN_MENU || Render::PAUSE_MENU)
 		this->_menu.render();
 }

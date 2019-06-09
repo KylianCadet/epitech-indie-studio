@@ -33,7 +33,9 @@ namespace IndieStudio {
 		~Game();
 
 	public:
-		void render() noexcept;
+		void render(void) noexcept;
+		bool isOver(void) const noexcept;
+		void destroy(void) noexcept;
 
 	private:
 		void reset() noexcept;
@@ -71,6 +73,7 @@ namespace IndieStudio {
 		bool _bonus_bool = false;
 		IndieStudio::Render &_render;
 		bool _win = false;
+		bool _isOver = false;
 	};
 }; // namespace IndieStudio
 

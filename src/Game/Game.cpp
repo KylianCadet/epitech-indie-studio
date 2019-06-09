@@ -107,7 +107,6 @@ void IndieStudio::Game::playEnding()
 			winner = character_it.base();
 	winner->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
 	winner->getEntity()->setAnimation(WIN_ANIM);
-	// this->_graphical.drawText(winner->getName() + " WIN");
 }
 
 void IndieStudio::Game::render() noexcept
@@ -238,8 +237,8 @@ void IndieStudio::Game::checkEvent(void) noexcept
 		this->_render = PAUSE_MENU;
 
 	if (this->_event._key[IndieStudio::Key::RETURN] == true && this->_win == true) {
-		// this->_render = MAIN_MENU;
-		// this->_reset = true;
+		this->_isOver = true;
+		this->_render = MAIN_MENU;
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
@@ -268,4 +267,24 @@ void IndieStudio::Game::bonusRender() noexcept
 			.detach();
 	}
 	this->_bonus.animeBonus();
+}
+
+bool IndieStudio::Game::isOver(void) const noexcept
+{
+	return (this->_isOver);
+}
+
+void IndieStudio::Game::destroy(void) noexcept
+{
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+		this->_graphical.deleteEntity(character_it->getEntity());
+	auto brickVec = this->_map.getBrickCube();
+	for (auto brick_it = brickVec.begin(); brick_it != brickVec.end(); brick_it++)
+		this->_graphical.deleteEntity(brick_it[0]);
+	auto wallVec = this->_map.getWallCube();
+	for (auto wall_it = wallVec.begin(); wall_it != wallVec.end(); wall_it++)
+		this->_graphical.deleteEntity(wall_it[0]);
+	auto floorVec = this->_map.getFloorCube();
+	for (auto floor_it = floorVec.begin(); floor_it != floorVec.end(); floor_it++)
+		this->_graphical.deleteEntity(floor_it[0]);
 }

@@ -35,6 +35,7 @@ private:
 	void rightActionManager(void) noexcept;
 	void upActionManager(void) noexcept;
 	void downActionManager(void) noexcept;
+	void alphaActionManager(IndieStudio::Key) noexcept;
 
 private:
 	Render &_renderStatus;

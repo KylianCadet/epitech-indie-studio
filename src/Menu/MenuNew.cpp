@@ -168,3 +168,11 @@ void IndieStudio::MenuNew::downActionManager(void) noexcept
 	if (this->_renderStatus == MENU_NEW_MAIN)
 		this->downAction();
 }
+
+void IndieStudio::MenuNew::alphaActionManager(IndieStudio::Key key) noexcept
+{
+}
+
+void IndieStudio::MenuNew::alphaAction(IndieStudio::Key key) noexcept
+{
+}

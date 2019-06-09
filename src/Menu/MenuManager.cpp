@@ -111,6 +111,14 @@ void IndieStudio::MenuManager::downActionManager(void) noexcept
 		this->_menuPause->downActionManager();
 }
 
+void IndieStudio::MenuManager::alphaActionManager(IndieStudio::Key key) noexcept
+{
+	if (this->_renderStatus == MAIN_MENU)
+		this->_menuMain->alphaActionManager(key);
+	if (this->_renderStatus == PAUSE_MENU)
+		this->_menuPause->alphaActionManager(key);
+}
+
 void IndieStudio::MenuManager::checkEvent(void) noexcept
 {
 	bool returnKey = this->_event._key[IndieStudio::Key::RETURN];
@@ -123,14 +131,21 @@ void IndieStudio::MenuManager::checkEvent(void) noexcept
 
 	if (this->_event._key[IndieStudio::Key::RETURN] != returnKey && returnKey == false)
 		this->returnActionManager();
-	if (this->_event._key[IndieStudio::Key::ESC] != escKey && escKey == false)
+	else if (this->_event._key[IndieStudio::Key::ESC] != escKey && escKey == false)
 		this->escapeActionManager();
-	if (this->_event._key[IndieStudio::Key::KEY_LEFT] != leftKey && leftKey == false)
+	else if (this->_event._key[IndieStudio::Key::KEY_LEFT] != leftKey && leftKey == false)
 		this->leftActionManager();
-	if (this->_event._key[IndieStudio::Key::KEY_RIGHT] != rightKey && rightKey == false)
+	else if (this->_event._key[IndieStudio::Key::KEY_RIGHT] != rightKey && rightKey == false)
 		this->rightActionManager();
-	if (this->_event._key[IndieStudio::Key::KEY_UP] != upKey && upKey == false)
+	else if (this->_event._key[IndieStudio::Key::KEY_UP] != upKey && upKey == false)
 		this->upActionManager();
-	if (this->_event._key[IndieStudio::Key::KEY_DOWN] != downKey && downKey == false)
+	else if (this->_event._key[IndieStudio::Key::KEY_DOWN] != downKey && downKey == false)
 		this->downActionManager();
+	IndieStudio::Key key = A;
+	for (char c = 'A'; c <= 'Z'; c++)
+	{
+		if (this->_event._key[key])
+			this->alphaActionManager(key);
+		key = static_cast<IndieStudio::Key>(static_cast<int>(key) + 1);
+	}
 }

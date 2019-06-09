@@ -242,3 +242,13 @@ void IndieStudio::MenuOptions::createImages(void) noexcept
 void IndieStudio::MenuOptions::drawImages(void) noexcept
 {
 }
+
+void IndieStudio::MenuOptions::alphaActionManager(IndieStudio::Key key) noexcept
+{
+	if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
+		this->_menuControls->alphaActionManager(key);
+}
+
+void IndieStudio::MenuOptions::alphaAction(IndieStudio::Key key) noexcept
+{
+}

@@ -25,12 +25,22 @@ IndieStudio::Config::~Config()
 {
 }
 
-IndieStudio::playerKeybinds IndieStudio::Config::getKeybinds1(void) noexcept
+IndieStudio::playerKeybinds IndieStudio::Config::getKeybinds1(void) const noexcept
 {
 	return this->_player1;
 }
 
-IndieStudio::playerKeybinds IndieStudio::Config::getKeybinds2(void) noexcept
+IndieStudio::playerKeybinds IndieStudio::Config::getKeybinds2(void) const noexcept
 {
 	return this->_player2;
+}
+
+void IndieStudio::Config::setKeybinds1(IndieStudio::playerKeybinds keyBinds) noexcept
+{
+	this->_player1 = keyBinds;
+}
+
+void IndieStudio::Config::setKeybinds2(IndieStudio::playerKeybinds keyBinds) noexcept
+{
+	this->_player2 = keyBinds;
 }

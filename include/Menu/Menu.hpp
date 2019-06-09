@@ -30,6 +30,8 @@ public:
 	virtual int getCurrentMenuActive(void) const noexcept;
 	virtual void setButtonActive(int) noexcept;
 	virtual int getCurrentButtonActive(void) const noexcept;
+	virtual void alphaAction(IndieStudio::Key) noexcept = 0;
+	virtual void alphaActionManager(IndieStudio::Key) noexcept = 0;
 
 protected:
 	int _renderStatus;

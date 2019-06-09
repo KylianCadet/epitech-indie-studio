@@ -27,8 +27,10 @@ public:
 	Config();
 	~Config();
 
-	playerKeybinds getKeybinds1(void) noexcept;
-	playerKeybinds getKeybinds2(void) noexcept;
+	playerKeybinds getKeybinds1(void) const noexcept;
+	playerKeybinds getKeybinds2(void) const noexcept;
+	void setKeybinds1(playerKeybinds) noexcept;
+	void setKeybinds2(playerKeybinds) noexcept;
 
 private:
 	playerKeybinds _player1;

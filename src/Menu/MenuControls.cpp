@@ -35,14 +35,13 @@ void IndieStudio::MenuControls::createLetters(void) noexcept
 		key = static_cast<IndieStudio::Key>(static_cast<int>(key) + 1);
 		this->_letters.push_back(tmp);
 	}
-	Config config;
-	IndieStudio::playerKeybinds keybinds1 = config.getKeybinds1();
+	IndieStudio::playerKeybinds keybinds1 = this->_config->getKeybinds1();
 	this->_upKey1._key = keybinds1.up;
 	this->_downKey1._key = keybinds1.down;
 	this->_leftKey1._key = keybinds1.left;
 	this->_rightKey1._key = keybinds1.right;
 	this->_bombKey1._key = keybinds1.bomb;
-	IndieStudio::playerKeybinds keybinds2 = config.getKeybinds2();
+	IndieStudio::playerKeybinds keybinds2 = this->_config->getKeybinds2();
 	this->_upKey2._key = keybinds2.up;
 	this->_downKey2._key = keybinds2.down;
 	this->_leftKey2._key = keybinds2.left;
@@ -152,6 +151,18 @@ void IndieStudio::MenuControls::drawMenuManager(void) noexcept
 
 void IndieStudio::MenuControls::refreshSkin(void) noexcept
 {
+	IndieStudio::playerKeybinds keybinds1 = this->_config->getKeybinds1();
+	this->_upKey1._key = keybinds1.up;
+	this->_downKey1._key = keybinds1.down;
+	this->_leftKey1._key = keybinds1.left;
+	this->_rightKey1._key = keybinds1.right;
+	this->_bombKey1._key = keybinds1.bomb;
+	IndieStudio::playerKeybinds keybinds2 = this->_config->getKeybinds2();
+	this->_upKey2._key = keybinds2.up;
+	this->_downKey2._key = keybinds2.down;
+	this->_leftKey2._key = keybinds2.left;
+	this->_rightKey2._key = keybinds2.right;
+	this->_bombKey2._key = keybinds2.bomb;
 	if (this->_playerStatus == MENU_CONTROLS_PLY_1)
 	{
 		this->_player1->setActiveSkin();
@@ -380,4 +391,58 @@ void IndieStudio::MenuControls::downActionManager(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
 	this->setButtonSwitch(1, 4);
+}
+
+bool IndieStudio::MenuControls::checkKey(IndieStudio::Key key) noexcept
+{
+	bool status = true;
+	IndieStudio::playerKeybinds keybinds1 = this->_config->getKeybinds1();
+	IndieStudio::Key *keyPtr1 = (IndieStudio::Key *)&keybinds1;
+	for (int i = 0; i < 5; i++)
+		if (*(keyPtr1 + i) == key)
+			status = false;
+	IndieStudio::playerKeybinds keybinds2 = this->_config->getKeybinds2();
+	IndieStudio::Key *keyPtr2 = (IndieStudio::Key *)&keybinds2;
+	for (int i = 0; i < 5; i++)
+		if (*(keyPtr2 + i) == key)
+			status = false;
+	return status;
+}
+
+void IndieStudio::MenuControls::alphaActionManager(IndieStudio::Key key) noexcept
+{
+	if (this->_playerStatus == MENU_CONTROLS_PLY_1)
+	{
+		IndieStudio::playerKeybinds keybinds = this->_config->getKeybinds1();
+		if (this->_buttonStatus == BTN_CONTROLS_UP && checkKey(key))
+			keybinds.up = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_DOWN && checkKey(key))
+			keybinds.down = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_LEFT && checkKey(key))
+			keybinds.left = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_RIGHT && checkKey(key))
+			keybinds.right = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_BOMB && checkKey(key))
+			keybinds.bomb = key;
+		this->_config->setKeybinds1(keybinds);
+	}
+	else if (this->_playerStatus == MENU_CONTROLS_PLY_2)
+	{
+		IndieStudio::playerKeybinds keybinds = this->_config->getKeybinds2();
+		if (this->_buttonStatus == BTN_CONTROLS_UP && checkKey(key))
+			keybinds.up = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_DOWN && checkKey(key))
+			keybinds.down = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_LEFT && checkKey(key))
+			keybinds.left = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_RIGHT && checkKey(key))
+			keybinds.right = key;
+		else if (this->_buttonStatus == BTN_CONTROLS_BOMB && checkKey(key))
+			keybinds.bomb = key;
+		this->_config->setKeybinds2(keybinds);
+	}
+}
+
+void IndieStudio::MenuControls::alphaAction(IndieStudio::Key key) noexcept
+{
 }

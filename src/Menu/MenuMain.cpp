@@ -250,3 +250,13 @@ void IndieStudio::MenuMain::downActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_MAIN_EXIT)
 		this->downAction();
 }
+
+void IndieStudio::MenuMain::alphaActionManager(IndieStudio::Key key) noexcept
+{
+	if (this->_renderStatus == MENU_MAIN_OPTIONS)
+		this->_menuOptions->alphaActionManager(key);
+}
+
+void IndieStudio::MenuMain::alphaAction(IndieStudio::Key key) noexcept
+{
+}

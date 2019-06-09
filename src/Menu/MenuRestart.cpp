@@ -116,3 +116,11 @@ void IndieStudio::MenuRestart::upActionManager(void) noexcept
 void IndieStudio::MenuRestart::downActionManager(void) noexcept
 {
 }
+
+void IndieStudio::MenuRestart::alphaActionManager(IndieStudio::Key key) noexcept
+{
+}
+
+void IndieStudio::MenuRestart::alphaAction(IndieStudio::Key key) noexcept
+{
+}

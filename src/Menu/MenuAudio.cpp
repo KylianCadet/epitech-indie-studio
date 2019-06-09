@@ -209,3 +209,11 @@ void IndieStudio::MenuAudio::checkActions(void) noexcept
 void IndieStudio::MenuAudio::drawMenu(void) noexcept
 {
 }
+
+void IndieStudio::MenuAudio::alphaActionManager(IndieStudio::Key key) noexcept
+{
+}
+
+void IndieStudio::MenuAudio::alphaAction(IndieStudio::Key key) noexcept
+{
+}

@@ -39,6 +39,7 @@ public:
 	void rightActionManager(void) noexcept override;
 	void upActionManager(void) noexcept override;
 	void downActionManager(void) noexcept override;
+	void alphaActionManager(IndieStudio::Key) noexcept override;
 
 private:
 	void drawMenu(void) noexcept override;
@@ -54,6 +55,7 @@ private:
 	void rightAction(void) noexcept override;
 	void upAction(void) noexcept override;
 	void downAction(void) noexcept override;
+	void alphaAction(IndieStudio::Key) noexcept override;
 
 	void refreshSkin(void) noexcept override;
 

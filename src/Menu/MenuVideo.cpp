@@ -116,3 +116,11 @@ void IndieStudio::MenuVideo::upActionManager(void) noexcept
 void IndieStudio::MenuVideo::downActionManager(void) noexcept
 {
 }
+
+void IndieStudio::MenuVideo::alphaActionManager(IndieStudio::Key key) noexcept
+{
+}
+
+void IndieStudio::MenuVideo::alphaAction(IndieStudio::Key key) noexcept
+{
+}

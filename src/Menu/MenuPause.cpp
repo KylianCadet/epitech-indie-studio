@@ -206,3 +206,11 @@ void IndieStudio::MenuPause::downActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_PAUSE_OPTIONS)
 		this->_menuOptions->downActionManager();
 }
+
+void IndieStudio::MenuPause::alphaActionManager(IndieStudio::Key key) noexcept
+{
+}
+
+void IndieStudio::MenuPause::alphaAction(IndieStudio::Key key) noexcept
+{
+}

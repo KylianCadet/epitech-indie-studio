@@ -69,6 +69,8 @@ void IndieStudio::MenuAudio::drawMenuManager(void) noexcept
 
 void IndieStudio::MenuAudio::refreshSkin(void) noexcept
 {
+	this->setVolumeMusicBar();
+	this->setVolumeEffectBar();
 	if (this->_buttonStatus == BTN_AUDIO_MUSIC)
 	{
 		this->_music->setActiveSkin();
@@ -136,14 +138,12 @@ void IndieStudio::MenuAudio::leftActionManager(void) noexcept
 		this->_leftMusicTime = 50;
 		this->_leftMusicArrow->setActiveSkin();
 		this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() - 10);
-		this->setVolumeMusicBar();
 	}
 	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
 	{
 		this->_leftEffectTime = 50;
 		this->_leftEffectArrow->setActiveSkin();
 		this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() - 10);
-		this->setVolumeEffectBar();
 	}
 }
 
@@ -155,14 +155,12 @@ void IndieStudio::MenuAudio::rightActionManager(void) noexcept
 		this->_rightMusicTime = 50;
 		this->_rightMusicArrow->setActiveSkin();
 		this->_volume->setVolumeMusics(this->_volume->getVolumeMusics() + 10);
-		this->setVolumeMusicBar();
 	}
 	else if (this->_buttonStatus == BTN_AUDIO_EFFECT)
 	{
 		this->_rightEffectTime = 50;
 		this->_rightEffectArrow->setActiveSkin();
 		this->_volume->setVolumeEffects(this->_volume->getVolumeEffects() + 10);
-		this->setVolumeEffectBar();
 	}
 }
 

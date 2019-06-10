@@ -66,7 +66,7 @@ void IndieStudio::MenuMain::checkActions(void) noexcept {
 	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK) {
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
-		this->_menuNew->setButtonActive(BTN_NEW_SOLO);
+		this->_menuNew->setButtonActive(BTN_NEW_GAMEMODE);
 	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME) {
 		this->_renderStatus = MENU_MAIN_GAME;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
@@ -200,7 +200,7 @@ void IndieStudio::MenuMain::leftActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->leftAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->leftAction();
+		this->_menuNew->leftActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
 		this->leftAction();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)
@@ -214,7 +214,7 @@ void IndieStudio::MenuMain::rightActionManager(void) noexcept
 	if (this->_renderStatus == MENU_MAIN_MAIN)
 		this->rightAction();
 	else if (this->_renderStatus == MENU_MAIN_NEWGAME)
-		this->rightAction();
+		this->_menuNew->rightActionManager();
 	else if (this->_renderStatus == MENU_MAIN_LOADGAME)
 		this->rightAction();
 	else if (this->_renderStatus == MENU_MAIN_OPTIONS)

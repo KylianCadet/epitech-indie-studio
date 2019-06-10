@@ -406,6 +406,8 @@ bool IndieStudio::MenuControls::checkKey(IndieStudio::Key key) noexcept
 	for (int i = 0; i < 5; i++)
 		if (*(keyPtr2 + i) == key)
 			status = false;
+	if (status)
+		this->_sounds->_volumeSwitchSound->playSound();
 	return status;
 }
 

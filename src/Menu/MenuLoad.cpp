@@ -29,7 +29,7 @@ void IndieStudio::MenuLoad::drawButtons(void) noexcept
 
 void IndieStudio::MenuLoad::createImages(void) noexcept
 {
-	this->_comingsoon = this->_graphical.createImage("assets/menu/comingsoon.png", std::pair<int, int>(-1, 500));
+	this->_comingsoon = this->_graphical.createImage("assets/menu/yoshi.png", std::pair<int, int>(-1, 500));
 	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
 }
 

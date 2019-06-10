@@ -12,10 +12,27 @@ static const int MENU_NEW_GAME = -1;
 static const int MENU_NEW_MAIN = 0;
 static const int MENU_NEW_BACK = 1;
 
-static const int BTN_NEW_SOLO = 0;
-static const int BTN_NEW_COOP = 1;
-static const int BTN_NEW_1VS1 = 2;
-static const int BTN_NEW_BACK = 3;
+static const int MODE_SOLO = 0;
+static const int MODE_COOP = 1;
+static const int MODE_DUEL = 2;
+
+static const int PLAYER1_BOB = 0;
+static const int PLAYER1_CARTMAN = 1;
+static const int PLAYER1_STARFOX = 2;
+static const int PLAYER1_YOSHI = 3;
+
+static const int PLAYER2_BOB = 0;
+static const int PLAYER2_CARTMAN = 1;
+static const int PLAYER2_STARFOX = 2;
+static const int PLAYER2_YOSHI = 3;
+
+static const int BTN_TOOL_PLAY = 0;
+static const int BTN_TOOL_BACK = 1;
+
+static const int BTN_NEW_GAMEMODE = 0;
+static const int BTN_NEW_PLAYER1 = 1;
+static const int BTN_NEW_PLAYER2 = 2;
+static const int BTN_NEW_PLAY = 3;
 
 #include "Menu.hpp"
 
@@ -56,10 +73,31 @@ private:
 	void refreshSkin(void) noexcept override;
 
 private:
-	Button *_solomode;
-	Button *_coopmode;
-	Button *_1vs1mode;
+	int _modeStatus;
+	int _player1Status;
+	int _player2Status;
+	int _toolStatus;
+
+	Button *_gamemode;
+	Button *_player1;
+	Button *_player2;
+
+	Button *_solo;
+	Button *_coop;
+	Button *_duel;
+
+	Button *_bob1;
+	Button *_cartman1;
+	Button *_starfox1;
+	Button *_yoshi1;
+
+	Button *_bob2;
+	Button *_cartman2;
+	Button *_starfox2;
+	Button *_yoshi2;
+
 	Button *_back;
+	Button *_play;
 };
 }; // namespace IndieStudio
 

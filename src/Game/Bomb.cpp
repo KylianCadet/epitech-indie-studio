@@ -38,7 +38,7 @@ int getMiddle(float vec)
 	return (vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<IndieStudio::Character> &characterVec, std::shared_ptr<IndieStudio::Audio> audio) :
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio) :
 	_graphical(graphical),
 	_map(map),
 	_sound(audio),
@@ -133,8 +133,8 @@ void IndieStudio::Bomb::checkHitPlayer(std::vector<IndieStudio::Pos> posVec, std
 			auto bool_it = boolVec.begin();
 			for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 				for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-					if (pos_it->_x == getMiddle(character_it->getPosition()._x) && pos_it->_z == getMiddle(character_it->getPosition()._z) && *bool_it == false && character_it->getDeath() == false)
-						character_it->death();
+					if (pos_it->_x == getMiddle(character_it->get()->getPosition()._x) && pos_it->_z == getMiddle(character_it->get()->getPosition()._z) && *bool_it == false && character_it->get()->getDeath() == false)
+						character_it->get()->death();
 		}
 		this->_totalDeath = true;
 	}).detach();

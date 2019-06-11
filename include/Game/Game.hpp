@@ -22,7 +22,7 @@
 
 static const int SIZE_MAP_X = 15;
 static const int SIZE_MAP_Y = 15;
-static const int DENSITY_BRICK = 30;
+static const int DENSITY_BRICK = 50;
 static const int DENSITY_WALL = 100;
 static const int DENSITY_BONUS = 33;
 
@@ -59,10 +59,11 @@ namespace IndieStudio {
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
-		std::vector<IndieStudio::IaMouvement> _iaMouvement;
+		//std::vector<IndieStudio::IaMouvement> _iaMouvement;
+		IndieStudio::IaMouvement _iaMouvement;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
-		std::vector<IndieStudio::Character> _characterVec;
+		std::vector<std::shared_ptr<IndieStudio::Character>> _characterVec;
 		std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
 		std::vector<std::thread> _th;
 		IndieStudio::IEvent _event;

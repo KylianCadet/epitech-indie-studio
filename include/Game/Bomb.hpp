@@ -16,7 +16,7 @@
 namespace IndieStudio {
 	class Bomb {
 	public:
-		Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<IndieStudio::Character> &characterVec, std::shared_ptr<IndieStudio::Audio> audio);
+		Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio);
 		~Bomb();
 		void createParticule(IndieStudio::Pos vector) noexcept;
 		void startCountdown(void);
@@ -42,7 +42,7 @@ namespace IndieStudio {
 		std::shared_ptr<IndieStudio::Audio> _sound;
 		std::vector<IndieStudio::IEntity *> _explosionParticule;
 		std::vector<std::shared_ptr<IndieStudio::Bomb>> &_bombVec;
-		std::vector<IndieStudio::Character> &_characterVec;
+		std::vector<std::shared_ptr<IndieStudio::Character>> &_characterVec;
 		bool _alive = true;
 		bool _totalDeath = false;
 		int _bombSize;

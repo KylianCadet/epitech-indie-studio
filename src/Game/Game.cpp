@@ -13,7 +13,8 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	_render(render),
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
-	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav")))
+	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
+	_iaMouvement()
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
@@ -21,6 +22,8 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
+//	this->_iaMouvement.updateIa(this->_characterVec, this->_bombVec, this->_map.getFree_Absolute_Pos());
+//	 this->_iaMouvement.createIa();
 }
 
 IndieStudio::Game::~Game()
@@ -62,7 +65,7 @@ void IndieStudio::Game::setMapCollision() noexcept
 void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 {
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-		IndieStudio::IEntity *entity = character_it->getEntity();
+		IndieStudio::IEntity *entity = character_it->get()->getEntity();
 		this->_graphical.createCollision(cube, entity);
 	}
 }
@@ -70,19 +73,19 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 void IndieStudio::Game::createCharacters() noexcept
 {
 	auto Pos_Vec = _map.get_Position_Start();
-	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "Yoshi", "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", false, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0)));
-	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1)));
-	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "Eric Cartman", "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2)));
-	this->_characterVec.push_back(
-		IndieStudio::Character(this->_graphical, "Fox", "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3)));
-	IndieStudio::IaMouvement a, b, c, d;
-	this->_iaMouvement.push_back(a);
-	this->_iaMouvement.push_back(b);
-	this->_iaMouvement.push_back(c);
-	this->_iaMouvement.push_back(d);
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
+		IndieStudio::Character(this->_graphical, "Yoshi", "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", true, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0))));
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
+		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))));
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
+		IndieStudio::Character(this->_graphical, "Eric Cartman", "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2))));
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
+		IndieStudio::Character(this->_graphical, "Fox", "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3))));
+	// IndieStudio::IaMouvement a, b, c, d;
+	// this->_iaMouvement.push_back(a);
+	// this->_iaMouvement.push_back(b);
+	// this->_iaMouvement.push_back(c);
+	// this->_iaMouvement.push_back(d);
 }
 
 std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
@@ -90,7 +93,7 @@ std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
 	std::size_t alive = 0;
 
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-		if (character_it->getDeath() == false)
+		if (character_it->get()->getDeath() == false)
 			alive++;
 	return (alive);
 }
@@ -100,13 +103,13 @@ std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
 
 void IndieStudio::Game::playEnding()
 {
-	IndieStudio::Character *winner;
+	std::shared_ptr<IndieStudio::Character> *winner;
 
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-		if (character_it->getDeath() == false)
+		if (character_it->get()->getDeath() == false)
 			winner = character_it.base();
-	winner->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
-	winner->getEntity()->setAnimation(WIN_ANIM);
+	winner->get()->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
+	winner->get()->getEntity()->setAnimation(WIN_ANIM);
 }
 
 void IndieStudio::Game::render() noexcept
@@ -135,15 +138,15 @@ void IndieStudio::Game::setRenderStatus(int status) noexcept
 #define RIGHT_ROT 90
 #define LEFT_ROT 270
 
-void checkMove(std::vector<IndieStudio::Character>::iterator character_it, bool isMoving, float &coordinate, int rotation, bool sign)
+void checkMove(std::vector<std::shared_ptr<IndieStudio::Character>>::iterator character_it, bool isMoving, float &coordinate, int rotation, bool sign)
 {
 	if (isMoving == true) {
 		if (sign)
-			coordinate += character_it->getSpeed();
+			coordinate += character_it->get()->getSpeed();
 		else
-			coordinate -= character_it->getSpeed();
-		character_it->getEntity()->setRotation(IndieStudio::Pos(0, rotation, 0));
-		character_it->setIsMoving(true);
+			coordinate -= character_it->get()->getSpeed();
+		character_it->get()->getEntity()->setRotation(IndieStudio::Pos(0, rotation, 0));
+		character_it->get()->setIsMoving(true);
 	}
 }
 
@@ -166,10 +169,10 @@ void IndieStudio::Game::moveCharacter() noexcept
 	bool isMoving = false;
 	int ia_Id = 0;
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ia_Id++) {
-		if (character_it->getDeath() == true)
+		if (character_it->get()->getDeath() == true)
 			continue;
-		IndieStudio::Pos newPos = character_it->getEntity()->getPosition();
-		if (character_it->getBot() == true) {
+		IndieStudio::Pos newPos = character_it->get()->getEntity()->getPosition();
+		if (character_it->get()->getBot() == true) {
 			// auto test = new IndieStudio::IaMouvement();
 			// std::thread([this, test, character_it](){
 			// 	while (character_it->getPosition()._x != 80)
@@ -180,39 +183,41 @@ void IndieStudio::Game::moveCharacter() noexcept
 			// if (character_it->th == true) {
 			// 	character_it->th = false;
 			// 	std::thread([this, ia_Id, character_it](){
-			this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			//this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
 			// character_it->th = true;
 			// }).detach();
 			// }
+			
+			//this->_iaMouvement.updateIa(this->_characterVec, this->_bombVec, this->_map.getFree_Absolute_Pos());
 		}
-		isMoving = character_it->getIsMoving();
-		checkMove(character_it, character_it->getMovingUp(), newPos._x, UP_ROT, true);
-		checkMove(character_it, character_it->getMovingDown(), newPos._x, DOWN_ROT, false);
-		checkMove(character_it, character_it->getMovingLeft(), newPos._z, LEFT_ROT, true);
-		checkMove(character_it, character_it->getMovingRight(), newPos._z, RIGHT_ROT, false);
-		if (character_it->getEntity()->getPosition() != newPos && isMoving == false)
-			character_it->getEntity()->setAnimation(RUN);
-		else if (character_it->getEntity()->getPosition() == newPos && isMoving == true) {
-			character_it->setIsMoving(false);
-			character_it->getEntity()->setAnimation(STAND);
+		isMoving = character_it->get()->getIsMoving();
+		checkMove(character_it, character_it->get()->getMovingUp(), newPos._x, UP_ROT, true);
+		checkMove(character_it, character_it->get()->getMovingDown(), newPos._x, DOWN_ROT, false);
+		checkMove(character_it, character_it->get()->getMovingLeft(), newPos._z, LEFT_ROT, true);
+		checkMove(character_it, character_it->get()->getMovingRight(), newPos._z, RIGHT_ROT, false);
+		if (character_it->get()->getEntity()->getPosition() != newPos && isMoving == false)
+			character_it->get()->getEntity()->setAnimation(RUN);
+		else if (character_it->get()->getEntity()->getPosition() == newPos && isMoving == true) {
+			character_it->get()->setIsMoving(false);
+			character_it->get()->getEntity()->setAnimation(STAND);
 		}
-		character_it->getEntity()->setPosition(newPos);
-		if (character_it->getDoingAction() == true) {
-			character_it->setDoingAction(false);
+		character_it->get()->getEntity()->setPosition(newPos);
+		if (character_it->get()->getDoingAction() == true) {
+			character_it->get()->setDoingAction(false);
 			this->checkDeleteBomb();
-			if (character_it->getBombMax() > character_it->get_Bomb_Current()) {
-				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->getEntity()->getPosition(), character_it->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound));
+			if (character_it->get()->getBombMax() > character_it->get()->get_Bomb_Current()) {
+				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->get()->getEntity()->getPosition(), character_it->get()->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound));
 				this->_bombVec.push_back(newBomb);
-				character_it->set_Bomb_Current(character_it->get_Bomb_Current() + 1);
+				character_it->get()->set_Bomb_Current(character_it->get()->get_Bomb_Current() + 1);
 				std::thread([character_it, newBomb]() {
 					newBomb->startCountdown();
-					character_it->set_Bomb_Current(character_it->get_Bomb_Current() - 1);
+					character_it->get()->set_Bomb_Current(character_it->get()->get_Bomb_Current() - 1);
 				})
 					.detach();
 			}
 		}
-		character_it->setBonus(this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusSpeed()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusFire()), this->_bonus.getBonus(character_it->getPosition(), this->_bonus.getRedBonusBomb()));
-		character_it->setBonus(this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusSpeed()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusFire()), this->_bonus.getMalus(character_it->getPosition(), this->_bonus.getBlueBonusBomb()));
+		character_it->get()->setBonus(this->_bonus.getBonus(character_it->get()->getPosition(), this->_bonus.getRedBonusSpeed()), this->_bonus.getBonus(character_it->get()->getPosition(), this->_bonus.getRedBonusFire()), this->_bonus.getBonus(character_it->get()->getPosition(), this->_bonus.getRedBonusBomb()));
+		character_it->get()->setBonus(this->_bonus.getMalus(character_it->get()->getPosition(), this->_bonus.getBlueBonusSpeed()), this->_bonus.getMalus(character_it->get()->getPosition(), this->_bonus.getBlueBonusFire()), this->_bonus.getMalus(character_it->get()->getPosition(), this->_bonus.getBlueBonusBomb()));
 	}
 }
 
@@ -222,14 +227,14 @@ void IndieStudio::Game::reset(void) noexcept
 	std::size_t i = 0;
 
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, i++)
-		character_it->setPosition(posVec.at(i));
+		character_it->get()->setPosition(posVec.at(i));
 }
 
 void IndieStudio::Game::checkEvent(void) noexcept
 {
 	std::vector<bool> ActionKey;
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-		ActionKey.push_back(this->_event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())]);
+		ActionKey.push_back(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getActionKey())]);
 
 	this->_event = this->_graphical.getEvent();
 
@@ -242,14 +247,14 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
-		if (character_it->getDeath() == true)
+		if (character_it->get()->getDeath() == true)
 			continue;
-		character_it->setMovingUp(this->_event._key[static_cast<IndieStudio::Key>(character_it->getUpKey())]);
-		character_it->setMovingLeft(this->_event._key[static_cast<IndieStudio::Key>(character_it->getLeftKey())]);
-		character_it->setMovingDown(this->_event._key[static_cast<IndieStudio::Key>(character_it->getDownKey())]);
-		character_it->setMovingRight(this->_event._key[static_cast<IndieStudio::Key>(character_it->getRightKey())]);
-		if (this->_event._key[static_cast<IndieStudio::Key>(character_it->getActionKey())] == true && *ActionKey_it == false)
-			character_it->setDoingAction(true);
+		character_it->get()->setMovingUp(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getUpKey())]);
+		character_it->get()->setMovingLeft(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getLeftKey())]);
+		character_it->get()->setMovingDown(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getDownKey())]);
+		character_it->get()->setMovingRight(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getRightKey())]);
+		if (this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getActionKey())] == true && *ActionKey_it == false)
+			character_it->get()->setDoingAction(true);
 	}
 }
 
@@ -277,7 +282,7 @@ bool IndieStudio::Game::isOver(void) const noexcept
 void IndieStudio::Game::destroy(void) noexcept
 {
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-		this->_graphical.deleteEntity(character_it->getEntity());
+		this->_graphical.deleteEntity(character_it->get()->getEntity());
 	auto brickVec = this->_map.getBrickCube();
 	for (auto brick_it = brickVec.begin(); brick_it != brickVec.end(); brick_it++)
 		this->_graphical.deleteEntity(brick_it[0]);

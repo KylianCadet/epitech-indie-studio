@@ -38,6 +38,12 @@ static const int BTN_NEW_PLAY = 3;
 
 namespace IndieStudio
 {
+struct Arrow
+{
+	Button *btn;
+	int c;
+};
+
 class MenuNew : public Menu
 {
 public:
@@ -95,6 +101,20 @@ private:
 	Button *_cartman2;
 	Button *_starfox2;
 	Button *_yoshi2;
+
+	IEntity *_bobPreview;
+	IEntity *_cartmanPreview;
+	IEntity *_starfoxPreview;
+	IEntity *_yoshiPreview;
+
+	Arrow _left1;
+	Arrow _right1;
+
+	Arrow _left2;
+	Arrow _right2;
+
+	Arrow _left3;
+	Arrow _right3;
 
 	Button *_back;
 	Button *_play;

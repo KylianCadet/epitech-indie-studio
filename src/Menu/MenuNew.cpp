@@ -16,6 +16,14 @@ IndieStudio::MenuNew::MenuNew(IndieStudio::IGraphical &graphical, IndieStudio::V
 	this->_player1Status = PLAYER1_STARFOX;
 	this->_player2Status = PLAYER2_CARTMAN;
 	this->_toolStatus = BTN_TOOL_PLAY;
+
+	this->_left1.c = 0;
+	this->_right1.c = 0;
+	this->_left2.c = 0;
+	this->_right2.c = 0;
+	this->_left3.c = 0;
+	this->_right3.c = 0;
+
 	this->createButtons();
 	this->createImages();
 }
@@ -31,8 +39,8 @@ void IndieStudio::MenuNew::createButtons(void) noexcept
 	int off = 110;
 
 	this->_gamemode = new Button(this->_graphical, "assets/menu/game/gamemode.png", "assets/menu/game/gamemodeA.png", std::pair<int, int>(x, pos));
-	this->_player1 = new Button(this->_graphical, "assets/menu/game/player1.png", "assets/menu/game/player1A.png", std::pair<int, int>(x - 50, (pos + 110)));
-	this->_player2 = new Button(this->_graphical, "assets/menu/game/player2.png", "assets/menu/game/player2A.png", std::pair<int, int>(x - 45, (pos + 220)));
+	this->_player1 = new Button(this->_graphical, "assets/menu/game/player1.png", "assets/menu/game/player1A.png", std::pair<int, int>(x - 60, (pos + 110)));
+	this->_player2 = new Button(this->_graphical, "assets/menu/game/player2.png", "assets/menu/game/player2A.png", std::pair<int, int>(x - 55, (pos + 220)));
 
 	this->_solo = new Button(this->_graphical, "assets/menu/game/solo.png", "assets/menu/game/soloA.png", std::pair<int, int>(x + 400, pos));
 	this->_coop = new Button(this->_graphical, "assets/menu/game/coop.png", "assets/menu/game/coopA.png", std::pair<int, int>(x + 400, pos));
@@ -48,6 +56,13 @@ void IndieStudio::MenuNew::createButtons(void) noexcept
 	this->_starfox2 = new Button(this->_graphical, "assets/menu/game/starfox.png", "assets/menu/game/starfoxA.png", std::pair<int, int>(x + 400, (pos + 220)));
 	this->_yoshi2 = new Button(this->_graphical, "assets/menu/game/yoshi.png", "assets/menu/game/yoshiA.png", std::pair<int, int>(x + 400, (pos + 220)));
 
+	this->_left1.btn = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(995, 397));
+	this->_right1.btn = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(880, 397));
+	this->_left2.btn = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(890, 397 + 110));
+	this->_right2.btn = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(980, 397 + 110));
+	this->_left3.btn = new Button(this->_graphical, "assets/menu/options/left.png", "assets/menu/options/leftA.png", std::pair<int, int>(890, 397 + 220));
+	this->_right3.btn = new Button(this->_graphical, "assets/menu/options/right.png", "assets/menu/options/rightA.png", std::pair<int, int>(980, 397 + 220));
+
 	this->_back = new Button(this->_graphical, "assets/menu/buttons/back.png", "assets/menu/buttons/backA.png", std::pair<int, int>(400, 750));
 	this->_play = new Button(this->_graphical, "assets/menu/buttons/play.png", "assets/menu/buttons/playA.png", std::pair<int, int>(900, 750));
 }
@@ -56,7 +71,6 @@ void IndieStudio::MenuNew::drawButtons(void) noexcept
 {
 	this->_gamemode->drawButton();
 	this->_player1->drawButton();
-	this->_player2->drawButton();
 	this->_back->drawButton();
 	this->_play->drawButton();
 	if (this->_modeStatus == MODE_SOLO)
@@ -73,22 +87,67 @@ void IndieStudio::MenuNew::drawButtons(void) noexcept
 		this->_starfox1->drawButton();
 	else if (this->_player1Status == PLAYER1_YOSHI)
 		this->_yoshi1->drawButton();
-	if (this->_player2Status == PLAYER2_BOB)
-		this->_bob2->drawButton();
-	else if (this->_player2Status == PLAYER2_CARTMAN)
-		this->_cartman2->drawButton();
-	else if (this->_player2Status == PLAYER2_STARFOX)
-		this->_starfox2->drawButton();
-	else if (this->_player2Status == PLAYER2_YOSHI)
-		this->_yoshi2->drawButton();
+	if (this->_modeStatus != MODE_SOLO)
+	{
+		this->_player2->drawButton();
+		if (this->_player2Status == PLAYER2_BOB)
+			this->_bob2->drawButton();
+		else if (this->_player2Status == PLAYER2_CARTMAN)
+			this->_cartman2->drawButton();
+		else if (this->_player2Status == PLAYER2_STARFOX)
+			this->_starfox2->drawButton();
+		else if (this->_player2Status == PLAYER2_YOSHI)
+			this->_yoshi2->drawButton();
+	}
+	if (this->_buttonStatus == BTN_NEW_GAMEMODE)
+	{
+		this->_left1.btn->drawButton();
+		this->_right1.btn->drawButton();
+	}
+	else if (this->_buttonStatus == BTN_NEW_PLAYER1)
+	{
+		this->_left2.btn->drawButton();
+		this->_right2.btn->drawButton();
+	}
+	else if (this->_buttonStatus == BTN_NEW_PLAYER2)
+	{
+		this->_left3.btn->drawButton();
+		this->_right3.btn->drawButton();
+	}
 }
 
 void IndieStudio::MenuNew::createImages(void) noexcept
 {
+	this->_bobPreview = this->_graphical.createImage("assets/menu/player/bob.png", std::pair<int, int>(100, 387));
+	this->_cartmanPreview = this->_graphical.createImage("assets/menu/player/cartman.png", std::pair<int, int>(100, 375));
+	this->_starfoxPreview = this->_graphical.createImage("assets/menu/player/starfox.png", std::pair<int, int>(160, 300));
+	this->_yoshiPreview = this->_graphical.createImage("assets/menu/player/yoshi.png", std::pair<int, int>(125, 350));
 }
 
 void IndieStudio::MenuNew::drawImages(void) noexcept
 {
+	if (this->_buttonStatus == BTN_NEW_PLAYER1)
+	{
+		if (this->_player1Status == PLAYER1_BOB)
+			this->_graphical.drawImage(this->_bobPreview);
+		else if (this->_player1Status == PLAYER1_CARTMAN)
+			this->_graphical.drawImage(this->_cartmanPreview);
+		else if (this->_player1Status == PLAYER1_STARFOX)
+			this->_graphical.drawImage(this->_starfoxPreview);
+		else if (this->_player1Status == PLAYER1_YOSHI)
+			this->_graphical.drawImage(this->_yoshiPreview);
+	}
+	else if (this->_buttonStatus == BTN_NEW_PLAYER2)
+	{
+		if (this->_player2Status == PLAYER2_BOB)
+			this->_graphical.drawImage(this->_bobPreview);
+		else if (this->_player2Status == PLAYER2_CARTMAN)
+			this->_graphical.drawImage(this->_cartmanPreview);
+		else if (this->_player2Status == PLAYER2_STARFOX)
+			this->_graphical.drawImage(this->_starfoxPreview);
+		else if (this->_player2Status == PLAYER2_YOSHI)
+			this->_graphical.drawImage(this->_yoshiPreview);
+	}
 }
 
 void IndieStudio::MenuNew::checkActions(void) noexcept
@@ -173,6 +232,31 @@ void IndieStudio::MenuNew::refreshSkin(void) noexcept
 		else if (this->_toolStatus == BTN_TOOL_PLAY)
 			this->_play->setActiveSkin();
 	}
+
+	if (this->_left1.c <= 0)
+		this->_left1.btn->setDefaultSkin();
+	else
+		this->_left1.c--;
+	if (this->_right1.c <= 0)
+		this->_right1.btn->setDefaultSkin();
+	else
+		this->_right1.c--;
+	if (this->_left2.c <= 0)
+		this->_left2.btn->setDefaultSkin();
+	else
+		this->_left2.c--;
+	if (this->_right2.c <= 0)
+		this->_right2.btn->setDefaultSkin();
+	else
+		this->_right2.c--;
+	if (this->_left3.c <= 0)
+		this->_left3.btn->setDefaultSkin();
+	else
+		this->_left3.c--;
+	if (this->_right3.c <= 0)
+		this->_right3.btn->setDefaultSkin();
+	else
+		this->_right3.c--;
 }
 
 void IndieStudio::MenuNew::returnAction(void) noexcept
@@ -226,6 +310,9 @@ void IndieStudio::MenuNew::leftAction(void) noexcept
 			this->_modeStatus = 0;
 		else if (this->_modeStatus < 0)
 			this->_modeStatus = 2;
+		this->_left1.btn->setActiveSkin();
+		this->_right1.btn->setDefaultSkin();
+		this->_left1.c = 50;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAYER1)
 	{
@@ -241,6 +328,9 @@ void IndieStudio::MenuNew::leftAction(void) noexcept
 			this->_player1Status = 0;
 		else if (this->_player1Status < 0)
 			this->_player1Status = 3;
+		this->_left2.btn->setActiveSkin();
+		this->_right2.btn->setDefaultSkin();
+		this->_left2.c = 50;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAYER2)
 	{
@@ -256,6 +346,9 @@ void IndieStudio::MenuNew::leftAction(void) noexcept
 			this->_player2Status = 0;
 		else if (this->_player2Status < 0)
 			this->_player2Status = 3;
+		this->_left3.btn->setActiveSkin();
+		this->_right3.btn->setDefaultSkin();
+		this->_left3.c = 50;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAY)
 	{
@@ -278,6 +371,9 @@ void IndieStudio::MenuNew::rightAction(void) noexcept
 			this->_modeStatus = 0;
 		else if (this->_modeStatus < 0)
 			this->_modeStatus = 2;
+		this->_right1.btn->setActiveSkin();
+		this->_left1.btn->setDefaultSkin();
+		this->_right1.c = 25;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAYER1)
 	{
@@ -293,6 +389,9 @@ void IndieStudio::MenuNew::rightAction(void) noexcept
 			this->_player1Status = 0;
 		else if (this->_player1Status < 0)
 			this->_player1Status = 3;
+		this->_right2.btn->setActiveSkin();
+		this->_left2.btn->setDefaultSkin();
+		this->_right2.c = 25;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAYER2)
 	{
@@ -308,6 +407,9 @@ void IndieStudio::MenuNew::rightAction(void) noexcept
 			this->_player2Status = 0;
 		else if (this->_player2Status < 0)
 			this->_player2Status = 3;
+		this->_right3.btn->setActiveSkin();
+		this->_left3.btn->setDefaultSkin();
+		this->_right3.c = 25;
 	}
 	else if (this->_buttonStatus == BTN_NEW_PLAY)
 	{
@@ -324,12 +426,16 @@ void IndieStudio::MenuNew::upAction(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
 	this->setButtonSwitch(-1, 3);
+	if (this->_buttonStatus == BTN_NEW_PLAYER2 && this->_modeStatus == MODE_SOLO)
+		this->setButtonSwitch(-1, 3);
 }
 
 void IndieStudio::MenuNew::downAction(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
 	this->setButtonSwitch(1, 3);
+	if (this->_buttonStatus == BTN_NEW_PLAYER2 && this->_modeStatus == MODE_SOLO)
+		this->setButtonSwitch(1, 3);
 }
 
 void IndieStudio::MenuNew::returnActionManager(void) noexcept

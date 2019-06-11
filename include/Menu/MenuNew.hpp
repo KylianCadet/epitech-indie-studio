@@ -41,7 +41,7 @@ namespace IndieStudio
 class MenuNew : public Menu
 {
 public:
-	MenuNew(IGraphical &, Volume *, MenuSounds *);
+	MenuNew(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuNew();
 
 public:

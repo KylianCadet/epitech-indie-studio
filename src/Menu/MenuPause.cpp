@@ -50,7 +50,7 @@ void IndieStudio::MenuPause::drawImages(void) noexcept
 	this->_graphical.drawImage(this->_wall);
 	this->_graphical.drawImage(this->_titleMenu);
 	this->_graphical.drawImage(this->_titleMenu);
-	this->_graphical.drawImage(this->_frameMenu);
+	// this->_graphical.drawImage(this->_frameMenu);
 }
 
 void IndieStudio::MenuPause::checkActions(void) noexcept

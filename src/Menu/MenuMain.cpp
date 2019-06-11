@@ -14,7 +14,7 @@ IndieStudio::MenuMain::MenuMain(IndieStudio::IGraphical &graphical, IndieStudio:
 	this->_buttonStatus = BTN_MAIN_NEWGAME;
 	this->createButtons();
 	this->createImages();
-	this->_menuNew = new IndieStudio::MenuNew(this->_graphical, this->_volume, this->_sounds);
+	this->_menuNew = new IndieStudio::MenuNew(this->_graphical, this->_volume, this->_sounds, this->_config);
 	this->_menuLoad = new IndieStudio::MenuLoad(this->_graphical, this->_volume, this->_sounds);
 	this->_menuOptions = new IndieStudio::MenuOptions(this->_graphical, this->_volume, this->_sounds, this->_config);
 }
@@ -54,22 +54,33 @@ void IndieStudio::MenuMain::drawImages(void) noexcept
 	// this->_graphical.drawImage(this->_frameMenu);
 }
 
-void IndieStudio::MenuMain::checkActions(void) noexcept {
-
-	if (this->_menuOptions->getCurrentMenuActive() == MENU_OPTIONS_BACK) {
+void IndieStudio::MenuMain::checkActions(void) noexcept
+{
+	if (this->_menuOptions->getCurrentMenuActive() == MENU_OPTIONS_BACK)
+	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuOptions->setMenuActive(MENU_OPTIONS_MAIN);
 		this->_menuOptions->setButtonActive(BTN_OPTIONS_AUDIO);
-	} else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK) {
+	}
+	else if (this->_menuLoad->getCurrentMenuActive() == MENU_LOAD_BACK)
+	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuLoad->setMenuActive(MENU_LOAD_MAIN);
-	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK) {
+	}
+	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_BACK)
+	{
 		this->_renderStatus = MENU_MAIN_MAIN;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 		this->_menuNew->setButtonActive(BTN_NEW_GAMEMODE);
-	} else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME) {
+	}
+	else if (this->_menuNew->getCurrentMenuActive() == MENU_NEW_GAME)
+	{
 		this->_renderStatus = MENU_MAIN_GAME;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
+		this->_menuNew->setButtonActive(BTN_NEW_GAMEMODE);
+		std::cout << "MODE : " << this->_config->getMode() << std::endl;
+		std::cout << "Player 1 : " << this->_config->getPlayer1Skin() << std::endl;
+		std::cout << "Player 2 : " << this->_config->getPlayer2Skin() << std::endl;
 	}
 }
 

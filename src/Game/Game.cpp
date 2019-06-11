@@ -80,19 +80,19 @@ void IndieStudio::Game::createCharacters() noexcept
 {
 	auto Pos_Vec = _map.get_Position_Start();
 	std::list<std::string> players = {"Yoshi", "Sponge Bob", "Eric Cartman", "Fox"};
-	bool player2 = true;
+	bool player2 = false;
 
-	if (this->_config->getMode() == Mode::COOP || this->_config->getMode() == Mode::DUEL)
-		player2 = false;
+	if (this->_config->getMode() == Mode::SOLO)
+		player2 = true;
 	for (auto player_it = players.begin(); player_it != players.end(); player_it++)
 		if (*player_it == this->_config->getPlayer1Skin() || *player_it == this->_config->getPlayer2Skin())
 			player_it = players.erase(player_it);
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, this->_config->getPlayer1Skin(), false, Pos_Vec.at(0), this->_config->getKeybinds1())));
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, this->_config->getPlayer2Skin(), player2, Pos_Vec.at(1), this->_config->getKeybinds2())));
 	if (this->_config->getMode() != Mode::DUEL) {
-		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), false, Pos_Vec.at(2))));
+		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), true, Pos_Vec.at(2))));
 		players.pop_front();
-		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), false, Pos_Vec.at(3))));
+		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), true, Pos_Vec.at(3))));
 	}
 	// IndieStudio::IaMouvement a, b, c, d;
 	// this->_iaMouvement.push_back(a);

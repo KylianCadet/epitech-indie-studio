@@ -24,6 +24,13 @@ IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::strin
 	_spawnPos(position),
 	_name(name)
 {
+	if (bot) {
+		this->_up = IndieStudio::Key::null;
+		this->_left = IndieStudio::Key::null;
+		this->_down = IndieStudio::Key::null;
+		this->_right = IndieStudio::Key::null;
+		this->_action = IndieStudio::Key::null;
+	}
 	this->_model = this->_graphical.createAnimatedMesh(playerAssets[name].mesh, playerAssets[name].texture);
 	this->_model->setPosition(position);
 	this->_deathSound = std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio(playerAssets[name].deathSound));

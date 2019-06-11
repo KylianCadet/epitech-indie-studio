@@ -12,6 +12,7 @@
 #include "Character.hpp"
 #include "Bomb.hpp"
 #include <thread>
+#include <mutex>
 static const float ECART = 2;
 
 namespace IndieStudio {
@@ -21,7 +22,7 @@ namespace IndieStudio {
             ~IaMouvement();
             //IaMouvement(std::vector<IndieStudio::Character> &);
             void Ia();
-            void updateIa(std::shared_ptr<IndieStudio::Character> , std::vector<std::shared_ptr<IndieStudio::Bomb>>, std::vector<std::shared_ptr<IndieStudio::Pos>>);
+            void updateIa(std::shared_ptr<IndieStudio::Character> &, std::vector<std::shared_ptr<IndieStudio::Bomb>>, std::vector<std::shared_ptr<IndieStudio::Pos>>, bool, bool, bool, bool);
             void createIa();
             void thJoin();
         protected:
@@ -56,5 +57,6 @@ namespace IndieStudio {
         std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
         std::vector<std::shared_ptr<IndieStudio::Pos>> _freePos;
         std::thread _th;
+        std::mutex _mutex;
     };
 }

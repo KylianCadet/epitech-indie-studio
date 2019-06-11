@@ -180,30 +180,18 @@ void IndieStudio::Game::checkDeleteBomb() noexcept
 void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
-	int ia_Id = 0;
-	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ia_Id++) {
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+		if (character_it->get()->getBot() == true) {
+			std::cout << "IA\n";
+			this->_iaMouvement.updateIa(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos(),
+			character_it->get()->getMovingUp(), character_it->get()->getMovingDown(), character_it->get()->getMovingLeft(), character_it->get()->getMovingRight());
+			this->_iaMouvement.Ia();
+		}
+	}
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
 		if (character_it->get()->getDeath() == true || character_it->get()->getBot() == true)
 			continue;
 		IndieStudio::Pos newPos = character_it->get()->getEntity()->getPosition();
-		if (character_it->get()->getBot() == true) {
-			// auto test = new IndieStudio::IaMouvement();
-			// std::thread([this, test, character_it](){
-			// 	while (character_it->getPosition()._x != 80)
-			// 		character_it->setMovingUp(true);
-			// 	character_it->setMovingUp(false);
-			// 	//test->Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
-			// }).detach();
-			// if (character_it->th == true) {
-			// 	character_it->th = false;
-			// 	std::thread([this, ia_Id, character_it](){
-			//this->_iaMouvement[ia_Id].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
-			// character_it->th = true;
-			// }).detach();
-			// }
-			// for (unsigned int i = 0; i != this->_iaMouvement.size(); i++) {
-			// 	this->_iaMouvement[i]->updateIa(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
-			// }
-		}
 		isMoving = character_it->get()->getIsMoving();
 		checkMove(character_it, character_it->get()->getMovingUp(), newPos._x, UP_ROT, true);
 		checkMove(character_it, character_it->get()->getMovingDown(), newPos._x, DOWN_ROT, false);

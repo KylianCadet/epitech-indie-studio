@@ -25,15 +25,20 @@ void IndieStudio::IaMouvement::createIa()
     //         this->_th.emplace_back(&IndieStudio::IaMouvement::Ia, this, i);
     //     }
     // }
-    this->_th = std::thread(&IndieStudio::IaMouvement::Ia, this);
+    //this->_th = std::thread(&IndieStudio::IaMouvement::Ia, this);
 }
 
 
-void IndieStudio::IaMouvement::updateIa(std::shared_ptr<IndieStudio::Character> characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec, std::vector<std::shared_ptr<IndieStudio::Pos>> freePos)
+void IndieStudio::IaMouvement::updateIa(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec,
+std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, bool Up_c, bool Down_c, bool Right_c, bool Left_c)
 {
     this->_characVec = characVec;
     this->_bombVec = bombVec;
     this->_freePos = freePos;
+    this->_freeUp = Up_c;
+    this->_freeDown = Down_c;
+    this->_freeRight = Right_c;
+    this->_freeLeft = Left_c;
 }
 
 // void IndieStudio::IaMouvement::Ia(IndieStudio::Character & character, std::vector<std::shared_ptr<IndieStudio::Bomb>> bomb, std::vector<IndieStudio::Pos> freePos)
@@ -68,10 +73,10 @@ void IndieStudio::IaMouvement::Ia()
 {
     //character.setMovingUp(isCenter(character.getPosition()));
 //    setfreePos(character.getPosition(), freePos);
-   while(1) {
-        std::cout << "POS = " << this->_characVec->getPosition()._x << " " << this->_characVec->getPosition()._y << " " << this->_characVec->getPosition()._z << "\n";
-        std::this_thread::sleep_for(std::chrono::microseconds(1000));
-        if (isMoving() == false && this->_freePos.size() > 0) {
+//   while(1) {
+//        std::cout << "POS = " << this->_characVec->getPosition()._x << " " << this->_characVec->getPosition()._y << " " << this->_characVec->getPosition()._z << "\n";
+        std::this_thread::sleep_for(std::chrono::microseconds(500));
+        if (isMoving() == false) {
             // std::cout << "FALSE\n";
             resetMoving();
             setCenter();
@@ -87,15 +92,17 @@ void IndieStudio::IaMouvement::Ia()
             // std::cout << "POS " << character.getPosition()._x << " " << character.getPosition()._y << " " << character.getPosition()._z << "\n";
             chooseDirection();
         }
-        this->_characVec->setMovingUp(_freeUp);
-        this->_characVec->setMovingDown(_freeDown);
-        this->_characVec->setMovingRight(_freeRight);
-        this->_characVec->setMovingLeft(_freeLeft);
+//       _mutex.lock();
+            this->_characVec->setMovingUp(_freeUp);
+            this->_characVec->setMovingDown(_freeDown);
+            this->_characVec->setMovingRight(_freeRight);
+            this->_characVec->setMovingLeft(_freeLeft);
+//        _mutex.unlock();
     //    this->_characVec[id]::cout << "DEST POS " << this->_destination._x << " " << _destination._y << " " << _destination._z << "\n";
     //    std::cout << "TRUE\n";
 //        std::cout << "SIZE FREE POS " << _freePos.size() << "\n";
-   }
-    _th.join();
+   //}
+//    _th.join();
 }
 
 bool checkBomb(int)

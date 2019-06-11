@@ -92,7 +92,7 @@ void IndieStudio::Map::delete_Wall(IndieStudio::IEntity *del)
 	for (auto i = _wall_inside_Vec.begin(); i != _wall_inside_Vec.end(); i++) {
 		if (*i == del) {
 			this->_graphical.deleteEntity(del);
-			this->_free_Absolute_Pos.push_back((*i)->getPosition());
+			this->_free_Absolute_Pos.push_back(std::shared_ptr<IndieStudio::Pos>(new IndieStudio::Pos((*i)->getPosition())));
 			this->_wall_inside_Vec.erase(i);
 			return;
 		}
@@ -105,7 +105,7 @@ void IndieStudio::Map::delete_Cube(IndieStudio::IEntity *del)
 		for (auto i = this->_cube_Destruc_map[j].begin(); i != this->_cube_Destruc_map[j].end(); i++) {
 			if (*i == del) {
 				this->_free_Pos.push_back((*i)->getPosition());
-				this->_free_Absolute_Pos.push_back((*i)->getPosition());
+				this->_free_Absolute_Pos.push_back(std::shared_ptr<IndieStudio::Pos>(new IndieStudio::Pos((*i)->getPosition())));
 				this->_graphical.deleteEntity(del);
 				this->_cube_Destruc_map[j].erase(i);
 				return;
@@ -212,16 +212,16 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::getAllCube(void) noexcept
 	return (cube);
 }
 
-std::vector<IndieStudio::Pos> IndieStudio::Map::getFree_Absolute_Pos(void) noexcept
+std::vector<std::shared_ptr<IndieStudio::Pos>> IndieStudio::Map::getFree_Absolute_Pos(void) noexcept
 {
-	for (unsigned int i = 0; i != getWallCube().size(); i++) {
-		for (unsigned j = 0; j != this->_free_Absolute_Pos.size(); j++) {
-			if (this->_free_Absolute_Pos[j] == getWallCube()[i]->getPosition()) {
-				std::cout << "ET BAH VOILA LA SOURCE DE CE FUCKING PROBLEME\n ";
-				this->_free_Absolute_Pos.erase(this->_free_Absolute_Pos.begin()+j);
-			}
-		}
-	}
+	// for (unsigned int i = 0; i != getWallCube().size(); i++) {
+	// 	for (unsigned j = 0; j != this->_free_Absolute_Pos.size(); j++) {
+	// 		if (this->_free_Absolute_Pos[j] == getWallCube()[i]->getPosition()) {
+	// 			std::cout << "ET BAH VOILA LA SOURCE DE CE FUCKING PROBLEME\n ";
+	// 			this->_free_Absolute_Pos.erase(this->_free_Absolute_Pos.begin()+j);
+	// 		}
+	// 	}
+	// }
 	return (this->_free_Absolute_Pos);
 }
 

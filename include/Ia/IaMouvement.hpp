@@ -20,9 +20,10 @@ namespace IndieStudio {
             IaMouvement();
             ~IaMouvement();
             //IaMouvement(std::vector<IndieStudio::Character> &);
-            void Ia(int j);
-            void updateIa(std::vector<std::shared_ptr<IndieStudio::Character>> , std::vector<std::shared_ptr<IndieStudio::Bomb>>, std::vector<IndieStudio::Pos>);
+            void Ia();
+            void updateIa(std::shared_ptr<IndieStudio::Character> , std::vector<std::shared_ptr<IndieStudio::Bomb>>, std::vector<std::shared_ptr<IndieStudio::Pos>>);
             void createIa();
+            void thJoin();
         protected:
         private:
         enum direction {
@@ -31,15 +32,15 @@ namespace IndieStudio {
             Right,
             Left
         };
-        void checkFreeMove(IndieStudio::Pos character_pos, std::vector<IndieStudio::Pos> freePos);
-        bool freeUp(IndieStudio::Pos character_pos, std::vector<IndieStudio::Pos> freePos);
-        bool freeDown(IndieStudio::Pos character_pos, std::vector<IndieStudio::Pos> freePos);
-        bool freeRight(IndieStudio::Pos character_pos, std::vector<IndieStudio::Pos> freePos);
-        bool freeLeft(IndieStudio::Pos character_pos, std::vector<IndieStudio::Pos> freePos);
-        void setCenter(std::shared_ptr<IndieStudio::Character> & character);
-        bool isMoving(std::shared_ptr<IndieStudio::Character> & character);
-        void resetMoving(std::shared_ptr<IndieStudio::Character> & character);
-        void chooseDirection(std::shared_ptr<IndieStudio::Character> & character);
+        void checkFreeMove();
+        bool freeUp();
+        bool freeDown();
+        bool freeRight();
+        bool freeLeft();
+        void setCenter();
+        bool isMoving();
+        void resetMoving();
+        void chooseDirection();
         void Move();
         std::vector<int> _choiceDestination;
         IndieStudio::Pos _destination = IndieStudio::Pos{0,0,0};
@@ -51,9 +52,9 @@ namespace IndieStudio {
         bool _freeDown = false;
         bool _freeRight = false;
         bool _freeLeft = false;
-        std::vector<std::shared_ptr<IndieStudio::Character>> _characVec;
+        std::shared_ptr<IndieStudio::Character> _characVec;
         std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
-        std::vector<IndieStudio::Pos> _freePos;
-        std::vector<std::thread> _th;
+        std::vector<std::shared_ptr<IndieStudio::Pos>> _freePos;
+        std::thread _th;
     };
 }

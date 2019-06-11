@@ -22,8 +22,13 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
-//	this->_iaMouvement.updateIa(this->_characterVec, this->_bombVec, this->_map.getFree_Absolute_Pos());
-//	 this->_iaMouvement.createIa();
+	// for (unsigned int i = 0; i != this->_characterVec.size(); i++) {
+	// 	if (this->_characterVec[i]->getBot() == true) {
+	// 		this->_iaMouvement.push_back(std::shared_ptr<IndieStudio::IaMouvement>(new IndieStudio::IaMouvement()));
+	// 		this->_iaMouvement[i]->updateIa(this->_characterVec[i], this->_bombVec, this->_map.getFree_Absolute_Pos());
+	// 		this->_iaMouvement[i]->createIa();
+	// 	}
+	// }
 }
 
 IndieStudio::Game::~Game()
@@ -76,7 +81,7 @@ void IndieStudio::Game::createCharacters() noexcept
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
 		IndieStudio::Character(this->_graphical, "Yoshi", "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", true, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0))));
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
-		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", false, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))));
+		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", true, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))));
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
 		IndieStudio::Character(this->_graphical, "Eric Cartman", "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2))));
 	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
@@ -187,8 +192,9 @@ void IndieStudio::Game::moveCharacter() noexcept
 			// character_it->th = true;
 			// }).detach();
 			// }
-			
-			//this->_iaMouvement.updateIa(this->_characterVec, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			// for (unsigned int i = 0; i != this->_iaMouvement.size(); i++) {
+			// 	this->_iaMouvement[i]->updateIa(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			// }
 		}
 		isMoving = character_it->get()->getIsMoving();
 		checkMove(character_it, character_it->get()->getMovingUp(), newPos._x, UP_ROT, true);
@@ -281,6 +287,7 @@ bool IndieStudio::Game::isOver(void) const noexcept
 
 void IndieStudio::Game::destroy(void) noexcept
 {
+	//std::cout << "TEST\n";
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
 		this->_graphical.deleteEntity(character_it->get()->getEntity());
 	auto brickVec = this->_map.getBrickCube();
@@ -292,4 +299,5 @@ void IndieStudio::Game::destroy(void) noexcept
 	auto floorVec = this->_map.getFloorCube();
 	for (auto floor_it = floorVec.begin(); floor_it != floorVec.end(); floor_it++)
 		this->_graphical.deleteEntity(floor_it[0]);
+	//this->_iaMouvement.thJoin();
 }

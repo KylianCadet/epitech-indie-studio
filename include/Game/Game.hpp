@@ -11,11 +11,11 @@
 #include "Bomb.hpp"
 #include "Bonus.hpp"
 #include "Character.hpp"
+#include "Config.hpp"
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
 #include "IaMouvement.hpp"
 #include "Map.hpp"
-#include <functional>
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -29,7 +29,7 @@ static const int DENSITY_BONUS = 33;
 namespace IndieStudio {
 	class Game {
 	public:
-		Game(IndieStudio::IGraphical &graphical, Render &render);
+		Game(IndieStudio::IGraphical &graphical, Render &render, const IndieStudio::Config *);
 		~Game();
 
 	public:
@@ -56,6 +56,7 @@ namespace IndieStudio {
 		void threadPool();
 
 	private:
+		const IndieStudio::Config *_config;
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;

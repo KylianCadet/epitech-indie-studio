@@ -7,20 +7,26 @@
 
 #include "Character.hpp"
 
-IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string name, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up, char left, char down, char right, char action, IndieStudio::Pos position) :
+static std::map<std::string, IndieStudio::character_assets_t> playerAssets = {
+	{"Yoshi", {"assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav"}},
+	{"Sponge Bob", {"assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav"}},
+	{"Eric Cartman", {"assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav"}},
+	{"Fox", {"assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav"}}};
+
+IndieStudio::Character::Character(IndieStudio::IGraphical &graphical, std::string name, bool bot, IndieStudio::Pos position, IndieStudio::playerKeybinds keys) :
 	_graphical(graphical),
 	_bot(bot),
-	_up(std::toupper(up)),
-	_left(std::toupper(left)),
-	_down(std::toupper(down)),
-	_right(std::toupper(right)),
-	_action(std::toupper(action)),
+	_up(std::toupper(keys.up)),
+	_left(std::toupper(keys.left)),
+	_down(std::toupper(keys.down)),
+	_right(std::toupper(keys.right)),
+	_action(std::toupper(keys.bomb)),
 	_spawnPos(position),
 	_name(name)
 {
-	this->_model = this->_graphical.createAnimatedMesh(meshPath, texturePath);
+	this->_model = this->_graphical.createAnimatedMesh(playerAssets[name].mesh, playerAssets[name].texture);
 	this->_model->setPosition(position);
-	this->_deathSound = std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio(deathSoundPath));
+	this->_deathSound = std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio(playerAssets[name].deathSound));
 }
 
 IndieStudio::Character::~Character()
@@ -184,7 +190,7 @@ IndieStudio::Pos IndieStudio::Character::getSpawnPos() const noexcept
 
 bool IndieStudio::Character::getBot() noexcept
 {
-	return(this->_bot);
+	return (this->_bot);
 }
 void IndieStudio::Character::setBonus(float speed, int bombSize, int bombMax) noexcept
 {
@@ -218,5 +224,6 @@ void IndieStudio::Character::death(void) noexcept
 		this->getEntity()->setAnimation(DEATH);
 		std::this_thread::sleep_for(std::chrono::seconds(2));
 		this->setPosition(IndieStudio::Pos(1000, 1000, 1000));
-	}).detach();
+	})
+		.detach();
 }

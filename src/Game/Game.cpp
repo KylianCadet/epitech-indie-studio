@@ -8,13 +8,14 @@
 #include "Game.hpp"
 #include <thread>
 
-IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render) :
+IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, const IndieStudio::Config *config) :
 	_graphical(graphical),
 	_render(render),
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
-	_iaMouvement()
+	_iaMouvement(),
+	_config(config)
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
@@ -78,14 +79,21 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 void IndieStudio::Game::createCharacters() noexcept
 {
 	auto Pos_Vec = _map.get_Position_Start();
-	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
-		IndieStudio::Character(this->_graphical, "Yoshi", "assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav", true, 'i', 'j', 'k', 'l', 'o', Pos_Vec.at(0))));
-	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
-		IndieStudio::Character(this->_graphical, "Sponge Bob", "assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav", true, 'w', 'x', 'c', 'v', 'b', Pos_Vec.at(1))));
-	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
-		IndieStudio::Character(this->_graphical, "Eric Cartman", "assets/characters/eric_c/tris.md2", "assets/characters/eric_c/eric.pcx", "assets/characters/eric_c/death.wav", false, 't', 'f', 'g', 'h', 'y', Pos_Vec.at(2))));
-	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new
-		IndieStudio::Character(this->_graphical, "Fox", "assets/characters/starfox/tris.md2", "assets/characters/starfox/starfox.pcx", "assets/characters/starfox/death.wav", false, 'z', 'q', 's', 'd', 'e', Pos_Vec.at(3))));
+	std::list<std::string> players = {"Yoshi", "Sponge Bob", "Eric Cartman", "Fox"};
+	bool player2 = true;
+
+	if (this->_config->getMode() == Mode::COOP || this->_config->getMode() == Mode::DUEL)
+		player2 = false;
+	for (auto player_it = players.begin(); player_it != players.end(); player_it++)
+		if (*player_it == this->_config->getPlayer1Skin() || *player_it == this->_config->getPlayer2Skin())
+			player_it = players.erase(player_it);
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, this->_config->getPlayer1Skin(), false, Pos_Vec.at(0), this->_config->getKeybinds1())));
+	this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, this->_config->getPlayer2Skin(), player2, Pos_Vec.at(1), this->_config->getKeybinds2())));
+	if (this->_config->getMode() != Mode::DUEL) {
+		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), false, Pos_Vec.at(2))));
+		players.pop_front();
+		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), false, Pos_Vec.at(3))));
+	}
 	// IndieStudio::IaMouvement a, b, c, d;
 	// this->_iaMouvement.push_back(a);
 	// this->_iaMouvement.push_back(b);
@@ -174,7 +182,7 @@ void IndieStudio::Game::moveCharacter() noexcept
 	bool isMoving = false;
 	int ia_Id = 0;
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ia_Id++) {
-		if (character_it->get()->getDeath() == true)
+		if (character_it->get()->getDeath() == true || character_it->get()->getBot() == true)
 			continue;
 		IndieStudio::Pos newPos = character_it->get()->getEntity()->getPosition();
 		if (character_it->get()->getBot() == true) {

@@ -9,16 +9,26 @@
 #define CHARACTER_HPP_
 
 #include "Audio.hpp"
+#include "Config.hpp"
 #include "IGraphical.hpp"
 #include <iostream>
 #include <list>
+
 static const float SPEED = 2.5f;
 static const int BOMBMAX = 2;
 static const int BOMBSIZE = 1;
+
 namespace IndieStudio {
+	typedef struct character_assets_s
+	{
+		std::string mesh;
+		std::string texture;
+		std::string deathSound;
+	} character_assets_t;
+
 	class Character {
 	public:
-		Character(IndieStudio::IGraphical &graphical, std::string name, std::string meshPath, std::string texturePath, std::string deathSoundPath, bool bot, char up = ' ', char left = ' ', char down = ' ', char right = ' ', char action = ' ', IndieStudio::Pos position = IndieStudio::Pos(0, 0, 0));
+		Character(IndieStudio::IGraphical &graphical, std::string name, bool bot, IndieStudio::Pos position = IndieStudio::Pos(0, 0, 0), IndieStudio::playerKeybinds keys = {Key::null, Key::null, Key::null, Key::null, Key::null});
 		~Character();
 		char getUpKey() const noexcept;
 		char getLeftKey() const noexcept;

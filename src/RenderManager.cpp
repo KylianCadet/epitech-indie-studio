@@ -28,7 +28,7 @@ void IndieStudio::RenderManager::render(void) noexcept
 	this->_musicManager.refreshMusic(this->_render);
 	if (this->_render == Render::GAME) {
 		if (this->_game == nullptr)
-			this->_game = std::unique_ptr<IndieStudio::Game>(new IndieStudio::Game(this->_graphical, this->_render));
+			this->_game = std::unique_ptr<IndieStudio::Game>(new IndieStudio::Game(this->_graphical, this->_render, this->_config));
 		this->_game->render();
 		if (this->_game->isOver()) {
 			this->_game->destroy();

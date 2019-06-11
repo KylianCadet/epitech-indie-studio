@@ -43,14 +43,15 @@ namespace IndieStudio {
 		KEY_UP,
 		KEY_DOWN,
 		KEY_LEFT,
-		KEY_RIGHT
+		KEY_RIGHT,
+		null = 0
 	};
 	class IEvent {
-		public:
-			virtual ~IEvent() = default;
-			std::map<IndieStudio::Key, bool> _key;
-			std::map<IndieStudio::Key, bool> _keyRelease;
+	public:
+		virtual ~IEvent() = default;
+		std::map<IndieStudio::Key, bool> _key;
+		std::map<IndieStudio::Key, bool> _keyRelease;
 	};
-};
+}; // namespace IndieStudio
 
 #endif

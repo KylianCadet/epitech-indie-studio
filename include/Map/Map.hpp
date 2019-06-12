@@ -44,6 +44,8 @@ namespace IndieStudio {
 		void create_Start_Positon(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getBrickCube(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getWallCube(void) const noexcept;
+		std::vector<IndieStudio::IEntity *> getWallInsideCube(void) noexcept;
+		std::vector<IndieStudio::IEntity *> getWallOutsideCube(void) noexcept;
 		std::vector<IndieStudio::IEntity *> getFloorCube(void) const noexcept;
 		void delete_Cube(IndieStudio::IEntity *);
 		void set_Texture_Cube(IndieStudio::IEntity *, std::string);
@@ -60,6 +62,7 @@ namespace IndieStudio {
 		std::vector<std::shared_ptr<IndieStudio::Pos>> getFree_Absolute_Pos(void) noexcept;
 		void clearFreePos() noexcept;
 	protected:
+
 	private:
 		enum Texture {
 			FLOOR,
@@ -75,8 +78,11 @@ namespace IndieStudio {
 		int check_format_map_txt() noexcept;
 		void adjustment_Map_Txt();
 		void init_pos_start() noexcept;
-		std::vector<IndieStudio::IEntity *> getWallInsideCube(void) noexcept;
 		std::string reverseStr(std::string &str);
+		void generateSave();
+
+
+		private:
 		std::map<std::string, std::vector<IndieStudio::IEntity *>> _cube;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<IndieStudio::Pos> _pos_start;
@@ -88,6 +94,8 @@ namespace IndieStudio {
 		std::vector<std::shared_ptr<IndieStudio::Pos>> _free_Absolute_Pos;
 		std::map<int, std::vector<IndieStudio::IEntity *>> _cube_Destruc_map;
 		std::vector<std::string> _map_txt_vec;
+		float _x_map = 0;
+		float _y_map = 0;
 	};
 }; // namespace IndieStudio
 

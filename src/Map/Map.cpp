@@ -32,6 +32,8 @@ void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const
 {
 	bool check = false;
 	srand(time(NULL));
+	this->_x_map = x;
+	this->_y_map = y;
 	for (int j = 0, k = 0; j < y; j++) {
 		for (int i = 0; i < x; i++) {
 			this->_floor_Vec.push_back(createCubes(CUBE_X + (i * CUBE_SIDE), CUBE_Y + (j * CUBE_SIDE), CUBE_Z, CUBE_SIDE, texture_Path.at(FLOOR)));
@@ -142,11 +144,6 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallCube(void) const no
 	return (cube);
 }
 
-std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallInsideCube(void) noexcept 
-{
-	return (_wall_inside_Vec);
-}
-
 std::vector<IndieStudio::Pos> IndieStudio::Map::get_Position_Start() const noexcept
 {
 	return (_pos_start);
@@ -214,15 +211,16 @@ std::vector<IndieStudio::IEntity *> IndieStudio::Map::getAllCube(void) noexcept
 
 std::vector<std::shared_ptr<IndieStudio::Pos>> IndieStudio::Map::getFree_Absolute_Pos(void) noexcept
 {
-	// for (unsigned int i = 0; i != getWallCube().size(); i++) {
-	// 	for (unsigned j = 0; j != this->_free_Absolute_Pos.size(); j++) {
-	// 		if (this->_free_Absolute_Pos[j] == getWallCube()[i]->getPosition()) {
-	// 			std::cout << "ET BAH VOILA LA SOURCE DE CE FUCKING PROBLEME\n ";
-	// 			this->_free_Absolute_Pos.erase(this->_free_Absolute_Pos.begin()+j);
-	// 		}
-	// 	}
-	// }
 	return (this->_free_Absolute_Pos);
+}
+
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallInsideCube(void) noexcept
+{
+	return (this->_wall_inside_Vec);
+}
+std::vector<IndieStudio::IEntity *> IndieStudio::Map::getWallOutsideCube(void) noexcept
+{
+	return(this->_wall_Vec);
 }
 
 //              SET
@@ -372,6 +370,33 @@ void IndieStudio::Map::clearFreePos() noexcept
 {
 	this->_free_Pos.clear();
 }
+
+void IndieStudio::Map::generateSave()
+{
+	std::vector<std::string> save_txt;
+	auto isCube = [](IndieStudio::Pos pos, std::vector<IndieStudio::IEntity*> cube) {
+		for (unsigned int i = 0; i != cube.size(); i++) {
+			if (cube[i]->getPosition() == pos)
+				return (true);
+		}
+		return (false);
+	};
+	for (float y = 0, i = 0; y != this->_y_map * CUBE_SIDE; y += CUBE_SIDE, i++) {
+		for (float x = 0, j = 0; x != this->_x_map * CUBE_SIDE; x += CUBE_SIDE, j++) {
+			//std::cout << "POS = " << this->_wall_Vec[i]->getPosition()._x << " " <<this->_wall_Vec[i]->getPosition()._y << " " <<this->_wall_Vec[i]->getPosition()._z << "\n";
+			if (isCube(IndieStudio::Pos{y,CUBE_SIDE,x}, this->_wall_Vec) == true)
+				std::cout << "#";
+			else if (isCube(IndieStudio::Pos{y,CUBE_SIDE,x}, this->_wall_inside_Vec) == true)
+				std::cout << "#";
+			else if (isCube(IndieStudio::Pos{y,CUBE_SIDE,x}, getBrickCube()) == true)
+				std::cout << "B";
+			else
+				std::cout << " ";
+		}
+		std::cout << "\n";
+	}
+}
+
 IndieStudio::Map::~Map()
 {
 }

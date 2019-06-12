@@ -22,6 +22,8 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
+	setSave();
+	this->_save.create_file();
 }
 
 IndieStudio::Game::~Game()
@@ -45,6 +47,15 @@ void IndieStudio::Game::setMapCollision() noexcept
 		this->createCubeColision(*brick_it);
 	for (auto wall_it = wall_vec.begin(); wall_it != wall_vec.end(); wall_it++)
 		this->createCubeColision(*wall_it);
+}
+
+void IndieStudio::Game::setSave() noexcept
+{
+	this->_save.setBrickVec(this->_map.getBrickCube());
+	this->_save.setWallInsideVec(this->_map.getWallInsideCube());
+	this->_save.setWallOutsideVec(this->_map.getWallOutsideCube());
+	this->_save.setCharacterVec(this->_characterVec);
+	this->_save.setDimensionMap(SIZE_MAP_X, SIZE_MAP_Y, CUBE_SIDE);
 }
 
 void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept

@@ -16,6 +16,7 @@
 #include "IGraphical.hpp"
 #include "IaMouvement.hpp"
 #include "Map.hpp"
+#include "Save.hpp"
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -54,15 +55,14 @@ namespace IndieStudio {
 		void setMapCollision() noexcept;
 		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
-		void threadPool();
-
+		void setSave() noexcept;
 	private:
 		const IndieStudio::Config *_config;
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
+		IndieStudio::Save _save;
 		std::vector<IndieStudio::IaMouvement> _iaMouvement;
-		//IndieStudio::IaMouvement _iaMouvement;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;
 		std::vector<std::shared_ptr<IndieStudio::Character>> _characterVec;

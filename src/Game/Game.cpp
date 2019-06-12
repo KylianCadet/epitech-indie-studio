@@ -25,7 +25,7 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
 	// setSave();
 	// this->_save.creatSave();
-	this->_save.configPlayerByTxt(this->_characterVec);
+	//this->_save.configPlayerByTxt(this->_characterVec);
 }
 
 IndieStudio::Game::~Game()

@@ -60,7 +60,7 @@ namespace IndieStudio {
 		std::shared_ptr<IndieStudio::Audio> _bombSound;
 		IndieStudio::Map _map;
 		IndieStudio::Bonus _bonus;
-		IndieStudio::IaMouvement _iaMouvement;
+		std::vector<IndieStudio::IaMouvement> _iaMouvement;
 		//IndieStudio::IaMouvement _iaMouvement;
 		int _renderStatus = MAIN_MENU;
 		IndieStudio::IGraphical &_graphical;

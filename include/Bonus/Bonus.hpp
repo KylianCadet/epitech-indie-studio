@@ -47,6 +47,7 @@ namespace IndieStudio {
             void addFreePosition(std::vector<IndieStudio::Pos>) noexcept;
             void animeBonus() noexcept;
             void delete_Cube(IndieStudio::IEntity *);
+            void destroy_Bonus();
         protected:
         private:
             enum enumBonus {

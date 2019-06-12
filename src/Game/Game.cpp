@@ -14,7 +14,6 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
-	_iaMouvement(),
 	_config(config)
 {
 	this->_bonus.addFreePosition(this->_map.getFreePos());
@@ -23,31 +22,12 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
-	// for (unsigned int i = 0; i != this->_characterVec.size(); i++) {
-	// 	if (this->_characterVec[i]->getBot() == true) {
-	// 		this->_iaMouvement.push_back(std::shared_ptr<IndieStudio::IaMouvement>(new IndieStudio::IaMouvement()));
-	// 		this->_iaMouvement[i]->updateIa(this->_characterVec[i], this->_bombVec, this->_map.getFree_Absolute_Pos());
-	// 		this->_iaMouvement[i]->createIa();
-	// 	}
-	// }
 }
 
 IndieStudio::Game::~Game()
 {
 }
 
-void IndieStudio::Game::threadPool()
-{
-	// for (int i = 0; i != 4; i++) {
-	// 	_th.emplace_back(std::thread(IndieStudio::IaMouvement::Ia,_characterVec[i], this->_bombVec, this->_map.getFree_Absolute_Pos())).detach();
-	// }
-	// 	for (auto i = _th.begin(); i != _th.end(); i++) {
-	// 	i->join();
-	// }
-	// auto test = std::bind(&IndieStudio::IaMouvement::Ia, this->_bombVec, this->_map.getFree_Absolute_Pos());
-	// //std::thread p1(test);
-	// t1.detach();
-}
 
 void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
 {
@@ -94,11 +74,11 @@ void IndieStudio::Game::createCharacters() noexcept
 		players.pop_front();
 		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), true, Pos_Vec.at(3))));
 	}
-	// IndieStudio::IaMouvement a, b, c, d;
-	// this->_iaMouvement.push_back(a);
-	// this->_iaMouvement.push_back(b);
-	// this->_iaMouvement.push_back(c);
-	// this->_iaMouvement.push_back(d);
+	IndieStudio::IaMouvement a, b, c, d;
+	this->_iaMouvement.push_back(a);
+	this->_iaMouvement.push_back(b);
+	this->_iaMouvement.push_back(c);
+	this->_iaMouvement.push_back(d);
 }
 
 std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
@@ -180,16 +160,14 @@ void IndieStudio::Game::checkDeleteBomb() noexcept
 void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
-	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
+	int id_IA = 0;
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, id_IA++) {
 		if (character_it->get()->getBot() == true) {
-			std::cout << "IA\n";
-			this->_iaMouvement.updateIa(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos(),
-			character_it->get()->getMovingUp(), character_it->get()->getMovingDown(), character_it->get()->getMovingLeft(), character_it->get()->getMovingRight());
-			this->_iaMouvement.Ia();
+			this->_iaMouvement[id_IA].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
 		}
 	}
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {
-		if (character_it->get()->getDeath() == true || character_it->get()->getBot() == true)
+		if (character_it->get()->getDeath() == true)
 			continue;
 		IndieStudio::Pos newPos = character_it->get()->getEntity()->getPosition();
 		isMoving = character_it->get()->getIsMoving();
@@ -249,7 +227,7 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
-		if (character_it->get()->getDeath() == true)
+		if (character_it->get()->getDeath() == true || character_it->get()->getBot() == true)
 			continue;
 		character_it->get()->setMovingUp(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getUpKey())]);
 		character_it->get()->setMovingLeft(this->_event._key[static_cast<IndieStudio::Key>(character_it->get()->getLeftKey())]);
@@ -283,7 +261,6 @@ bool IndieStudio::Game::isOver(void) const noexcept
 
 void IndieStudio::Game::destroy(void) noexcept
 {
-	//std::cout << "TEST\n";
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
 		this->_graphical.deleteEntity(character_it->get()->getEntity());
 	auto brickVec = this->_map.getBrickCube();
@@ -295,5 +272,5 @@ void IndieStudio::Game::destroy(void) noexcept
 	auto floorVec = this->_map.getFloorCube();
 	for (auto floor_it = floorVec.begin(); floor_it != floorVec.end(); floor_it++)
 		this->_graphical.deleteEntity(floor_it[0]);
-	//this->_iaMouvement.thJoin();
+	this->_bonus.destroy_Bonus();
 }

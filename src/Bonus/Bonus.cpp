@@ -212,3 +212,24 @@ void IndieStudio::Bonus::animeBonus() noexcept
 	this->_Bonus_Blue_Fire_Vec = parser(this->_Bonus_Blue_Fire_Vec, direction);
 	this->_Bonus_Blue_Speed_Vec = parser(this->_Bonus_Blue_Speed_Vec, direction);
 }
+
+void IndieStudio::Bonus::destroy_Bonus()
+{
+	auto destroy = [this](std::vector<IndieStudio::IEntity *> cube) {
+		for (unsigned int i = 0; i != cube.size(); i++) {
+			this->_graphical.deleteEntity(cube[i]);
+		}
+	};
+	destroy(this->_Bonus_Red_Bomb_Vec);
+	destroy(this->_Bonus_Red_Fire_Vec);
+	destroy(this->_Bonus_Red_Speed_Vec);
+	destroy(this->_Bonus_Blue_Bomb_Vec);
+	destroy(this->_Bonus_Blue_Fire_Vec);
+	destroy(this->_Bonus_Blue_Speed_Vec);
+	this->_Bonus_Red_Bomb_Vec.clear();
+	this->_Bonus_Red_Fire_Vec.clear();
+	this->_Bonus_Red_Speed_Vec.clear();
+	this->_Bonus_Blue_Bomb_Vec.clear();
+	this->_Bonus_Blue_Fire_Vec.clear();
+	this->_Bonus_Blue_Speed_Vec.clear();
+}

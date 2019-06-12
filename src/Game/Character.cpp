@@ -199,6 +199,10 @@ bool IndieStudio::Character::getBot() noexcept
 {
 	return (this->_bot);
 }
+void IndieStudio::Character::setBot(bool isBot) noexcept
+{
+	this->_bot = isBot;
+}
 void IndieStudio::Character::setBonus(float speed, int bombSize, int bombMax) noexcept
 {
 	if (speed != 0 || bombSize != 0 || bombMax != 0) {
@@ -233,4 +237,9 @@ void IndieStudio::Character::death(void) noexcept
 		this->setPosition(IndieStudio::Pos(1000, 1000, 1000));
 	})
 		.detach();
+}
+
+void IndieStudio::Character::setDeath(bool isDead) noexcept
+{
+	this->_death = isDead;
 }

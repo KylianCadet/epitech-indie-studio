@@ -16,14 +16,16 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
 	_config(config)
 {
+//	this->_map.generateBySave(MAP_TXT_PATH);
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
 	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
-	setSave();
-	this->_save.create_file();
+	// setSave();
+	// this->_save.creatSave();
+	this->_save.configPlayerByTxt(this->_characterVec);
 }
 
 IndieStudio::Game::~Game()

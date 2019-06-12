@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 #include <stdlib.h>
 #include <vector>
 #include <fstream>
@@ -29,15 +30,18 @@ namespace IndieStudio {
             void setDimensionMap(float, float, float) noexcept;
             void setCharacterVec(std::vector<std::shared_ptr<IndieStudio::Character>>) noexcept;
             std::vector<std::string> getMap() noexcept;
-            void create_file() noexcept;
+            void creatSave() noexcept;
+            std::string getMapFile() noexcept;
             std::vector<std::string> getMapByTxt() noexcept;
-            std::vector<std::shared_ptr<IndieStudio::Character>> getPlayerPositionByTxt() noexcept;
+            std::vector<std::shared_ptr<IndieStudio::Character>> configPlayerByTxt(std::vector<std::shared_ptr<IndieStudio::Character>>&) noexcept;
         protected:
         private:
         void generateSave() noexcept;
         void generateMap() noexcept;
         void generatePlayerPosition() noexcept;
         std::vector<std::string> getTxt(std::string) noexcept;
+        std::vector<std::string> splitTxt(std::string, std::string) noexcept;
+        std::string reverseStr(std::string &str) noexcept;
         private:
         std::vector<std::string> _mapTxt;
         std::vector<std::string> _playerPosition;

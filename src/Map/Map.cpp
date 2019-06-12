@@ -23,7 +23,7 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 	if (set_Txt_Map(map) == 0)
 		generate_map_by_txt(set_Graphisme(graphisme));
 	else
-		generate_map(15, 32, get_texture_64());
+		generate_map(15, 15, get_texture_64());
 }
 
 //          GENERATION
@@ -71,6 +71,10 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 			if (_map_txt_vec[j][i] == 'P') {
 				_pos_start.push_back({CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)});
 			}
+			if(_map_txt_vec[j][i] == '.') {
+				this->_free_Pos.push_back(IndieStudio::Pos{CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)});
+				this->_free_Absolute_Pos.push_back(std::shared_ptr<IndieStudio::Pos>(new IndieStudio::Pos{CUBE_X + (i * CUBE_SIDE), CUBE_Z + CUBE_SIDE, CUBE_Y + (j * CUBE_SIDE)}));
+			}
 		}
 		if (check == true) {
 			k++;
@@ -80,6 +84,15 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 	adjustment_Position_Start();
 }
 
+void IndieStudio::Map::generateBySave(std::string map) noexcept
+{
+	this->_free_Pos.clear();
+	this->_free_Absolute_Pos.clear();
+	if (set_Txt_Map(map) == 0)	
+		generate_map_by_txt(set_Graphisme(_graphisme));
+	else
+		generate_map(15, 15, get_texture_64());
+}
 IndieStudio::IEntity *IndieStudio::Map::createCubes(float x, float z, float y, float size, std::string texturePath) noexcept
 {
 	IndieStudio::IEntity *cube = this->_graphical.createCube(
@@ -286,10 +299,10 @@ int IndieStudio::Map::check_format_map_txt() noexcept
 {
 	for (unsigned int j = 0; j < _map_txt_vec.size(); j++) {
 		for (unsigned int i = 0; i < _map_txt_vec[j].size() - 1; i++) {
-			if (_map_txt_vec[j][i] == ' ' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' || _map_txt_vec[j][i] == 'P')
+			if (_map_txt_vec[j][i] == '.' || _map_txt_vec[j][i] == '#' || _map_txt_vec[j][i] == 'B' || _map_txt_vec[j][i] == 'P' || _map_txt_vec[j][i] == ' ')
 				;
 			else {
-				std::cout << "Bad Format, Format : Wall = '#', Brick = 'B', Other = ' ', Positon Player = 'P'. Random generation Used\n";
+				std::cout << "Bad Format, Format : Wall = '#', Brick = 'B', Empty = '.', Positon Player = 'P'. Random generation Used\n";
 				return (-1);
 			}
 		}

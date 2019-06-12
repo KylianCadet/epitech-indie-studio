@@ -74,8 +74,10 @@ namespace IndieStudio {
 
 		void death(void) noexcept;
 		bool getDeath(void) const noexcept;
+		void setDeath(bool) noexcept;
 
 		bool getBot() noexcept;
+		void setBot(bool) noexcept;
 
 		std::string getName(void) const noexcept;
 

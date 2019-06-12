@@ -61,6 +61,7 @@ namespace IndieStudio {
 		std::vector<IndieStudio::Pos> getFreePos(void) noexcept;
 		std::vector<std::shared_ptr<IndieStudio::Pos>> getFree_Absolute_Pos(void) noexcept;
 		void clearFreePos() noexcept;
+		void generateBySave(std::string map = NULL) noexcept;
 	protected:
 
 	private:
@@ -96,6 +97,7 @@ namespace IndieStudio {
 		std::vector<std::string> _map_txt_vec;
 		float _x_map = 0;
 		float _y_map = 0;
+		std::string _graphisme = "64";
 	};
 }; // namespace IndieStudio
 

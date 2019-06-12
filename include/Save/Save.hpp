@@ -30,7 +30,7 @@ namespace IndieStudio {
             void setDimensionMap(float, float, float) noexcept;
             void setCharacterVec(std::vector<std::shared_ptr<IndieStudio::Character>>) noexcept;
             std::vector<std::string> getMap() noexcept;
-            void creatSave() noexcept;
+            void createSave() noexcept;
             std::string getMapFile() noexcept;
             std::vector<std::string> getMapByTxt() noexcept;
             std::vector<std::shared_ptr<IndieStudio::Character>> configPlayerByTxt(std::vector<std::shared_ptr<IndieStudio::Character>>&) noexcept;

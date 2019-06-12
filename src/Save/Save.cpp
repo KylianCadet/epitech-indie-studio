@@ -23,7 +23,7 @@ IndieStudio::Save::Save(std::vector<IndieStudio::IEntity *> const & brick, std::
     this->_cube_size = cube_size;
 }
 
-void IndieStudio::Save::creatSave() noexcept
+void IndieStudio::Save::createSave() noexcept
 {
     generateSave();
     std::ofstream mapFile(MAP_TXT_PATH);
@@ -102,6 +102,9 @@ void IndieStudio::Save::generateMap() noexcept
         }
         save_txt.push_back(reverseStr(line));
     }
+    for (int i = save_txt.size()-1; i != -1; i--) {
+        this->_mapTxt.push_back(save_txt[i]);
+    }
 }
 
 std::string IndieStudio::Save::reverseStr(std::string &str) noexcept
@@ -176,9 +179,11 @@ std::vector<std::string> IndieStudio::Save::splitTxt(std::string line, std::stri
     std::vector<std::string> tab;
     while ((pos = line.find(delimiter)) != std::string::npos) {
         token = line.substr(0, pos);
+        std::cout << token << std::endl;
         tab.push_back(token);
         line.erase(0, pos + delimiter.length());
     }
+    //std::cout << line << std::endl;
     return (tab);
 }
 //////////// SET ////////////

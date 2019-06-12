@@ -222,8 +222,11 @@ void IndieStudio::Game::checkEvent(void) noexcept
 		this->_render = PAUSE_MENU;
 
 	if (this->_event._key[IndieStudio::Key::RETURN] == true && this->_win == true) {
-		this->_isOver = true;
-		this->_render = MAIN_MENU;
+		std::thread([this] {
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+			this->_isOver = true;
+			this->_render = MAIN_MENU;
+		}).detach();
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {

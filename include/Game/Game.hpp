@@ -39,6 +39,7 @@ namespace IndieStudio {
 
 	private:
 		void reset() noexcept;
+		void playIntro() noexcept;
 		std::size_t getAliveCharacter() const noexcept;
 		void playEnding();
 		void createCubes() noexcept;
@@ -76,6 +77,12 @@ namespace IndieStudio {
 		IndieStudio::Render &_render;
 		bool _win = false;
 		bool _isOver = false;
+		bool _intro = true;
+		int _introNumber = 3;
+		bool _create = true;
+		IndieStudio::IEntity *_3;
+		IndieStudio::IEntity *_2;
+		IndieStudio::IEntity *_1;
 	};
 }; // namespace IndieStudio
 

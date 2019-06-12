@@ -28,7 +28,6 @@ IndieStudio::Game::~Game()
 {
 }
 
-
 void IndieStudio::Game::setCameraPosition(int x, int y) noexcept
 {
 	float div = ((x + y) / 2) * 32;
@@ -105,16 +104,45 @@ void IndieStudio::Game::playEnding()
 	winner->get()->getEntity()->setAnimation(WIN_ANIM);
 }
 
+#include "unistd.h"
+
+void IndieStudio::Game::playIntro() noexcept
+{
+	if (this->_create) {
+		this->_3 = this->_graphical.createImage("./assets/3.png", std::pair<int, int>(-1, 300));
+		this->_2 = this->_graphical.createImage("./assets/2.png", std::pair<int, int>(-1, 300));
+		this->_1 = this->_graphical.createImage("./assets/1.png", std::pair<int, int>(-1, 350));
+		std::thread([this] {
+			sleep(1);
+			this->_introNumber = 2;
+			sleep(1);
+			this->_introNumber = 1;
+			sleep(1);
+			this->_intro = false;
+		})
+			.detach();
+		this->_create = false;
+	}
+	if (this->_introNumber == 3)
+		this->_graphical.drawImage(_3);
+	else if (this->_introNumber == 2)
+		this->_graphical.drawImage(_2);
+	else
+		this->_graphical.drawImage(_1);
+}
+
 void IndieStudio::Game::render() noexcept
 {
 	if (this->getAliveCharacter() == 1 && this->_win == false) {
 		this->_win = true;
 		this->playEnding();
-	} else if (this->_win == false)
+	} else if (this->_win == false && this->_intro == false)
 		this->moveCharacter();
 	this->bonusRender();
 	this->checkEvent();
 	this->_graphical.drawScene();
+	if (this->_intro)
+		this->playIntro();
 }
 
 int IndieStudio::Game::getRenderStatus(void) const noexcept
@@ -226,7 +254,8 @@ void IndieStudio::Game::checkEvent(void) noexcept
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 			this->_isOver = true;
 			this->_render = MAIN_MENU;
-		}).detach();
+		})
+			.detach();
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {

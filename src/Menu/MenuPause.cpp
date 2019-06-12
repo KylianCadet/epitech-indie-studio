@@ -209,6 +209,8 @@ void IndieStudio::MenuPause::downActionManager(void) noexcept
 
 void IndieStudio::MenuPause::alphaActionManager(IndieStudio::Key key) noexcept
 {
+	if (this->_renderStatus == MENU_PAUSE_OPTIONS)
+		this->_menuOptions->alphaActionManager(key);
 }
 
 void IndieStudio::MenuPause::alphaAction(IndieStudio::Key key) noexcept

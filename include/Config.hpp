@@ -25,7 +25,8 @@ enum Mode
 {
 	SOLO,
 	COOP,
-	DUEL
+	DUEL,
+	CONTINUE
 };
 
 class Config

@@ -12,7 +12,7 @@ namespace IndieStudio {
 	enum Render {
 		GAME,
 		MAIN_MENU,
-		PAUSE_MENU
+		PAUSE_MENU,
 	};
 };
 

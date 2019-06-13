@@ -10,22 +10,22 @@
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, const IndieStudio::Config *config) :
 	_graphical(graphical),
+	_save(graphical, this->_config->getKeybinds1(), this->_config->getKeybinds2()),
 	_render(render),
 	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
-	_config(config)
+	_config(config),
+	_iaMouvement(4)
 {
-//	this->_map.generateBySave(MAP_TXT_PATH);    POUR GENERER LA MAP SAUVEGARDER
+	if (config->getMode() == Mode::CONTINUE)
+		this->_map.generateBySave(MAP_TXT_PATH);
 	this->_bonus.addFreePosition(this->_map.getFreePos());
 	this->_map.clearFreePos();
 	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
 	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
-// 	setSave();   POUR CREER LA SAUVEGARDE
-//	this->_save.createSave();   POUR CREER LA SAUVEGARDE
-//	this->_save.configPlayerByTxt(this->_characterVec);    POUR GENERER LA MAP SAUVEGARDER
 }
 
 IndieStudio::Game::~Game()
@@ -58,6 +58,7 @@ void IndieStudio::Game::setSave() noexcept
 	this->_save.setWallOutsideVec(this->_map.getWallOutsideCube());
 	this->_save.setCharacterVec(this->_characterVec);
 	this->_save.setDimensionMap(SIZE_MAP_X, SIZE_MAP_Y, CUBE_SIDE);
+	this->_save.createSave();
 }
 
 void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
@@ -70,6 +71,8 @@ void IndieStudio::Game::createCubeColision(IndieStudio::IEntity *cube) noexcept
 
 void IndieStudio::Game::createCharacters() noexcept
 {
+	if (this->_config->getMode() == Mode::CONTINUE)
+		return (this->_save.configPlayerByTxt(this->_characterVec));
 	auto Pos_Vec = _map.get_Position_Start();
 	std::list<std::string> players = {"Yoshi", "Sponge Bob", "Eric Cartman", "Fox"};
 	bool player2 = false;
@@ -86,11 +89,6 @@ void IndieStudio::Game::createCharacters() noexcept
 		players.pop_front();
 		this->_characterVec.push_back(std::shared_ptr<IndieStudio::Character>(new IndieStudio::Character(this->_graphical, *players.begin(), true, Pos_Vec.at(3))));
 	}
-	IndieStudio::IaMouvement a, b, c, d;
-	this->_iaMouvement.push_back(a);
-	this->_iaMouvement.push_back(b);
-	this->_iaMouvement.push_back(c);
-	this->_iaMouvement.push_back(d);
 }
 
 std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
@@ -259,10 +257,14 @@ void IndieStudio::Game::checkEvent(void) noexcept
 
 	this->_event = this->_graphical.getEvent();
 
-	if (this->_event._key[IndieStudio::Key::ESC] == true)
+	if (this->_event._key[IndieStudio::Key::ESC] == true) {
+		this->setSave();
 		this->_render = PAUSE_MENU;
+	}
 
 	if (this->_event._key[IndieStudio::Key::RETURN] == true && this->_win == true) {
+		remove(PLAYER_TXT_PATH.c_str());
+		remove(MAP_TXT_PATH.c_str());
 		std::thread([this] {
 			std::this_thread::sleep_for(std::chrono::seconds(2));
 			this->_isOver = true;

@@ -34,6 +34,13 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 			usleep(100000);
 			this->_graphical.drop();
 			exit(0);
+		} else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_LOADGAME)
+		{
+			if (std::ifstream(MAP_TXT_PATH).good() && std::ifstream(PLAYER_TXT_PATH).good()) {
+				this->_config->setMode(Mode::CONTINUE);
+				this->_renderStatus = Render::GAME;
+				this->_menuMain->setMenuActive(MENU_MAIN_MAIN);
+			}
 		}
 	}
 	else if (this->_renderStatus == PAUSE_MENU)

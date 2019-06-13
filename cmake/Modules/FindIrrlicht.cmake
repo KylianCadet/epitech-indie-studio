@@ -14,14 +14,14 @@ elseif(WIN64)
 else()
 	FIND_LIBRARY(IRRLICHT_LIBRARY NAMES libIrrlicht.a
 		PATHS
-		/usr/local/lib
+		# /usr/local/lib
 		${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/Unix
 	)
 endif()
 
 FIND_PATH(IRRLICHT_INCLUDE_DIR NAMES irrlicht.h
 	PATHS
-	/usr/irrlicht-includes
+	# /usr/irrlicht-includes
 	${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/irrlicht-includes
 )
 

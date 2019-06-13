@@ -1,7 +1,7 @@
 
 cmake_minimum_required	(VERSION 3.6)
 
-message(STATUS "*** Building Indie Studio version ${VERSION_STRING} // Salty Queens' Bomberman! ***")
+message(STATUS "*** Building Indie Studio version ${VERSION_STRING} // ALLAH's Bomberman! ***")
 
 project(indie_studio) #NOM DU PROJET
 
@@ -92,7 +92,7 @@ if(IRRLICHT_FOUND)
 	endif()
 
 	set_property		(TARGET bomberman PROPERTY CXX_STANDARD 11)
-	message(STATUS "*** Successfully generated Salty Queens' Bomberman project! ***")
+	message(STATUS "*** Successfully generated ALLAH's Bomberman project! ***")
 else()
 	message(WARNING "*** Irrlicht not found, build failed! ***")
 endif()

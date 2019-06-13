@@ -86,8 +86,31 @@ void IndieStudio::Map::generate_map_by_txt(std::vector<std::string> texture_Path
 
 void IndieStudio::Map::generateBySave(std::string map) noexcept
 {
+	auto delCubeVec = [this](std::vector<IndieStudio::IEntity *> &cube) {
+		for(unsigned int i = 0; i != cube.size(); i++) {
+			this->_graphical.deleteEntity(cube[i]);
+		}
+	};
+	auto delCubeMap = [this]() {
+		for (unsigned int j = 0; j < this->_cube_Destruc_map.size(); j++) {
+			for (unsigned int i = 0; i != this->_cube_Destruc_map[j].size(); i++) {
+				this->_graphical.deleteEntity(this->_cube_Destruc_map[j][i]);
+			}
+	}
+	};
+	delCubeVec(_floor_Vec);
+	delCubeVec(_cube_Destruc_Vec);
+	delCubeVec(_wall_Vec);
+	delCubeVec(_wall_inside_Vec);
+	delCubeMap();
 	this->_free_Pos.clear();
 	this->_free_Absolute_Pos.clear();
+	this->_floor_Vec.clear();
+	this->_pos_start.clear();
+	this->_cube_Destruc_map.clear();
+	this->_wall_Vec.clear();
+	this->_wall_inside_Vec.clear();
+	this->_cube_Destruc_Vec.clear();
 	if (set_Txt_Map(map) == 0)	
 		generate_map_by_txt(set_Graphisme(_graphisme));
 	else

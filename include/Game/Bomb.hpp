@@ -24,6 +24,8 @@ namespace IndieStudio {
 		bool getAlive(void) const noexcept;
 		bool getTotalDeath(void) const noexcept;
 		IndieStudio::Pos getPosition(void) const noexcept;
+		IndieStudio::Pos getLastPosition(void) const noexcept;
+		int getBombSize() noexcept;
 
 	private:
 		void checkHitCube(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
@@ -39,6 +41,7 @@ namespace IndieStudio {
 		IndieStudio::Map &_map;
 		IndieStudio::IEntity *_bomb;
 		IndieStudio::IEntity *_particle;
+		IndieStudio::Pos _lastPos = IndieStudio::Pos{0,0,0};
 		std::shared_ptr<IndieStudio::Audio> _sound;
 		std::vector<IndieStudio::IEntity *> _explosionParticule;
 		std::vector<std::shared_ptr<IndieStudio::Bomb>> &_bombVec;

@@ -52,6 +52,7 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 	this->_bomb->setScale(IndieStudio::Pos(20, 20, 20));
 	this->_bomb->setPosition(vector);
 	this->createParticule(vector);
+	this->_lastPos = vector;
 }
 
 IndieStudio::Pos IndieStudio::Bomb::getPosition() const noexcept
@@ -202,4 +203,14 @@ bool IndieStudio::Bomb::getAlive() const noexcept
 bool IndieStudio::Bomb::getTotalDeath() const noexcept
 {
 	return (this->_totalDeath);
+}
+
+int IndieStudio::Bomb::getBombSize() noexcept
+{
+	return (this->_bombSize);
+}
+
+IndieStudio::Pos IndieStudio::Bomb::getLastPosition(void) const noexcept
+{
+	return (this->_lastPos);
 }

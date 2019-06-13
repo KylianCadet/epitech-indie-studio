@@ -11,28 +11,71 @@ IndieStudio::IaMouvement::IaMouvement()
 {
 }
 
-void IndieStudio::IaMouvement::Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec,
+void IndieStudio::IaMouvement::Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec,
 std::vector<std::shared_ptr<IndieStudio::Pos>> freePos)
 {
         this->_characVec = characVec;
         this->_bombVec = bombVec;
         this->_freePos = freePos;
-        std::this_thread::sleep_for(std::chrono::microseconds(500));
         if (isMoving() == false) {
             resetMoving();
             setCenter();
             checkFreeMove();
+            checkBomb();
             chooseDirection();
             this->_characVec->setMovingUp(_freeUp);
             this->_characVec->setMovingDown(_freeDown);
             this->_characVec->setMovingRight(_freeRight);
             this->_characVec->setMovingLeft(_freeLeft);
+            std::this_thread::sleep_for(std::chrono::microseconds(300));
         }
 }
 
-bool checkBomb(int)
+void IndieStudio::IaMouvement::checkBomb()
 {
+    setBombPos();
+    std::vector<int> tempChoiceDestination = this->_choiceDestination;
+    auto eraseDestination = [&tempChoiceDestination](int nb) {
+        for (unsigned int i = 0; i != tempChoiceDestination.size(); i++) {
+            if (tempChoiceDestination[i] == nb) {
+                tempChoiceDestination.erase(tempChoiceDestination.begin() + i);
+                break;
+            }
+        }
+    };
+    for (unsigned int i = 0; i != this->_bombPos.size(); i++) {
+        if (this->_bombPos[i]._x == _destinationUp._x && this->_bombPos[i]._z == _destinationUp._z) {
+            eraseDestination(Up);
+        }
+        if (this->_bombPos[i]._x == _destinationDown._x && this->_bombPos[i]._z == _destinationDown._z) {
+            eraseDestination(Down);
+        }
+        if (this->_bombPos[i]._x == _destinationRight._x && this->_bombPos[i]._z == _destinationRight._z) {
+            eraseDestination(Right);
+        }
+        if (this->_bombPos[i]._x == _destinationLeft._x && this->_bombPos[i]._z == _destinationLeft._z) {
+            eraseDestination(Left);
+        }
+    }
+    if (tempChoiceDestination.size() > 0)
+        this->_choiceDestination = tempChoiceDestination;
+}
 
+void IndieStudio::IaMouvement::setBombPos()
+{
+    this->_bombPos.clear();
+    for (unsigned int i = 0; i != this->_bombVec.size(); i++) {
+        for (int j = 0; j != this->_bombVec[i]->getBombSize() + 1; j++) {
+            if (j < 1) {
+                this->_bombPos.push_back(IndieStudio::Pos{this->_bombVec[i]->getLastPosition()._x, this->_bombVec[i]->getLastPosition()._y, this->_bombVec[i]->getLastPosition()._z});
+            } else {
+                this->_bombPos.push_back(IndieStudio::Pos{this->_bombVec[i]->getLastPosition()._x + (j * 40), this->_bombVec[i]->getLastPosition()._y, this->_bombVec[i]->getLastPosition()._z});
+                this->_bombPos.push_back(IndieStudio::Pos{this->_bombVec[i]->getLastPosition()._x - (j * 40), this->_bombVec[i]->getLastPosition()._y, this->_bombVec[i]->getLastPosition()._z});
+                this->_bombPos.push_back(IndieStudio::Pos{this->_bombVec[i]->getLastPosition()._x, this->_bombVec[i]->getLastPosition()._y, this->_bombVec[i]->getLastPosition()._z + (j * 40)});
+                this->_bombPos.push_back(IndieStudio::Pos{this->_bombVec[i]->getLastPosition()._x, this->_bombVec[i]->getLastPosition()._y, this->_bombVec[i]->getLastPosition()._z - (j * 40)});
+            }
+        }
+    }
 }
 
 void IndieStudio::IaMouvement::resetMoving()
@@ -110,7 +153,6 @@ bool IndieStudio::IaMouvement::freeUp()
         if (this->_characVec->getPosition()._z >= _freePos[i]->_z - ECART && this->_characVec->getPosition()._z <= _freePos[i]->_z + ECART && (this->_characVec->getPosition()._x + nb) >= _freePos[i]->_x - ECART && (this->_characVec->getPosition()._x + nb) <= _freePos[i]->_x + ECART) {
             this->_choiceDestination.push_back(Up);
             this->_destinationUp = *_freePos[i];
-            this->_freeUp = true;
         }
     }
 }
@@ -123,7 +165,6 @@ bool IndieStudio::IaMouvement::freeDown()
         if (this->_characVec->getPosition()._z >= _freePos[i]->_z - ECART && this->_characVec->getPosition()._z <= _freePos[i]->_z + ECART && (this->_characVec->getPosition()._x + nb) >= _freePos[i]->_x - ECART && (this->_characVec->getPosition()._x + nb) <= _freePos[i]->_x + ECART) {
             this->_choiceDestination.push_back(Down);
             this->_destinationDown = *_freePos[i];
-            this->_freeDown = true;
         }
     }
 }
@@ -136,7 +177,6 @@ bool IndieStudio::IaMouvement::freeLeft()
         if (this->_characVec->getPosition()._x >= (_freePos[i]->_x - ECART) && this->_characVec->getPosition()._x <= (_freePos[i]->_x + ECART) && (this->_characVec->getPosition()._z + nb) >= (_freePos[i]->_z - ECART) && (this->_characVec->getPosition()._z + nb) <= _freePos[i]->_z + ECART) {
             this->_choiceDestination.push_back(Left);
             this->_destinationLeft = *_freePos[i];
-            this->_freeLeft = true;
         }
     }
 
@@ -150,7 +190,6 @@ bool IndieStudio::IaMouvement::freeRight()
         if (this->_characVec->getPosition()._x >= _freePos[i]->_x - ECART && this->_characVec->getPosition()._x <= _freePos[i]->_x + ECART && (this->_characVec->getPosition()._z + nb) >= _freePos[i]->_z - ECART && (this->_characVec->getPosition()._z + nb) <= _freePos[i]->_z + ECART) {
             this->_choiceDestination.push_back(Right);
             this->_destinationRight = *_freePos[i];
-            this->_freeRight = true;
         }
     }
 }

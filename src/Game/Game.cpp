@@ -200,6 +200,7 @@ void IndieStudio::Game::moveCharacter() noexcept
 {
 	bool isMoving = false;
 	int id_IA = 0;
+	this->checkDeleteBomb();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, id_IA++) {
 		if (character_it->get()->getBot() == true) {
 			this->_iaMouvement[id_IA].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
@@ -223,7 +224,7 @@ void IndieStudio::Game::moveCharacter() noexcept
 		character_it->get()->getEntity()->setPosition(newPos);
 		if (character_it->get()->getDoingAction() == true) {
 			character_it->get()->setDoingAction(false);
-			this->checkDeleteBomb();
+			//this->checkDeleteBomb();
 			if (character_it->get()->getBombMax() > character_it->get()->get_Bomb_Current()) {
 				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->get()->getEntity()->getPosition(), character_it->get()->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound));
 				this->_bombVec.push_back(newBomb);

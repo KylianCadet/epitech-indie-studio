@@ -19,15 +19,7 @@ namespace IndieStudio {
         public:
             IaMouvement();
             ~IaMouvement();
-            //IaMouvement(std::vector<IndieStudio::Character> &);
-            void Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> bombVec, std::vector<std::shared_ptr<IndieStudio::Pos>> freePos);
-            void updateIa(std::shared_ptr<IndieStudio::Character> &, std::vector<std::shared_ptr<IndieStudio::Bomb>>, std::vector<std::shared_ptr<IndieStudio::Pos>>, bool, bool, bool, bool);
-            void createIa();
-            void thJoin();
-            bool getUp();
-            bool getDown();
-            bool getRight();
-            bool getLeft();
+            void Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Pos>> freePos);
         protected:
         private:
         enum direction {
@@ -46,6 +38,8 @@ namespace IndieStudio {
         void resetMoving();
         void chooseDirection();
         void Move();
+        void checkBomb();
+        void setBombPos();
         std::vector<int> _choiceDestination;
         IndieStudio::Pos _destination = IndieStudio::Pos{0,0,0};
         IndieStudio::Pos _destinationUp = IndieStudio::Pos{0,0,0};
@@ -59,5 +53,6 @@ namespace IndieStudio {
         std::shared_ptr<IndieStudio::Character> _characVec;
         std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
         std::vector<std::shared_ptr<IndieStudio::Pos>> _freePos;
+        std::vector<IndieStudio::Pos> _bombPos;
     };
 }

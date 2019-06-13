@@ -6,7 +6,7 @@ message(STATUS "*** Building Indie Studio version ${VERSION_STRING} // ALLAH's B
 project(indie_studio) #NOM DU PROJET
 
 set			(IRRLICHT Irrlicht)
-set 		(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
+# set 		(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
 
 #set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE}) #LA Où ON VEUT SORTIR LE BINAIRE (facultatif)
 
@@ -37,8 +37,10 @@ if(WIN32)
 	set(SHAREDIR ".")
 	set(BINDIR "bin")
 	set(CMAKE_CXX_FLAGS "-EHsc")
+	set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/build")
 
 elseif(UNIX)
+	set (CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 	set(SHAREDIR ".")
 	set(BINDIR "bin")
 	set(CMAKE_CXX_FLAGS "-W -Wextra -Werror")

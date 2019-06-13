@@ -2,27 +2,29 @@ if(WIN32)
 	if(MSVC)
 		FIND_LIBRARY(IRRLICHT_LIBRARY NAMES Irrlicht.lib
 			PATHS
-			${CMAKE_CURRENT_SOURCE_DIR}/lib/Win64		)
+			${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/Win64		)
 	endif()
 elseif(WIN64)
 	if(MSVC)
 		FIND_LIBRARY(IRRLICHT_LIBRARY NAMES Irrlicht.lib
 			PATHS
-			${CMAKE_CURRENT_SOURCE_DIR}/lib/Win64
+			${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/Win64
 		)
 	endif()
 else()
 	FIND_LIBRARY(IRRLICHT_LIBRARY NAMES libIrrlicht.a
-		PATHS
-		# /usr/local/lib
+		HINTS
 		${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/Unix
+		NO_DEFAULT_PATH
+		NO_SYSTEM_ENVIRONMENT_PATH
+		# /usr/local/lib
 	)
 endif()
 
 FIND_PATH(IRRLICHT_INCLUDE_DIR NAMES irrlicht.h
 	PATHS
-	# /usr/irrlicht-includes
 	${CMAKE_CURRENT_SOURCE_DIR}/cmake/lib/irrlicht-includes
+	# /usr/irrlicht-includes
 )
 
 MESSAGE(STATUS "IRRLICHT_INCLUDE_DIR = ${IRRLICHT_INCLUDE_DIR}")

@@ -294,7 +294,7 @@ void IndieStudio::Map::set_Density_Brick(float percent)
 {
 	auto nb = (percent / 100) * this->getBrickCube().size();
 	for (unsigned int i = 0; i < nb; i++) {
-		auto randPos = rand()%(this->getBrickCube().size()-0 + 1) + 0;
+		auto randPos = rand()%(this->getBrickCube().size()-1 + 1) + 0;
 			delete_Cube(this->getBrickCube()[randPos]);
 	}
 }

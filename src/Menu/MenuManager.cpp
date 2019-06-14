@@ -52,17 +52,16 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 		}
 		else if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_QUIT)
 		{
-			std::cout << "IN MENU PAUSE QUIT" << std::endl;
 			this->_config->setMode(Mode::RESET);
 			this->_renderStatus = MAIN_MENU;
 			this->_menuPause->setButtonActive(BTN_PAUSE_BACK);
 			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);
 			this->_menuMain->setMenuActive(MENU_MAIN_MAIN);
 		}
-		else if (this->_menuPause->getCurrentButtonActive() == MENU_PAUSE_RESTART)
+		else if (this->_menuPause->getCurrentMenuActive() == MENU_PAUSE_RESTART)
 		{
-			std::cout << "MENU PAUSE RESTART" << std::endl;
 			this->_config->setPrevMode(this->_config->getMode());
+			this->_menuPause->setMenuActive(MENU_PAUSE_MAIN);
 			this->_config->setMode(Mode::RESET);
 			this->_renderStatus = Render::GAME;
 		}

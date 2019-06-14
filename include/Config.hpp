@@ -26,7 +26,8 @@ enum Mode
 	SOLO,
 	COOP,
 	DUEL,
-	CONTINUE
+	CONTINUE,
+	RESET
 };
 
 class Config
@@ -37,6 +38,9 @@ public:
 
 	Mode getMode(void) const noexcept;
 	void setMode(Mode) noexcept;
+
+	Mode getPrevMode(void) const noexcept;
+	void setPrevMode(Mode) noexcept;
 
 	std::string getPlayer1Skin(void) const noexcept;
 	std::string getPlayer2Skin(void) const noexcept;
@@ -50,6 +54,7 @@ public:
 
 private:
 	Mode _mode;
+	Mode _prevMode;
 
 	std::string _player1Skin;
 	std::string _player2Skin;

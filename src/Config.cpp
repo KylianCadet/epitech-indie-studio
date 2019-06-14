@@ -75,3 +75,13 @@ void IndieStudio::Config::setKeybinds2(IndieStudio::playerKeybinds keyBinds) noe
 {
 	this->_player2 = keyBinds;
 }
+
+IndieStudio::Mode IndieStudio::Config::getPrevMode(void) const noexcept
+{
+	return (this->_prevMode);
+}
+
+void IndieStudio::Config::setPrevMode(Mode mode) noexcept
+{
+	this->_prevMode = mode;
+}

@@ -7,7 +7,8 @@
 
 #include "Config.hpp"
 
-IndieStudio::Config::Config()
+IndieStudio::Config::Config() :
+	_prevMode(IndieStudio::Mode::SOLO)
 {
 	this->_player1.up = Z;
 	this->_player1.down = S;

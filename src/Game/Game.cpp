@@ -201,8 +201,6 @@ void IndieStudio::Game::moveCharacter() noexcept
 	bool isMoving = false;
 	int id_IA = 0;
 	this->checkDeleteBomb();
-	for (auto ia_it = this->_iaMouvement.begin(); ia_it != this->_iaMouvement.end(); ia_it++)
-	this->_iaMouvement
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, id_IA++) {
 		std::cout << character_it->get()->getName() << std::endl;
 		if (character_it->get()->getBot() == true) {

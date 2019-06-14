@@ -106,16 +106,12 @@ std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
 
 void IndieStudio::Game::playEnding()
 {
-	std::shared_ptr<IndieStudio::Character> *winner;
-
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-		if (character_it->get()->getDeath() == false)
-			winner = character_it.base();
-	winner->get()->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
-	winner->get()->getEntity()->setAnimation(WIN_ANIM);
+		if (character_it->get()->getDeath() == false) {
+			character_it->get()->getEntity()->setRotation(IndieStudio::Pos(0, DOWN_ROT, 0));
+			character_it->get()->getEntity()->setAnimation(WIN_ANIM);
+		}
 }
-
-#include "unistd.h"
 
 void IndieStudio::Game::playIntro() noexcept
 {
@@ -124,11 +120,11 @@ void IndieStudio::Game::playIntro() noexcept
 		this->_2 = this->_graphical.createImage("./assets/2.png", std::pair<int, int>(-1, 300));
 		this->_1 = this->_graphical.createImage("./assets/1.png", std::pair<int, int>(-1, 350));
 		std::thread([this] {
-			sleep(1);
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 			this->_introNumber = 2;
-			sleep(1);
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 			this->_introNumber = 1;
-			sleep(1);
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 			this->_intro = false;
 		})
 			.detach();
@@ -258,7 +254,7 @@ void IndieStudio::Game::checkEvent(void) noexcept
 
 	this->_event = this->_graphical.getEvent();
 
-	if (this->_event._key[IndieStudio::Key::ESC] == true) {
+	if (this->_event._key[IndieStudio::Key::ESC] == true && this->_intro == false) {
 		this->setSave();
 		this->_render = PAUSE_MENU;
 	}
@@ -321,4 +317,8 @@ void IndieStudio::Game::destroy(void) noexcept
 	for (auto floor_it = floorVec.begin(); floor_it != floorVec.end(); floor_it++)
 		this->_graphical.deleteEntity(floor_it[0]);
 	this->_bonus.destroy_Bonus();
+	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
+		this->_graphical.deleteEntity(bomb_it->get()->getEntity());
+	this->_bombVec.clear();
+	this->_characterVec.clear();
 }

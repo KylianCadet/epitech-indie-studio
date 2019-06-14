@@ -214,3 +214,8 @@ IndieStudio::Pos IndieStudio::Bomb::getLastPosition(void) const noexcept
 {
 	return (this->_lastPos);
 }
+
+IndieStudio::IEntity *IndieStudio::Bomb::getEntity(void) const noexcept
+{
+	return (this->_bomb);
+}

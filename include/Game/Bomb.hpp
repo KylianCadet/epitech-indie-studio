@@ -26,6 +26,7 @@ namespace IndieStudio {
 		IndieStudio::Pos getPosition(void) const noexcept;
 		IndieStudio::Pos getLastPosition(void) const noexcept;
 		int getBombSize() noexcept;
+		IndieStudio::IEntity *getEntity(void) const noexcept;
 
 	private:
 		void checkHitCube(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);

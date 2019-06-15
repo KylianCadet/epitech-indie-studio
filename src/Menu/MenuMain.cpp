@@ -78,9 +78,6 @@ void IndieStudio::MenuMain::checkActions(void) noexcept
 		this->_renderStatus = MENU_MAIN_GAME;
 		this->_menuNew->setMenuActive(MENU_NEW_MAIN);
 		this->_menuNew->setButtonActive(BTN_NEW_GAMEMODE);
-		std::cout << "MODE : " << this->_config->getMode() << std::endl;
-		std::cout << "Player 1 : " << this->_config->getPlayer1Skin() << std::endl;
-		std::cout << "Player 2 : " << this->_config->getPlayer2Skin() << std::endl;
 	}
 }
 

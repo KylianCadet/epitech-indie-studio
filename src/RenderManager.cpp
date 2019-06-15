@@ -27,6 +27,7 @@ void IndieStudio::RenderManager::render(void) noexcept
 {
 	this->_musicManager.refreshMusic(this->_render);
 	if (this->_config->getMode() == Mode::RESET) {
+		while (this->_game->checkDeleteBomb()) {};
 		this->_game->destroy();
 		this->_game.reset();
 		this->_game = nullptr;
@@ -37,6 +38,7 @@ void IndieStudio::RenderManager::render(void) noexcept
 			this->_game = std::unique_ptr<IndieStudio::Game>(new IndieStudio::Game(this->_graphical, this->_render, this->_config));
 		this->_game->render();
 		if (this->_game->isOver()) {
+			while (this->_game->checkDeleteBomb()) {};
 			this->_game->destroy();
 			this->_game.reset();
 			this->_game = nullptr;

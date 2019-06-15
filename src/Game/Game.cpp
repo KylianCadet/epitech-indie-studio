@@ -12,7 +12,7 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	_graphical(graphical),
 	_save(graphical, this->_config->getKeybinds1(), this->_config->getKeybinds2()),
 	_render(render),
-	_map(IndieStudio::Map(graphical, "64", SIZE_MAP_X, SIZE_MAP_Y, DENSITY_BRICK, DENSITY_WALL)),
+	_map(IndieStudio::Map(graphical, std::to_string(config->getQuality()), SIZE_MAP_X, SIZE_MAP_Y, config->_blockDensity, config->_wallDensity)),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
 	_config(config),
@@ -182,14 +182,17 @@ void checkMove(std::vector<std::shared_ptr<IndieStudio::Character>>::iterator ch
 #define RUN 1
 #define STAND 0
 
-void IndieStudio::Game::checkDeleteBomb() noexcept
+bool IndieStudio::Game::checkDeleteBomb() noexcept
 {
 	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
 		if (bomb_it->get()->getTotalDeath() == true) {
 			this->_bombVec.erase(bomb_it);
-			this->checkDeleteBomb();
-			return;
+			return (this->checkDeleteBomb());
 		}
+	if (this->_bombVec.empty()) {
+		return (false);
+	}
+	return (true);
 }
 
 void IndieStudio::Game::moveCharacter() noexcept
@@ -262,12 +265,10 @@ void IndieStudio::Game::checkEvent(void) noexcept
 	if (this->_event._key[IndieStudio::Key::RETURN] == true && this->_win == true) {
 		remove(PLAYER_TXT_PATH.c_str());
 		remove(MAP_TXT_PATH.c_str());
-		std::thread([this] {
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-			this->_isOver = true;
-			this->_render = MAIN_MENU;
-		})
-			.detach();
+		while (this->checkDeleteBomb()) {
+		};
+		this->_isOver = true;
+		this->_render = MAIN_MENU;
 	}
 	auto ActionKey_it = ActionKey.begin();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, ActionKey_it++) {
@@ -319,6 +320,5 @@ void IndieStudio::Game::destroy(void) noexcept
 	this->_bonus.destroy_Bonus();
 	for (auto bomb_it = this->_bombVec.begin(); bomb_it != this->_bombVec.end(); bomb_it++)
 		this->_graphical.deleteEntity(bomb_it->get()->getEntity());
-	this->_bombVec.clear();
 	this->_characterVec.clear();
 }

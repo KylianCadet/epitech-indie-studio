@@ -30,6 +30,7 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 
 void IndieStudio::Map::generate_map(int x, int y, std::vector<std::string> const texture_Path) noexcept
 {
+	std::string allah;
 	bool check = false;
 	srand(time(NULL));
 	this->_x_map = x;

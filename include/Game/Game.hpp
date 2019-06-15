@@ -37,6 +37,7 @@ namespace IndieStudio {
 		void render(void) noexcept;
 		bool isOver(void) const noexcept;
 		void destroy(void) noexcept;
+		bool checkDeleteBomb() noexcept;
 
 	private:
 		void reset() noexcept;
@@ -53,7 +54,6 @@ namespace IndieStudio {
 		void mapRender() noexcept;
 		void bonusRender() noexcept;
 		void setMapCollision() noexcept;
-		void checkDeleteBomb() noexcept;
 		void setCameraPosition(int x, int y) noexcept;
 		void setSave() noexcept;
 	private:

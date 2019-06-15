@@ -24,6 +24,7 @@ IndieStudio::Config::Config() : _prevMode(IndieStudio::Mode::SOLO)
 	this->_quality = 64;
 	this->_wallDensity = 100;
 	this->_blockDensity = 50;
+	this->_mapSize = 15;
 }
 
 IndieStudio::Config::~Config()

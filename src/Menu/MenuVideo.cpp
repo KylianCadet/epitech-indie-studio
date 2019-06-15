@@ -25,6 +25,13 @@ IndieStudio::MenuVideo::MenuVideo(IndieStudio::IGraphical &graphical, IndieStudi
 	else if (this->_config->getQuality() == 256)
 		this->_qualityStatus = QUALITY_ULTRA;
 
+	if (this->_config->_mapSize == 11)
+		this->_mapStatus = MAP_SMALL;
+	else if (this->_config->_mapSize == 15)
+		this->_mapStatus = MAP_MEDIUM;
+	else if (this->_config->_mapSize == 25)
+		this->_mapStatus = MAP_LARGE;
+
 	this->createButtons();
 	this->createImages();
 }
@@ -36,18 +43,23 @@ IndieStudio::MenuVideo::~MenuVideo()
 void IndieStudio::MenuVideo::createButtons(void) noexcept
 {
 	int x = 550;
-	int pos = 450;
+	int pos = 400;
 	int off = 110;
 
 	this->_block = new Button(this->_graphical, "assets/menu/video/block.png", "assets/menu/video/blockA.png", std::pair<int, int>(x, pos));
 	this->_wall = new Button(this->_graphical, "assets/menu/video/wall.png", "assets/menu/video/wallA.png", std::pair<int, int>(x + 10, (pos + 110)));
 	this->_quality = new Button(this->_graphical, "assets/menu/video/quality.png", "assets/menu/video/qualityA.png", std::pair<int, int>(x, (pos + 220)));
+	this->_map = new Button(this->_graphical, "assets/menu/video/map.png", "assets/menu/video/mapA.png", std::pair<int, int>(x, (pos + 330)));
 	x = 900;
 	this->_low = new Button(this->_graphical, "assets/menu/video/low.png", "assets/menu/video/lowA.png", std::pair<int, int>(x, pos + 220));
 	this->_standard = new Button(this->_graphical, "assets/menu/video/standard.png", "assets/menu/video/standardA.png", std::pair<int, int>(x, (pos + 220)));
 	this->_high = new Button(this->_graphical, "assets/menu/video/high.png", "assets/menu/video/highA.png", std::pair<int, int>(x, (pos + 220)));
 	this->_very = new Button(this->_graphical, "assets/menu/video/very.png", "assets/menu/video/veryA.png", std::pair<int, int>(x, (pos + 220)));
 	this->_ultra = new Button(this->_graphical, "assets/menu/video/ultra.png", "assets/menu/video/ultraA.png", std::pair<int, int>(x, (pos + 220)));
+
+	this->_small = new Button(this->_graphical, "assets/menu/video/small.png", "assets/menu/video/smallA.png", std::pair<int, int>(x, (pos + 330)));
+	this->_medium = new Button(this->_graphical, "assets/menu/video/medium.png", "assets/menu/video/mediumA.png", std::pair<int, int>(x, (pos + 330)));
+	this->_large = new Button(this->_graphical, "assets/menu/video/large.png", "assets/menu/video/largeA.png", std::pair<int, int>(x, (pos + 330)));
 }
 
 void IndieStudio::MenuVideo::drawButtons(void) noexcept
@@ -55,6 +67,7 @@ void IndieStudio::MenuVideo::drawButtons(void) noexcept
 	this->_block->drawButton();
 	this->_wall->drawButton();
 	this->_quality->drawButton();
+	this->_map->drawButton();
 
 	if (this->_qualityStatus == QUALITY_LOW)
 		this->_low->drawButton();
@@ -66,17 +79,25 @@ void IndieStudio::MenuVideo::drawButtons(void) noexcept
 		this->_very->drawButton();
 	else if (this->_qualityStatus == QUALITY_ULTRA)
 		this->_ultra->drawButton();
+
+	if (this->_mapStatus == MAP_SMALL)
+		this->_small->drawButton();
+	else if (this->_mapStatus == MAP_MEDIUM)
+		this->_medium->drawButton();
+	else if (this->_mapStatus == MAP_LARGE)
+		this->_large->drawButton();
 }
 
 void IndieStudio::MenuVideo::createImages(void) noexcept
 {
-	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 800));
+	this->_escapeInfo = this->_graphical.createImage("assets/menu/options/esc2.png", std::pair<int, int>(-1, 850));
 }
 
 void IndieStudio::MenuVideo::drawImages(void) noexcept
 {
-	this->_graphical.drawText(std::to_string(this->_config->_blockDensity) + "%", 1100, 470, 0, 0);
-	this->_graphical.drawText(std::to_string(this->_config->_wallDensity) + "%", 1100, 580, 0, 0);
+	int pos = 400;
+	this->_graphical.drawText(std::to_string(this->_config->_blockDensity) + "%", 1100, pos + 20, 0, 0);
+	this->_graphical.drawText(std::to_string(this->_config->_wallDensity) + "%", 1100, pos + 110 + 20, 0, 0);
 	this->_graphical.drawImage(this->_escapeInfo);
 }
 
@@ -105,12 +126,17 @@ void IndieStudio::MenuVideo::refreshSkin(void) noexcept
 	this->_block->setDefaultSkin();
 	this->_wall->setDefaultSkin();
 	this->_quality->setDefaultSkin();
+	this->_map->setDefaultSkin();
 
 	this->_low->setDefaultSkin();
 	this->_standard->setDefaultSkin();
 	this->_high->setDefaultSkin();
 	this->_very->setDefaultSkin();
 	this->_ultra->setDefaultSkin();
+
+	this->_small->setDefaultSkin();
+	this->_medium->setDefaultSkin();
+	this->_large->setDefaultSkin();
 
 	if (this->_buttonStatus == BTN_VIDEO_BLOCK) {
 		this->_block->setActiveSkin();
@@ -133,6 +159,18 @@ void IndieStudio::MenuVideo::refreshSkin(void) noexcept
 		} else if (this->_qualityStatus == QUALITY_ULTRA) {
 			this->_ultra->setActiveSkin();
 			this->_config->setQuality(256);
+		}
+	} else if (this->_buttonStatus == BTN_VIDEO_MAP) {
+		this->_map->setActiveSkin();
+		if (this->_mapStatus == MAP_SMALL) {
+			this->_small->setActiveSkin();
+			this->_config->_mapSize = 11;
+		} else if (this->_mapStatus == MAP_MEDIUM) {
+			this->_medium->setActiveSkin();
+			this->_config->_mapSize = 15;
+		} else if (this->_mapStatus == MAP_LARGE) {
+			this->_large->setActiveSkin();
+			this->_config->_mapSize = 25;
 		}
 	}
 }
@@ -194,6 +232,13 @@ void IndieStudio::MenuVideo::leftActionManager(void) noexcept
 			this->_qualityStatus = 0;
 		else if (this->_qualityStatus < 0)
 			this->_qualityStatus = 4;
+	} else if (this->_buttonStatus == BTN_VIDEO_MAP) {
+		this->_sounds->_buttonSwitchSound->playSound();
+		this->_mapStatus--;
+		if (this->_mapStatus > 2)
+			this->_mapStatus = 0;
+		else if (this->_mapStatus < 0)
+			this->_mapStatus = 2;
 	}
 }
 
@@ -216,19 +261,26 @@ void IndieStudio::MenuVideo::rightActionManager(void) noexcept
 			this->_qualityStatus = 0;
 		else if (this->_qualityStatus < 0)
 			this->_qualityStatus = 4;
+	} else if (this->_buttonStatus == BTN_VIDEO_MAP) {
+		this->_sounds->_buttonSwitchSound->playSound();
+		this->_mapStatus++;
+		if (this->_mapStatus > 2)
+			this->_mapStatus = 0;
+		else if (this->_mapStatus < 0)
+			this->_mapStatus = 2;
 	}
 }
 
 void IndieStudio::MenuVideo::upActionManager(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
-	this->setButtonSwitch(-1, 2);
+	this->setButtonSwitch(-1, 3);
 }
 
 void IndieStudio::MenuVideo::downActionManager(void) noexcept
 {
 	this->_sounds->_buttonSwitchSound->playSound();
-	this->setButtonSwitch(1, 2);
+	this->setButtonSwitch(1, 3);
 }
 
 void IndieStudio::MenuVideo::alphaActionManager(IndieStudio::Key key) noexcept

@@ -14,12 +14,17 @@ static const int MENU_VIDEO_BACK = 1;
 static const int BTN_VIDEO_BLOCK = 0;
 static const int BTN_VIDEO_WALL = 1;
 static const int BTN_VIDEO_QUALITY = 2;
+static const int BTN_VIDEO_MAP = 3;
 
 static const int QUALITY_LOW = 0;
 static const int QUALITY_STANDARD = 1;
 static const int QUALITY_HIGH = 2;
 static const int QUALITY_VERY = 3;
 static const int QUALITY_ULTRA = 4;
+
+static const int MAP_SMALL = 0;
+static const int MAP_MEDIUM = 1;
+static const int MAP_LARGE = 2;
 
 #include "Menu.hpp"
 
@@ -60,18 +65,24 @@ private:
 	void refreshSkin(void) noexcept override;
 
 private:
+	int _mapStatus;
 	int _qualityStatus;
 	IEntity *_escapeInfo;
 
 	Button *_block;
 	Button *_wall;
 	Button *_quality;
+	Button *_map;
 
 	Button *_low;
 	Button *_standard;
 	Button *_high;
 	Button *_very;
 	Button *_ultra;
+
+	Button *_small;
+	Button *_medium;
+	Button *_large;
 };
 }; // namespace IndieStudio
 

@@ -26,6 +26,7 @@ IndieStudio::IrrGraphical::IrrGraphical()
 	this->setCursorVisible(false);
 	this->_device->setEventReceiver(this);
 	this->_gui = this->_device->getGUIEnvironment();
+	this->_mikado = this->_gui->getFont("fonts/mikado.png");
 }
 
 IndieStudio::IrrGraphical::~IrrGraphical()
@@ -264,4 +265,9 @@ void IndieStudio::IrrGraphical::setCameraPosition(IndieStudio::Pos pos) noexcept
 void IndieStudio::IrrGraphical::setCameraRotation(IndieStudio::Pos pos) noexcept
 {
 	this->_camera->setRotation(irr::core::vector3df{pos._x, pos._y, pos._z});
+}
+
+void IndieStudio::IrrGraphical::drawText(std::string path, int a, int b, int c, int d) noexcept
+{
+	this->_mikado->draw(path.c_str(), irr::core::rect<irr::s32>(a, b, c, d), irr::video::SColor(255, 255, 255, 255));
 }

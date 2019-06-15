@@ -48,6 +48,7 @@ namespace IndieStudio {
 		virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept = 0;
 		virtual void set2DPos(IndieStudio::IEntity *, std::pair<int, int>) noexcept = 0;
 		virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept = 0;
+		virtual void drawText(std::string, int, int, int, int) noexcept = 0;
 	};
 }; // namespace IndieStudio
 

@@ -42,6 +42,7 @@ namespace IndieStudio {
 		virtual void setSkin(IndieStudio::IEntity *, std::string) noexcept;
 		virtual void set2DPos(IndieStudio::IEntity *, std::pair<int, int>) noexcept;
 		virtual void setCustomRectangle(IndieStudio::IEntity *, int, int, int, int) noexcept;
+		virtual void drawText(std::string, int, int, int, int) noexcept;
 		void holdParticle(irr::scene::IParticleSystemSceneNode *particle) const;
 
 
@@ -53,6 +54,7 @@ namespace IndieStudio {
 		irr::video::IVideoDriver *_driver;
 		irr::scene::ICameraSceneNode *_camera;
 		irr::gui::IGUIEnvironment *_gui;
+		irr::gui::IGUIFont *_mikado;
 	};
 }; // namespace IndieStudio
 

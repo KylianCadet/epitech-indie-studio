@@ -11,6 +11,16 @@
 static const int MENU_VIDEO_MAIN = 0;
 static const int MENU_VIDEO_BACK = 1;
 
+static const int BTN_VIDEO_BLOCK = 0;
+static const int BTN_VIDEO_WALL = 1;
+static const int BTN_VIDEO_QUALITY = 2;
+
+static const int QUALITY_LOW = 0;
+static const int QUALITY_STANDARD = 1;
+static const int QUALITY_HIGH = 2;
+static const int QUALITY_VERY = 3;
+static const int QUALITY_ULTRA = 4;
+
 #include "Menu.hpp"
 
 namespace IndieStudio
@@ -18,7 +28,7 @@ namespace IndieStudio
 class MenuVideo : public Menu
 {
 public:
-	MenuVideo(IGraphical &, Volume *, MenuSounds *);
+	MenuVideo(IGraphical &, Volume *, MenuSounds *, Config *);
 	~MenuVideo();
 
 public:
@@ -50,8 +60,18 @@ private:
 	void refreshSkin(void) noexcept override;
 
 private:
-	IEntity *_comingsoon;
+	int _qualityStatus;
 	IEntity *_escapeInfo;
+
+	Button *_block;
+	Button *_wall;
+	Button *_quality;
+
+	Button *_low;
+	Button *_standard;
+	Button *_high;
+	Button *_very;
+	Button *_ultra;
 };
 }; // namespace IndieStudio
 

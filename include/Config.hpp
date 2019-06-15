@@ -39,6 +39,9 @@ public:
 	Mode getMode(void) const noexcept;
 	void setMode(Mode) noexcept;
 
+	int getQuality(void) const noexcept;
+	void setQuality(int) noexcept;
+
 	Mode getPrevMode(void) const noexcept;
 	void setPrevMode(Mode) noexcept;
 
@@ -52,8 +55,11 @@ public:
 	void setKeybinds1(playerKeybinds) noexcept;
 	void setKeybinds2(playerKeybinds) noexcept;
 
+	int _wallDensity;
+	int _blockDensity;
 private:
 	Mode _mode;
+	int _quality;
 	Mode _prevMode;
 
 	std::string _player1Skin;

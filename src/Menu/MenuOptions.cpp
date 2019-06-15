@@ -14,7 +14,7 @@ IndieStudio::MenuOptions::MenuOptions(IndieStudio::IGraphical &graphical, IndieS
 	this->_buttonStatus = BTN_OPTIONS_AUDIO;
 	this->createButtons();
 	this->_menuAudio = new IndieStudio::MenuAudio(this->_graphical, this->_volume, this->_sounds);
-	this->_menuVideo = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds);
+	this->_menuVideo = new IndieStudio::MenuVideo(this->_graphical, this->_volume, this->_sounds, this->_config);
 	this->_menuControls = new IndieStudio::MenuControls(this->_graphical, this->_volume, this->_sounds, this->_config);
 }
 
@@ -186,7 +186,7 @@ void IndieStudio::MenuOptions::leftActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->leftActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->leftAction();
+		this->_menuVideo->leftActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
 		this->_menuControls->leftActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
@@ -200,7 +200,7 @@ void IndieStudio::MenuOptions::rightActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->rightActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->rightAction();
+		this->_menuVideo->rightActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
 		this->_menuControls->rightActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
@@ -214,7 +214,7 @@ void IndieStudio::MenuOptions::upActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->upActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->upAction();
+		this->_menuVideo->upActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
 		this->_menuControls->upActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)
@@ -228,7 +228,7 @@ void IndieStudio::MenuOptions::downActionManager(void) noexcept
 	else if (this->_renderStatus == MENU_OPTIONS_AUDIO)
 		this->_menuAudio->downActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_VIDEO)
-		this->downAction();
+		this->_menuVideo->downActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_CONTROLS)
 		this->_menuControls->downActionManager();
 	else if (this->_renderStatus == MENU_OPTIONS_BACK)

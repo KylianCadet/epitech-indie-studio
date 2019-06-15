@@ -7,8 +7,7 @@
 
 #include "Config.hpp"
 
-IndieStudio::Config::Config() :
-	_prevMode(IndieStudio::Mode::SOLO)
+IndieStudio::Config::Config() : _prevMode(IndieStudio::Mode::SOLO)
 {
 	this->_player1.up = Z;
 	this->_player1.down = S;
@@ -21,6 +20,10 @@ IndieStudio::Config::Config() :
 	this->_player2.left = J;
 	this->_player2.right = L;
 	this->_player2.bomb = O;
+
+	this->_quality = 256;
+	this->_wallDensity = 50;
+	this->_blockDensity = 50;
 }
 
 IndieStudio::Config::~Config()
@@ -35,6 +38,16 @@ IndieStudio::Mode IndieStudio::Config::getMode(void) const noexcept
 void IndieStudio::Config::setMode(IndieStudio::Mode mode) noexcept
 {
 	this->_mode = mode;
+}
+
+int IndieStudio::Config::getQuality(void) const noexcept
+{
+	return this->_quality;
+}
+
+void IndieStudio::Config::setQuality(int quality) noexcept
+{
+	this->_quality = quality;
 }
 
 std::string IndieStudio::Config::getPlayer1Skin(void) const noexcept

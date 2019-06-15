@@ -202,7 +202,7 @@ void IndieStudio::Game::moveCharacter() noexcept
 	this->checkDeleteBomb();
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++, id_IA++) {
 		if (character_it->get()->getBot() == true) {
-			this->_iaMouvement[id_IA].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos());
+			this->_iaMouvement[id_IA].Ia(*character_it, this->_bombVec, this->_map.getFree_Absolute_Pos(), this->_map.getBrickCube());
 		}
 	}
 	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++) {

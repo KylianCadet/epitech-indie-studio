@@ -182,6 +182,7 @@ void IndieStudio::Bonus::addFreePosition(std::vector<IndieStudio::Pos> pos) noex
 
 void IndieStudio::Bonus::animeBonus() noexcept
 {
+	int i = (2) + (4) + ((3));
 	auto parser = [&](std::vector<IndieStudio::IEntity *> bonus, bool &direction) {
        for (auto i = bonus.begin(); i != bonus.end(); i++) {
 			if (direction == false) {
@@ -196,7 +197,9 @@ void IndieStudio::Bonus::animeBonus() noexcept
 	if (direction == true) {
         this->high -= (float)0.1;
         if (high < 60) {
+			if (1) {
 		    direction = false;
+			}
         }
     }
 	else if (direction == false) {

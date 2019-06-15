@@ -12,6 +12,8 @@ IndieStudio::Map::Map(IndieStudio::IGraphical &graphical, std::string graphisme,
 	_graphical(graphical)
 {
 	init_pos_start();
+	if (densityBrick == 100)
+		densityBrick -= 10;
 	this->generate_map(x < 6 ? 6 : x, y < 6 ? 6 : y, set_Graphisme(graphisme));
 	set_Density_Wall(100 - densityWall);
 	set_Density_Brick(100 - densityBrick);

@@ -12,16 +12,19 @@ IndieStudio::IaMouvement::IaMouvement()
 }
 
 void IndieStudio::IaMouvement::Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec,
-								  std::vector<std::shared_ptr<IndieStudio::Pos>> freePos)
+	std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, std::vector<IndieStudio::IEntity *> brick)
 {
 	this->_characVec = characVec;
 	this->_bombVec = bombVec;
 	this->_freePos = freePos;
+	this->_brick = brick;
+	// this->_characVec->setBombSize(-1);
 	if (isMoving() == false) {
 		resetMoving();
 		setCenter();
 		checkFreeMove();
 		checkBomb();
+		poseBomb();
 		chooseDirection();
 		this->_characVec->setMovingUp(_freeUp);
 		this->_characVec->setMovingDown(_freeDown);
@@ -35,9 +38,13 @@ void IndieStudio::IaMouvement::checkBomb()
 {
 	setBombPos();
 	std::vector<int> tempChoiceDestination = this->_choiceDestination;
-	auto eraseDestination = [&tempChoiceDestination](int nb) {
+	this->_canStay = true;
+	bool inBomb = false;
+	unsigned int check = 0;
+	auto eraseDestination = [&tempChoiceDestination, &check](int nb) {
 		for (unsigned int i = 0; i != tempChoiceDestination.size(); i++) {
 			if (tempChoiceDestination[i] == nb) {
+				check++;
 				tempChoiceDestination.erase(tempChoiceDestination.begin() + i);
 				break;
 			}
@@ -56,9 +63,37 @@ void IndieStudio::IaMouvement::checkBomb()
 		if (this->_bombPos[i]._x == _destinationLeft._x && this->_bombPos[i]._z == _destinationLeft._z) {
 			eraseDestination(Left);
 		}
+		if (this->_bombPos[i]._x == this->_currentPos._x && this->_bombPos[i]._z == this->_currentPos._z) {
+			this->_canStay = false;
+		}
+	}
+	for (unsigned int i = 0; i != this->_bombVec.size(); i++) {
+		if (this->_bombVec[i]->getPosition()._x == this->_currentPos._x && this->_bombVec[i]->getPosition()._z == this->_currentPos._z)
+			inBomb = true;
 	}
 	if (tempChoiceDestination.size() > 0)
+			this->_choiceDestination = tempChoiceDestination;
+	else if (this->_canStay == true)
 		this->_choiceDestination = tempChoiceDestination;
+	else if (this->_characVec->getDeath() == false && this->_choiceDestination.size() != 1 && inBomb != true) {
+		// if (this->_choiceDestination.size() == check) {
+		// 	std::cout << this->_characVec->getName() << ": ";
+		// 	std::cout << "CHECK = " << check << " choice = " << this->_choiceDestination.size() << "\n";
+		// 	return;
+		// }
+		this->_choiceDestination = tempChoiceDestination;
+	}
+
+}
+
+void IndieStudio::IaMouvement::poseBomb()
+{
+	if (this->checkBrick() == true) {
+		if (this->_currentPos != this->_spawnPos /* && rand() % 3 == 0 */&& this->_choiceDestination.size() > 0  &&
+		this->_characVec->get_Bomb_Current() == 0 && this->_canStay == true && this->_canBomb == true) {
+			this->_characVec->setDoingAction(true);
+		}
+	}
 }
 
 void IndieStudio::IaMouvement::setBombPos()
@@ -78,6 +113,21 @@ void IndieStudio::IaMouvement::setBombPos()
 	}
 }
 
+bool IndieStudio::IaMouvement::checkBrick()
+{
+	for (unsigned int i = 0; i != this->_brick.size(); i++) {
+		if (this->_currentPos._x + 40 == this->_brick[i]->getPosition()._x && this->_currentPos._z == this->_brick[i]->getPosition()._z)
+			return (true);
+		if (this->_currentPos._x - 40 == this->_brick[i]->getPosition()._x && this->_currentPos._z == this->_brick[i]->getPosition()._z)
+			return (true);
+		if (this->_currentPos._x == this->_brick[i]->getPosition()._x && this->_currentPos._z + 40 == this->_brick[i]->getPosition()._z)
+			return (true);
+		if (this->_currentPos._x == this->_brick[i]->getPosition()._x && this->_currentPos._z - 40== this->_brick[i]->getPosition()._z)
+			return (true);
+	}
+	return (false);
+}
+
 void IndieStudio::IaMouvement::resetMoving()
 {
 	this->_characVec->setMovingUp(false);
@@ -91,18 +141,23 @@ void IndieStudio::IaMouvement::resetMoving()
 	this->_choiceDestination.clear();
 }
 
+void IndieStudio::IaMouvement::resetDirection()
+{
+	this->_characVec->setMovingUp(false);
+	this->_characVec->setMovingDown(false);
+	this->_characVec->setMovingLeft(false);
+	this->_characVec->setMovingRight(false);
+	this->_freeUp = false;
+	this->_freeDown = false;
+	this->_freeLeft = false;
+	this->_freeRight = false;
+}
+
 void IndieStudio::IaMouvement::chooseDirection()
 {
 	if (this->_choiceDestination.size() > 0) {
 		int choose = rand() % (this->_choiceDestination.size());
-		this->_characVec->setMovingUp(false);
-		this->_characVec->setMovingDown(false);
-		this->_characVec->setMovingLeft(false);
-		this->_characVec->setMovingRight(false);
-		this->_freeUp = false;
-		this->_freeDown = false;
-		this->_freeLeft = false;
-		this->_freeRight = false;
+		resetDirection();
 		choose = this->_choiceDestination[choose];
 		if (choose == Up) {
 			this->_characVec->setMovingUp(true);
@@ -151,8 +206,8 @@ bool IndieStudio::IaMouvement::freeUp()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._x + 1;
-	for (nb = 0; (int)(pos + nb) % 40 != 0; nb++)
-		;
+	for (nb = 0; (int)(pos + nb) % 40 != 0; nb++);
+
 	for (unsigned int i = 0; i != _freePos.size(); i++) {
 		if (this->_characVec->getPosition()._z >= _freePos[i]->_z - ECART && this->_characVec->getPosition()._z <= _freePos[i]->_z + ECART && (this->_characVec->getPosition()._x + nb) >= _freePos[i]->_x - ECART && (this->_characVec->getPosition()._x + nb) <= _freePos[i]->_x + ECART) {
 			this->_choiceDestination.push_back(Up);
@@ -164,8 +219,8 @@ bool IndieStudio::IaMouvement::freeDown()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._x - 1;
-	for (nb = 0; (int)(pos + nb) % 40 != 0; nb--)
-		;
+	for (nb = 0; (int)(pos + nb) % 40 != 0; nb--);
+
 	for (unsigned int i = 0; i != _freePos.size(); i++) {
 		if (this->_characVec->getPosition()._z >= _freePos[i]->_z - ECART && this->_characVec->getPosition()._z <= _freePos[i]->_z + ECART && (this->_characVec->getPosition()._x + nb) >= _freePos[i]->_x - ECART && (this->_characVec->getPosition()._x + nb) <= _freePos[i]->_x + ECART) {
 			this->_choiceDestination.push_back(Down);
@@ -177,8 +232,8 @@ bool IndieStudio::IaMouvement::freeLeft()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._z + 1;
-	for (nb = 0; (int)(pos + nb) % 40 != 0; nb++)
-		;
+	for (nb = 0; (int)(pos + nb) % 40 != 0; nb++);
+
 	for (unsigned int i = 0; i != _freePos.size(); i++) {
 		if (this->_characVec->getPosition()._x >= (_freePos[i]->_x - ECART) && this->_characVec->getPosition()._x <= (_freePos[i]->_x + ECART) && (this->_characVec->getPosition()._z + nb) >= (_freePos[i]->_z - ECART) && (this->_characVec->getPosition()._z + nb) <= _freePos[i]->_z + ECART) {
 			this->_choiceDestination.push_back(Left);
@@ -190,8 +245,8 @@ bool IndieStudio::IaMouvement::freeRight()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._z - 1;
-	for (nb = 0; (int)(pos + nb) % 40 != 0; nb--)
-		;
+	for (nb = 0; (int)(pos + nb) % 40 != 0; nb--);
+
 	for (unsigned int i = 0; i != _freePos.size(); i++) {
 		if (this->_characVec->getPosition()._x >= _freePos[i]->_x - ECART && this->_characVec->getPosition()._x <= _freePos[i]->_x + ECART && (this->_characVec->getPosition()._z + nb) >= _freePos[i]->_z - ECART && (this->_characVec->getPosition()._z + nb) <= _freePos[i]->_z + ECART) {
 			this->_choiceDestination.push_back(Right);
@@ -219,6 +274,9 @@ void IndieStudio::IaMouvement::setCenter()
 	int x = (up < -1 * (down) ? up : down) + pos_UP_DOWN;
 	int z = (left < -1 * (right) ? left : right) + pos_RIGHT_LEFT;
 	this->_characVec->setPosition(IndieStudio::Pos{(float)x, this->_characVec->getPosition()._y, (float)z});
+	this->_currentPos = IndieStudio::Pos{(float)x, this->_characVec->getPosition()._y, (float)z};
+	if (this->_spawnPos == IndieStudio::Pos{0,0,0})
+		this->_spawnPos = IndieStudio::Pos{(float)x, this->_characVec->getPosition()._y, (float)z};
 }
 
 IndieStudio::IaMouvement::~IaMouvement()

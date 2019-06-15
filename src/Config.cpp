@@ -21,7 +21,7 @@ IndieStudio::Config::Config() : _prevMode(IndieStudio::Mode::SOLO)
 	this->_player2.right = L;
 	this->_player2.bomb = O;
 
-	this->_quality = 256;
+	this->_quality = 64;
 	this->_wallDensity = 50;
 	this->_blockDensity = 50;
 }

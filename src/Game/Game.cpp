@@ -7,12 +7,20 @@
 
 #include "Game.hpp"
 #include <thread>
+#include "Bomb.hpp"
+#define STAND 0
+#define RUN 1
+#define WIN_ANIM 8
+#define UP_ROT 0
+#define RIGHT_ROT 90
+#define DOWN_ROT 180
+#define LEFT_ROT 270
 
 IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, const IndieStudio::Config *config) :
 	_graphical(graphical),
 	_save(graphical, this->_config->getKeybinds1(), this->_config->getKeybinds2()),
 	_render(render),
-	_map(IndieStudio::Map(graphical, std::to_string(config->getQuality()), SIZE_MAP_X, SIZE_MAP_Y, config->_blockDensity, config->_wallDensity)),
+	_map(IndieStudio::Map(graphical, std::to_string(config->getQuality()), config->getMapSize(), config->getMapSize(), config->getBlockDensity(), config->getWallDensity())),
 	_bonus(IndieStudio::Bonus(graphical, DENSITY_BONUS)),
 	_bombSound(std::shared_ptr<IndieStudio::Audio>(new IndieStudio::Audio("assets/bomb/bomb.wav"))),
 	_config(config),
@@ -25,7 +33,7 @@ IndieStudio::Game::Game(IndieStudio::IGraphical &graphical, Render &render, cons
 	this->_bonus.create_Bonus();
 	this->createCharacters();
 	this->setMapCollision();
-	this->setCameraPosition(SIZE_MAP_X < 6 ? 6 : SIZE_MAP_X, SIZE_MAP_Y < 6 ? 6 : SIZE_MAP_Y);
+	this->setCameraPosition(this->_config->getMapSize() < 6 ? 6 : this->_config->getMapSize(), this->_config->getMapSize() < 6 ? 6 : this->_config->getMapSize());
 }
 
 IndieStudio::Game::~Game()
@@ -57,7 +65,7 @@ void IndieStudio::Game::setSave() noexcept
 	this->_save.setWallInsideVec(this->_map.getWallInsideCube());
 	this->_save.setWallOutsideVec(this->_map.getWallOutsideCube());
 	this->_save.setCharacterVec(this->_characterVec);
-	this->_save.setDimensionMap(SIZE_MAP_X, SIZE_MAP_Y, CUBE_SIDE);
+	this->_save.setDimensionMap(this->_config->getMapSize(), this->_config->getMapSize(), CUBE_SIDE);
 	this->_save.createSave();
 }
 
@@ -100,9 +108,6 @@ std::size_t IndieStudio::Game::getAliveCharacter() const noexcept
 			alive++;
 	return (alive);
 }
-
-#define WIN_ANIM 8
-#define DOWN_ROT 180
 
 void IndieStudio::Game::playEnding()
 {
@@ -162,10 +167,6 @@ void IndieStudio::Game::setRenderStatus(int status) noexcept
 	this->_renderStatus = status;
 }
 
-#define UP_ROT 0
-#define RIGHT_ROT 90
-#define LEFT_ROT 270
-
 void checkMove(std::vector<std::shared_ptr<IndieStudio::Character>>::iterator character_it, bool isMoving, float &coordinate, int rotation, bool sign)
 {
 	if (isMoving == true) {
@@ -177,10 +178,6 @@ void checkMove(std::vector<std::shared_ptr<IndieStudio::Character>>::iterator ch
 		character_it->get()->setIsMoving(true);
 	}
 }
-
-#include "Bomb.hpp"
-#define RUN 1
-#define STAND 0
 
 bool IndieStudio::Game::checkDeleteBomb() noexcept
 {
@@ -223,9 +220,8 @@ void IndieStudio::Game::moveCharacter() noexcept
 		character_it->get()->getEntity()->setPosition(newPos);
 		if (character_it->get()->getDoingAction() == true) {
 			character_it->get()->setDoingAction(false);
-			//this->checkDeleteBomb();
 			if (character_it->get()->getBombMax() > character_it->get()->get_Bomb_Current()) {
-				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->get()->getEntity()->getPosition(), character_it->get()->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound));
+				std::shared_ptr<IndieStudio::Bomb> newBomb(new IndieStudio::Bomb(this->_graphical, character_it->get()->getEntity()->getPosition(), character_it->get()->getBombSize(), this->_map, this->_bombVec, this->_characterVec, this->_bombSound, this->_config));
 				this->_bombVec.push_back(newBomb);
 				character_it->get()->set_Bomb_Current(character_it->get()->get_Bomb_Current() + 1);
 				std::thread([character_it, newBomb]() {

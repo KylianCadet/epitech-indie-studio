@@ -100,3 +100,18 @@ void IndieStudio::Config::setPrevMode(Mode mode) noexcept
 {
 	this->_prevMode = mode;
 }
+
+int IndieStudio::Config::getBlockDensity(void) const noexcept
+{
+	return (this->_wallDensity);
+}
+
+int IndieStudio::Config::getWallDensity(void) const noexcept
+{
+	return (this->_wallDensity);
+}
+
+int IndieStudio::Config::getMapSize(void) const noexcept
+{
+	return (this->_mapSize);
+}

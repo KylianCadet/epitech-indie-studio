@@ -13,10 +13,11 @@
 #include "IEntity.hpp"
 #include "IGraphical.hpp"
 #include "Map.hpp"
+
 namespace IndieStudio {
 	class Bomb {
 	public:
-		Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio);
+		Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio, const IndieStudio::Config *config);
 		~Bomb();
 		void createParticule(IndieStudio::Pos vector) noexcept;
 		void startCountdown(void);
@@ -29,6 +30,7 @@ namespace IndieStudio {
 		IndieStudio::IEntity *getEntity(void) const noexcept;
 
 	private:
+		std::size_t getAliveCharacter() const noexcept;
 		void checkHitCube(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
 		void checkHitBomb(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
 		void checkHitPlayer(std::vector<IndieStudio::Pos> pos, std::vector<bool> &boolVec);
@@ -38,6 +40,7 @@ namespace IndieStudio {
 		void checkHit(IndieStudio::Pos position, std::vector<bool> boolVec);
 
 	private:
+		const IndieStudio::Config *_config;
 		IndieStudio::IGraphical &_graphical;
 		IndieStudio::Map &_map;
 		IndieStudio::IEntity *_bomb;

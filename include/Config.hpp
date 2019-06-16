@@ -51,10 +51,13 @@ namespace IndieStudio {
 		void setKeybinds1(playerKeybinds) noexcept;
 		void setKeybinds2(playerKeybinds) noexcept;
 
+		int getMapSize(void) const noexcept;
+		int getWallDensity(void) const noexcept;
+		int getBlockDensity(void) const noexcept;
+
 		int _mapSize;
 		int _wallDensity;
 		int _blockDensity;
-
 	private:
 		Mode _mode;
 		int _quality;

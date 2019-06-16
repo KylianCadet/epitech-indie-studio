@@ -38,14 +38,16 @@ int getMiddle(float vec)
 	return (vec);
 }
 
-IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio) :
+
+IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vector, int bombSize, IndieStudio::Map &map, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Character>> &characterVec, std::shared_ptr<IndieStudio::Audio> audio, const IndieStudio::Config *config) :
 	_graphical(graphical),
 	_map(map),
 	_sound(audio),
 	_bombSize(bombSize),
 	_bombVec(bombVec),
 	_bomb(graphical.createMesh("assets/bomb/dinamite.obj")),
-	_characterVec(characterVec)
+	_characterVec(characterVec),
+	_config(config)
 {
 	setMiddle(vector._x);
 	setMiddle(vector._z);
@@ -53,6 +55,16 @@ IndieStudio::Bomb::Bomb(IndieStudio::IGraphical &graphical, IndieStudio::Pos vec
 	this->_bomb->setPosition(vector);
 	this->createParticule(vector);
 	this->_lastPos = vector;
+}
+
+std::size_t IndieStudio::Bomb::getAliveCharacter() const noexcept
+{
+	std::size_t alive = 0;
+
+	for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
+		if (character_it->get()->getDeath() == false)
+			alive++;
+	return (alive);
 }
 
 IndieStudio::Pos IndieStudio::Bomb::getPosition() const noexcept
@@ -134,7 +146,7 @@ void IndieStudio::Bomb::checkHitPlayer(std::vector<IndieStudio::Pos> posVec, std
 			auto bool_it = boolVec.begin();
 			for (auto pos_it = posVec.begin(); pos_it != posVec.end(); pos_it++, bool_it++)
 				for (auto character_it = this->_characterVec.begin(); character_it != this->_characterVec.end(); character_it++)
-					if (pos_it->_x == getMiddle(character_it->get()->getPosition()._x) && pos_it->_z == getMiddle(character_it->get()->getPosition()._z) && *bool_it == false && character_it->get()->getDeath() == false)
+					if (pos_it->_x == getMiddle(character_it->get()->getPosition()._x) && pos_it->_z == getMiddle(character_it->get()->getPosition()._z) && *bool_it == false && character_it->get()->getDeath() == false && this->getAliveCharacter() > 1 && this->_config->getMode() != Mode::RESET)
 						character_it->get()->death();
 		}
 		this->_totalDeath = true;
@@ -166,7 +178,8 @@ void IndieStudio::Bomb::explosion()
 	IndieStudio::Pos position = this->_bomb->getPosition();
 	this->createAutoParticle(position, EXPLOSION_DURATION);
 	this->checkHit(position, std::vector<bool>{false, false, false, false});
-	this->playExplosionSound();
+	if (this->_config->getMode() != Mode::RESET)
+		this->playExplosionSound();
 	this->_graphical.deleteEntity(this->_bomb);
 	this->_graphical.deleteEntity(this->_particle);
 }

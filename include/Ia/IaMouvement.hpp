@@ -19,7 +19,7 @@ namespace IndieStudio {
         public:
             IaMouvement();
             ~IaMouvement();
-            void Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, std::vector<IndieStudio::IEntity *> brick);
+            void Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec, std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, std::vector<IndieStudio::IEntity *> brick, std::vector<std::shared_ptr<IndieStudio::Character>> characAll);
         protected:
         private:
         enum direction {
@@ -43,6 +43,9 @@ namespace IndieStudio {
         void setBombPos();
         void poseBomb();
         bool checkBrick();
+        bool inBomb();
+        bool checkPlayer();
+        std::vector<int> checkBombHit();
         std::vector<int> _choiceDestination;
         IndieStudio::Pos _destination = IndieStudio::Pos{0,0,0};
         IndieStudio::Pos _destinationUp = IndieStudio::Pos{0,0,0};
@@ -57,6 +60,7 @@ namespace IndieStudio {
         bool _freeLeft = false;
         bool _canStay = true;
         bool _canBomb = true;
+        std::vector<std::shared_ptr<IndieStudio::Character>> _characAll;
         std::shared_ptr<IndieStudio::Character> _characVec;
         std::vector<std::shared_ptr<IndieStudio::Bomb>> _bombVec;
         std::vector<std::shared_ptr<IndieStudio::Pos>> _freePos;

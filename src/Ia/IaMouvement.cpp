@@ -12,13 +12,14 @@ IndieStudio::IaMouvement::IaMouvement()
 }
 
 void IndieStudio::IaMouvement::Ia(std::shared_ptr<IndieStudio::Character> &characVec, std::vector<std::shared_ptr<IndieStudio::Bomb>> &bombVec,
-	std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, std::vector<IndieStudio::IEntity *> brick)
+	std::vector<std::shared_ptr<IndieStudio::Pos>> freePos, std::vector<IndieStudio::IEntity *> brick, std::vector<std::shared_ptr<IndieStudio::Character>> characAll)
 {
 	this->_characVec = characVec;
 	this->_bombVec = bombVec;
 	this->_freePos = freePos;
 	this->_brick = brick;
-	// this->_characVec->setBombSize(-1);
+	this->_characAll = characAll;
+	this->_characVec->setBombSize(1);
 	if (isMoving() == false) {
 		resetMoving();
 		setCenter();
@@ -34,12 +35,49 @@ void IndieStudio::IaMouvement::Ia(std::shared_ptr<IndieStudio::Character> &chara
 	}
 }
 
+bool IndieStudio::IaMouvement::checkPlayer()
+{
+	auto inRange = [this](std::shared_ptr<IndieStudio::Character> &charac){
+		if (charac->getPosition()._x >= this->_currentPos._x - 60 && charac->getPosition()._x <= this->_currentPos._x + 60
+		&& charac->getPosition()._z >= this->_currentPos._z - 20 && charac->getPosition()._z <= this->_currentPos._z + 20)
+			return (true);
+		if (charac->getPosition()._z >= this->_currentPos._z - 60 && charac->getPosition()._z >= this->_currentPos._z + 60
+		&& charac->getPosition()._x >= this->_currentPos._x - 20 && charac->getPosition()._x <= this->_currentPos._x + 20)
+			return (true);
+		return(false);
+	};
+	for (unsigned int i = 0; i != this->_characAll.size(); i++) {
+		if (this->_characVec->getName() != this->_characAll[i]->getName() && inRange(this->_characAll[i]) == true) {
+			return(true);
+		}
+	}
+	return (false);
+}
+
 void IndieStudio::IaMouvement::checkBomb()
+{
+//	std::cout << this->_characVec->getName() << " " << this->_characVec->getPosition()._x << " " << this->_characVec->getPosition()._y << " " << this->_characVec->getPosition()._z << "\n";
+	std::vector<int> tempChoiceDestination = checkBombHit();
+	if (tempChoiceDestination.size() > 0)
+			this->_choiceDestination = tempChoiceDestination;
+	else if (this->_canStay == true)
+		this->_choiceDestination = tempChoiceDestination;
+	else if (this->_characVec->getDeath() == false && this->_choiceDestination.size() != 1 && inBomb() != true) {
+		// if (this->_choiceDestination.size() == check && this->_characVec->getBombSize() > 1) {
+		// 	// std::cout << this->_characVec->getName() << ": ";
+		// 	// std::cout << "CHECK = " << check << " choice = " << this->_choiceDestination.size() << "\n";
+		// 	return;
+		// }
+		this->_choiceDestination = tempChoiceDestination;
+	}
+
+}
+
+std::vector<int> IndieStudio::IaMouvement::checkBombHit()
 {
 	setBombPos();
 	std::vector<int> tempChoiceDestination = this->_choiceDestination;
 	this->_canStay = true;
-	bool inBomb = false;
 	unsigned int check = 0;
 	auto eraseDestination = [&tempChoiceDestination, &check](int nb) {
 		for (unsigned int i = 0; i != tempChoiceDestination.size(); i++) {
@@ -67,30 +105,23 @@ void IndieStudio::IaMouvement::checkBomb()
 			this->_canStay = false;
 		}
 	}
+	return (tempChoiceDestination);
+}
+
+bool IndieStudio::IaMouvement::inBomb()
+{
 	for (unsigned int i = 0; i != this->_bombVec.size(); i++) {
 		if (this->_bombVec[i]->getPosition()._x == this->_currentPos._x && this->_bombVec[i]->getPosition()._z == this->_currentPos._z)
-			inBomb = true;
+			return (true);
 	}
-	if (tempChoiceDestination.size() > 0)
-			this->_choiceDestination = tempChoiceDestination;
-	else if (this->_canStay == true)
-		this->_choiceDestination = tempChoiceDestination;
-	else if (this->_characVec->getDeath() == false && this->_choiceDestination.size() != 1 && inBomb != true) {
-		if (this->_choiceDestination.size() == check && this->_characVec->getBombSize() > 1) {
-			std::cout << this->_characVec->getName() << ": ";
-			std::cout << "CHECK = " << check << " choice = " << this->_choiceDestination.size() << "\n";
-			return;
-		}
-		this->_choiceDestination = tempChoiceDestination;
-	}
-
+	return (false);
 }
 
 void IndieStudio::IaMouvement::poseBomb()
 {
-	if (this->checkBrick() == true) {
-		if (this->_currentPos != this->_spawnPos /* && rand() % 3 == 0 */&& this->_choiceDestination.size() > 0  &&
-		this->_characVec->get_Bomb_Current() == 0 && this->_canStay == true && this->_canBomb == true) {
+	if (this->checkBrick() == true || checkPlayer() == true) {
+		if (this->_currentPos != this->_spawnPos /* && rand() % 3 == 0 */&& this->_choiceDestination.size() > 0 &&
+		 this->_characVec->get_Bomb_Current() == 0 && this->_canStay == true && this->_canBomb == true) {
 			this->_characVec->setDoingAction(true);
 		}
 	}

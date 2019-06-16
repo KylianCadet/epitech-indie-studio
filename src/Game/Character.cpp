@@ -6,7 +6,8 @@
 */
 
 #include "Character.hpp"
-
+#include <cctype>
+#include <clocale>
 static std::map<std::string, IndieStudio::character_assets_t> playerAssets = {
 	{"Yoshi", {"assets/characters/yoshi/tris.md2", "assets/characters/yoshi/yoshi.pcx", "assets/characters/yoshi/death.wav"}},
 	{"Sponge Bob", {"assets/characters/spongebob/tris.md2", "assets/characters/spongebob/bob.pcx", "assets/characters/spongebob/death.wav"}},

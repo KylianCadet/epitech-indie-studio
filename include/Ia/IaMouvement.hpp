@@ -29,10 +29,10 @@ namespace IndieStudio {
             Left
         };
         void checkFreeMove();
-        bool freeUp();
-        bool freeDown();
-        bool freeRight();
-        bool freeLeft();
+        void freeUp();
+        void freeDown();
+        void freeRight();
+        void freeLeft();
         void setCenter();
         bool isMoving();
         void resetMoving();

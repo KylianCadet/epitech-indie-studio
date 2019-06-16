@@ -76,11 +76,11 @@ void IndieStudio::IaMouvement::checkBomb()
 	else if (this->_canStay == true)
 		this->_choiceDestination = tempChoiceDestination;
 	else if (this->_characVec->getDeath() == false && this->_choiceDestination.size() != 1 && inBomb != true) {
-		// if (this->_choiceDestination.size() == check) {
-		// 	std::cout << this->_characVec->getName() << ": ";
-		// 	std::cout << "CHECK = " << check << " choice = " << this->_choiceDestination.size() << "\n";
-		// 	return;
-		// }
+		if (this->_choiceDestination.size() == check && this->_characVec->getBombSize() > 1) {
+			std::cout << this->_characVec->getName() << ": ";
+			std::cout << "CHECK = " << check << " choice = " << this->_choiceDestination.size() << "\n";
+			return;
+		}
 		this->_choiceDestination = tempChoiceDestination;
 	}
 
@@ -202,7 +202,7 @@ void IndieStudio::IaMouvement::checkFreeMove()
 	freeRight();
 }
 
-bool IndieStudio::IaMouvement::freeUp()
+void IndieStudio::IaMouvement::freeUp()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._x + 1;
@@ -215,7 +215,7 @@ bool IndieStudio::IaMouvement::freeUp()
 		}
 	}
 }
-bool IndieStudio::IaMouvement::freeDown()
+void IndieStudio::IaMouvement::freeDown()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._x - 1;
@@ -228,7 +228,7 @@ bool IndieStudio::IaMouvement::freeDown()
 		}
 	}
 }
-bool IndieStudio::IaMouvement::freeLeft()
+void IndieStudio::IaMouvement::freeLeft()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._z + 1;
@@ -241,7 +241,7 @@ bool IndieStudio::IaMouvement::freeLeft()
 		}
 	}
 }
-bool IndieStudio::IaMouvement::freeRight()
+void IndieStudio::IaMouvement::freeRight()
 {
 	float nb = 0;
 	float pos = this->_characVec->getPosition()._z - 1;

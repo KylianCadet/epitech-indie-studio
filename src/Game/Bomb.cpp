@@ -10,7 +10,6 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
-#include <unistd.h>
 
 #define WALL_SIZE 40
 #define EXPLOSION_DURATION 1

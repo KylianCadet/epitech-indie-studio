@@ -103,7 +103,7 @@ void IndieStudio::Config::setPrevMode(Mode mode) noexcept
 
 int IndieStudio::Config::getBlockDensity(void) const noexcept
 {
-	return (this->_wallDensity);
+	return (this->_blockDensity);
 }
 
 int IndieStudio::Config::getWallDensity(void) const noexcept

@@ -32,7 +32,7 @@ static const std::string BRICK_TEXTURE_64 = "assets/map/64/bricks.png";
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
-
+#include <string>
 namespace IndieStudio {
 	class Map {
 	public:

@@ -31,7 +31,7 @@ void IndieStudio::MenuManager::checkActions(void) noexcept
 		}
 		else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_EXIT)
 		{
-			usleep(100000);
+			std::this_thread::sleep_for(std::chrono::microseconds(100000));
 			this->_graphical.drop();
 			exit(0);
 		} else if (this->_menuMain->getCurrentMenuActive() == MENU_MAIN_LOADGAME)
